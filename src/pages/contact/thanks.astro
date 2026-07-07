@@ -1,0 +1,44 @@
+---
+import Container from "@/components/Container.astro";
+import Eyebrow from "@/components/Eyebrow.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import { BUSINESS } from "@/consts";
+import DefaultLayout from "@/layouts/DefaultLayout.astro";
+---
+
+<DefaultLayout
+  title="Request received"
+  description="Thanks — your quote request has reached MeasuredPlan. We'll reply with scope and a fixed fee, usually within one business day."
+  noindex={true}
+>
+  <section class="cad-grid-paper border-b border-line">
+    <Container class="flex min-h-[62vh] flex-col items-center justify-center py-24 text-center">
+      <Eyebrow class="mb-6 justify-center">Request received</Eyebrow>
+      <span class="datum-tick mb-6" aria-hidden="true"></span>
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl">Thanks — it's on its way.</h1>
+      <p class="mt-5 max-w-xl text-lg text-ink-muted">
+        Your request has reached us. We'll review the details and reply with the
+        right drawing route, scope and a fixed fee — usually within one business
+        day.
+      </p>
+      <p class="mt-4 max-w-xl text-sm text-ink-muted">
+        Need to reach us sooner? Email
+        <a
+          href={`mailto:${BUSINESS.email}`}
+          class="text-ink underline underline-offset-4">{BUSINESS.email}</a
+        >
+        or call
+        <a
+          href={`tel:${BUSINESS.phoneHref}`}
+          class="text-ink underline underline-offset-4">{BUSINESS.phone}</a
+        >.
+      </p>
+      <div class="mt-9 flex flex-wrap justify-center gap-3">
+        <LinkButton href="/" size="lg">Back to home</LinkButton>
+        <LinkButton href="/projects/" variant="outline" size="lg">
+          View sample plans
+        </LinkButton>
+      </div>
+    </Container>
+  </section>
+</DefaultLayout>

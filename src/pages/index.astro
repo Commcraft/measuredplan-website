@@ -33,7 +33,7 @@ const homeFaqs = allFaqs
 
 const process = [
   {
-    title: "Enquiry",
+    title: "Inquiry",
     body: "Send the property details and what the drawings are for. We confirm scope, format and a fixed fee.",
   },
   {
@@ -93,11 +93,11 @@ const proof = [
         <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-muted">
           MeasuredPlan produces precise floor plans, elevations, sections and
           lease plans from an accurate site measure — clean, layered drawings
-          you can design, plan and register from.
+          you can design, permit and build from.
         </p>
         <div class="mt-9 flex flex-wrap gap-3">
-          <LinkButton href="/contact" size="lg">Request a quote</LinkButton>
-          <LinkButton href="/projects" variant="outline" size="lg">
+          <LinkButton href="/contact/" size="lg">Request a quote</LinkButton>
+          <LinkButton href="/projects/" variant="outline" size="lg">
             View sample plans
           </LinkButton>
         </div>
@@ -153,7 +153,7 @@ const proof = [
         title="Drawings for planning, design and property."
         intro="Five measured survey services, each delivered as clean, usable drawings. Not sure which you need? We will tell you."
       />
-      <LinkButton href="/services" variant="outline" size="sm" class="shrink-0">
+      <LinkButton href="/services/" variant="outline" size="sm" class="shrink-0">
         All services
       </LinkButton>
     </div>
@@ -161,7 +161,7 @@ const proof = [
       {
         services.map((s) => (
           <ServiceCard
-            href={`/services/${s.id}`}
+            href={`/services/${s.id}/`}
             title={s.data.title}
             eyebrow={s.data.eyebrow}
             summary={s.data.summary}
@@ -213,15 +213,15 @@ const proof = [
       <figure>
         <div class="title-block aspect-[4/3] overflow-hidden">
           <img
-            src="/projects/luxury-home-3d.webp"
-            alt="3D model and cutaway produced from a measured survey"
+            src="/projects/suites-plan.webp"
+            alt="Lease exhibit showing demised suites and common areas"
             loading="lazy"
             decoding="async"
-            class="h-full w-full object-cover"
+            class="h-full w-full bg-white object-cover object-top"
           />
         </div>
         <figcaption class="mt-3 font-mono text-xs text-ink-muted">
-          3D model · from measured survey
+          Lease exhibit · demised suites · PDF + DWG
         </figcaption>
       </figure>
     </div>
@@ -235,7 +235,7 @@ const proof = [
     <SectionHeading
       id="process-heading"
       eyebrow="Process"
-      title="A clear route from enquiry to delivery."
+      title="A clear route from inquiry to delivery."
       intro="Four steps, every project. You always know what happens next and what you will receive."
     />
     <ProcessStrip steps={process} class="mt-12" />
@@ -263,7 +263,7 @@ const proof = [
         title="Recent projects."
         intro="A sample of measured surveys and drawings across the services we offer."
       />
-      <LinkButton href="/projects" variant="outline" size="sm" class="shrink-0">
+      <LinkButton href="/projects/" variant="outline" size="sm" class="shrink-0">
         View all
       </LinkButton>
     </div>
@@ -312,7 +312,7 @@ const proof = [
           Client references are available on request.
         </p>
       </div>
-      <LinkButton href="/about" variant="outline" size="md" class="shrink-0">
+      <LinkButton href="/about/" variant="outline" size="md" class="shrink-0">
         About the practice
       </LinkButton>
     </div>
@@ -330,7 +330,7 @@ const proof = [
       <div>
         <Faq items={homeFaqs} />
         <div class="mt-8">
-          <LinkButton href="/faq" variant="ghost" size="sm">
+          <LinkButton href="/faq/" variant="ghost" size="sm">
             All questions →
           </LinkButton>
         </div>

@@ -28,61 +28,58 @@ export const BUSINESS = {
   formats: ["PDF", "DWG", "IFC"],
 } as const;
 
+// Formspree form ID for the quote form (static-host compatible backend).
+// Create a free form at https://formspree.io, then paste its ID here
+// (the part after /f/ in the endpoint, e.g. "xyzabcd1").
+// While this is the [TODO] placeholder, the form falls back to opening the
+// visitor's email app so the contact route keeps working.
+export const FORMSPREE_ID = "[TODO: Formspree form ID]";
+export const FORMSPREE_CONFIGURED = /^[a-zA-Z0-9]+$/.test(FORMSPREE_ID);
+
 // Primary navigation (see site-brief §2).
 export const NAV_LINKS = [
-  { label: "Services", href: "/services" },
-  { label: "Projects", href: "/projects" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "About", href: "/about" },
+  { label: "Services", href: "/services/" },
+  { label: "Projects", href: "/projects/" },
+  { label: "Pricing", href: "/pricing/" },
+  { label: "About", href: "/about/" },
 ] as const;
 
 export const PRIMARY_CTA = {
   label: "Request a quote",
-  href: "/contact",
+  href: "/contact/",
 } as const;
 
 // Footer service links (kept in sync with the services collection order).
 export const FOOTER_SERVICES = [
   {
     label: "Measured building surveys",
-    href: "/services/measured-building-surveys",
+    href: "/services/measured-building-surveys/",
   },
-  { label: "Lease & property plans", href: "/services/lease-plans" },
-  { label: "CAD drafting", href: "/services/cad-drafting" },
-  { label: "3D laser scanning", href: "/services/3d-scanning" },
-  { label: "Area & square footage reports", href: "/services/area-reports" },
+  { label: "Lease & property plans", href: "/services/lease-plans/" },
+  { label: "CAD drafting", href: "/services/cad-drafting/" },
+  { label: "3D laser scanning", href: "/services/3d-scanning/" },
+  { label: "Area & square footage reports", href: "/services/area-reports/" },
 ] as const;
 
 export const FOOTER_COMPANY = [
-  { label: "Projects", href: "/projects" },
-  { label: "Pricing", href: "/pricing" },
-  { label: "About", href: "/about" },
-  { label: "Contact", href: "/contact" },
+  { label: "Projects", href: "/projects/" },
+  { label: "Pricing", href: "/pricing/" },
+  { label: "About", href: "/about/" },
+  { label: "FAQ", href: "/faq/" },
+  { label: "Contact", href: "/contact/" },
 ] as const;
 
 export const FOOTER_LEGAL = [
-  { label: "Privacy", href: "/privacy" },
-  { label: "Terms", href: "/terms" },
+  { label: "Privacy", href: "/privacy/" },
+  { label: "Terms", href: "/terms/" },
 ] as const;
 
 export const SITE_METADATA = {
   title: {
-    default: `${SITE_TITLE} — Measured Building Surveys · Asheville, NC`,
+    default: `${SITE_TITLE} — As-Built Surveys & Floor Plans · Asheville, NC`,
     template: `%s — ${SITE_TITLE}`,
   },
   description: SITE_DESCRIPTION,
-  keywords: [
-    "measured building survey",
-    "as-built drawings",
-    "floor plans",
-    "CAD drafting",
-    "lease exhibit",
-    "space plans",
-    "BOMA square footage",
-    "3D laser scanning",
-    "Asheville NC",
-    "Western North Carolina",
-  ],
   authors: [{ name: "MeasuredPlan" }],
   creator: "MeasuredPlan",
   publisher: "MeasuredPlan",
@@ -96,7 +93,7 @@ export const SITE_METADATA = {
     shortcut: [{ url: "/favicon.ico" }],
   },
   openGraph: {
-    title: `${SITE_TITLE} — Measured Building Surveys · Asheville, NC`,
+    title: `${SITE_TITLE} — As-Built Surveys & Floor Plans · Asheville, NC`,
     description: SITE_DESCRIPTION,
     siteName: SITE_TITLE,
     images: [
@@ -110,7 +107,7 @@ export const SITE_METADATA = {
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_TITLE} — Measured Building Surveys · Asheville, NC`,
+    title: `${SITE_TITLE} — As-Built Surveys & Floor Plans · Asheville, NC`,
     description: SITE_DESCRIPTION,
     images: ["/og-cover.jpg"],
   },
@@ -123,8 +120,12 @@ export const ORGANIZATION_JSONLD = {
   name: BUSINESS.name,
   description: SITE_DESCRIPTION,
   url: SITE_URL,
+  logo: `${SITE_URL}/brand/measuredplan-logo-primary.svg`,
   image: `${SITE_URL}/og-cover.jpg`,
-  areaServed: "Western North Carolina",
+  areaServed: {
+    "@type": "AdministrativeArea",
+    name: "Western North Carolina",
+  },
   address: {
     "@type": "PostalAddress",
     addressLocality: "Asheville",
@@ -132,6 +133,12 @@ export const ORGANIZATION_JSONLD = {
     addressCountry: "US",
   },
   email: BUSINESS.email,
-  telephone: BUSINESS.phone,
+  telephone: "+1-828-215-4724",
+  openingHoursSpecification: {
+    "@type": "OpeningHoursSpecification",
+    dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+    opens: "09:00",
+    closes: "17:00",
+  },
   priceRange: "$$",
 };

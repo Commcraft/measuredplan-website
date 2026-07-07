@@ -24,7 +24,7 @@ export function serviceJsonLd(opts: {
     description: opts.description,
     provider: { "@type": "ProfessionalService", name: BUSINESS.name },
     areaServed: BUSINESS.areaServed,
-    url: `${SITE_URL}/services/${opts.slug}`,
+    url: `${SITE_URL}/services/${opts.slug}/`,
   };
 }
 

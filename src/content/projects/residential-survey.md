@@ -8,5 +8,5 @@ scopeLine: Measured floor plan with room and deck areas for a renovation and add
 deliverables: ["Floor plan", "Area schedule", "DWG + PDF"]
 image: /projects/residential-plan.webp
 date: "2025"
-featured: false
+featured: true
 ---

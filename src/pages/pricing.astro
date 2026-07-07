@@ -65,12 +65,12 @@ const pricingFaqs = [
 
 const crumbs = [
   { label: "Home", href: "/" },
-  { label: "Pricing", href: "/pricing" },
+  { label: "Pricing", href: "/pricing/" },
 ];
 ---
 
 <DefaultLayout
-  title="Pricing"
+  title="Measured Survey Pricing · Asheville, NC"
   description="How MeasuredPlan fees work: quote-based pricing driven by floor area, building complexity, access and the outputs you need. A site visit, layered DWG and PDF, and one revision are always included."
   jsonLd={[breadcrumbJsonLd(crumbs), faqPageJsonLd(pricingFaqs)]}
 >
@@ -86,7 +86,7 @@ const crumbs = [
     <SectionHeading
       eyebrow="How fees are calculated"
       title="Four things move the fee."
-      intro="Tell us about these and we can give you an accurate, fixed quote — usually within one working day."
+      intro="Tell us about these and we can give you an accurate, fixed quote — usually within one business day."
     />
     <div class="mt-12 grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
       {
@@ -132,7 +132,7 @@ const crumbs = [
             </div>
             <p class="font-mono text-sm text-ink">{s.data.fromFee}</p>
             <LinkButton
-              href={`/services/${s.id}`}
+              href={`/services/${s.id}/`}
               variant="outline"
               size="sm"
               class="justify-self-start sm:justify-self-end"
@@ -172,7 +172,7 @@ const crumbs = [
       <div>
         <Faq items={pricingFaqs} />
         <div class="mt-8">
-          <LinkButton href="/faq" variant="ghost" size="sm">
+          <LinkButton href="/faq/" variant="ghost" size="sm">
             All questions →
           </LinkButton>
         </div>

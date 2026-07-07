@@ -89,6 +89,8 @@ const isActive = (href: string) =>
     id="mobile-nav"
     class="hidden border-t border-line bg-paper lg:hidden"
     data-mobile-nav
+    inert
+    aria-hidden="true"
   >
     <Container>
       <nav aria-label="Mobile" class="py-4">
@@ -132,6 +134,13 @@ const isActive = (href: string) =>
   function setOpen(open: boolean) {
     if (!toggle || !panel || !iconOpen || !iconClose) return;
     panel.classList.toggle("hidden", !open);
+    if (open) {
+      panel.removeAttribute("inert");
+      panel.removeAttribute("aria-hidden");
+    } else {
+      panel.setAttribute("inert", "");
+      panel.setAttribute("aria-hidden", "true");
+    }
     toggle.setAttribute("aria-expanded", String(open));
     toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
     iconOpen.classList.toggle("hidden", open);

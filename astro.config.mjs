@@ -11,6 +11,7 @@ export default defineConfig({
   site: "https://measuredplan.com",
   integrations: [mdx(), sitemap()],
   output: "static",
+  trailingSlash: "always",
 
   vite: {
     plugins: [tailwindcss()],

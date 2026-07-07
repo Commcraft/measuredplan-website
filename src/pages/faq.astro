@@ -19,7 +19,7 @@ const items = faqEntries.map((f) => ({
 
 const crumbs = [
   { label: "Home", href: "/" },
-  { label: "FAQ", href: "/faq" },
+  { label: "FAQ", href: "/faq/" },
 ];
 ---
 
@@ -43,7 +43,7 @@ const crumbs = [
           confirm the specifics for your property when we quote.
         </p>
         <div class="mt-6 flex flex-wrap gap-3">
-          <LinkButton href="/contact" size="md">Ask a question</LinkButton>
+          <LinkButton href="/contact/" size="md">Ask a question</LinkButton>
         </div>
       </div>
       <Faq items={items} />

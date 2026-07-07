@@ -8,5 +8,5 @@ scopeLine: Measured survey developed into a full 3D model and cutaway visualizat
 deliverables: ["3D model", "Cutaway views", "DWG + PDF"]
 image: /projects/luxury-home-3d.webp
 date: "2025"
-featured: true
+featured: false
 ---

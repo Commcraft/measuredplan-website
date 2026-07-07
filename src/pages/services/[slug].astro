@@ -30,7 +30,7 @@ const projects = (await getCollection("projects"))
   .slice(0, 3);
 
 const process = [
-  { title: "Enquiry", body: "Confirm scope, format and a fixed fee." },
+  { title: "Inquiry", body: "Confirm scope, format and a fixed fee." },
   { title: "Site visit", body: "Measure on site to a stated datum." },
   { title: "Drawing", body: "Draft in CAD, checked against the survey." },
   { title: "Delivery", body: "A clean, scaled set in your formats." },
@@ -45,8 +45,8 @@ const specRows = [
 
 const crumbs = [
   { label: "Home", href: "/" },
-  { label: "Services", href: "/services" },
-  { label: d.title, href: `/services/${entry.id}` },
+  { label: "Services", href: "/services/" },
+  { label: d.title, href: `/services/${entry.id}/` },
 ];
 ---
 
@@ -199,7 +199,7 @@ const crumbs = [
 
   <!-- Process mini -->
   <Section surface="stone">
-    <SectionHeading eyebrow="Process" title="From enquiry to delivery." />
+    <SectionHeading eyebrow="Process" title="From inquiry to delivery." />
     <ProcessStrip steps={process} class="mt-10" />
   </Section>
 
@@ -228,9 +228,9 @@ const crumbs = [
         </ul>
       </div>
       <div class="lg:justify-self-end">
-        <LinkButton href="/contact" size="lg">Request a quote</LinkButton>
+        <LinkButton href="/contact/" size="lg">Request a quote</LinkButton>
         <p class="mt-3 text-sm text-ink-muted">
-          Usually confirmed within one working day.
+          Usually confirmed within one business day.
         </p>
       </div>
     </div>
@@ -254,7 +254,7 @@ const crumbs = [
       <Section surface="paper">
         <div class="flex items-end justify-between gap-6">
           <SectionHeading eyebrow="Related work" title="Drawings of this type." />
-          <LinkButton href="/projects" variant="outline" size="sm" class="shrink-0">
+          <LinkButton href="/projects/" variant="outline" size="sm" class="shrink-0">
             All work
           </LinkButton>
         </div>
@@ -288,8 +288,8 @@ const crumbs = [
 
   <div class="border-t border-line bg-paper">
     <div class="container flex flex-wrap items-center gap-x-6 gap-y-2 py-6 font-mono text-xs text-ink-muted">
-      <a href="/services" class="hover:text-ink">← All services</a>
-      <a href="/contact" class="hover:text-ink">Request a quote →</a>
+      <a href="/services/" class="hover:text-ink">← All services</a>
+      <a href="/contact/" class="hover:text-ink">Request a quote →</a>
     </div>
   </div>
 

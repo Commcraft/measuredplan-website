@@ -17,7 +17,7 @@ const services = (await getCollection("services")).sort(
 );
 
 const process = [
-  { title: "Enquiry", body: "Tell us the property and what the drawings are for." },
+  { title: "Inquiry", body: "Tell us the property and what the drawings are for." },
   { title: "Site visit", body: "We measure on site to a stated datum." },
   { title: "Drawing", body: "We draft in CAD and check against the survey." },
   { title: "Delivery", body: "A clean, scaled set in your chosen formats." },
@@ -25,18 +25,18 @@ const process = [
 
 const crumbs = [
   { label: "Home", href: "/" },
-  { label: "Services", href: "/services" },
+  { label: "Services", href: "/services/" },
 ];
 ---
 
 <DefaultLayout
-  title="Services"
+  title="Measured Survey & Drafting Services · Asheville"
   description="Measured drawing services: measured building surveys, lease & property plans, CAD drafting, 3D laser scanning and area reports — delivered as clean, usable drawings."
   jsonLd={[breadcrumbJsonLd(crumbs)]}
 >
   <PageIntro
     eyebrow="Services"
-    title="Measured survey services, from plan to registration."
+    title="Measured survey services, for design, permitting and leasing."
     intro="Whatever the property and whatever the drawings are for, the aim is the same: an accurate record, drawn clearly and delivered in a format you can use."
     crumbs={crumbs}
   />
@@ -46,7 +46,7 @@ const crumbs = [
       {
         services.map((s) => (
           <ServiceCard
-            href={`/services/${s.id}`}
+            href={`/services/${s.id}/`}
             title={s.data.title}
             eyebrow={s.data.eyebrow}
             summary={s.data.summary}
@@ -76,7 +76,7 @@ const crumbs = [
         </p>
       </div>
       <div class="flex flex-wrap gap-3 lg:justify-end">
-        <LinkButton href="/contact" size="md">Request a quote</LinkButton>
+        <LinkButton href="/contact/" size="md">Request a quote</LinkButton>
       </div>
     </div>
   </Section>
