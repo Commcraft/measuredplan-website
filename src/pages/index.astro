@@ -12,6 +12,7 @@ import ProofPoint from "@/components/ProofPoint.astro";
 import Section from "@/components/Section.astro";
 import SectionHeading from "@/components/SectionHeading.astro";
 import ServiceCard from "@/components/ServiceCard.astro";
+import Testimonials from "@/components/Testimonials.astro";
 import { SITE_TAGLINE, BUSINESS } from "@/consts";
 import DefaultLayout from "@/layouts/DefaultLayout.astro";
 import { faqPageJsonLd } from "@/lib/seo";
@@ -22,6 +23,10 @@ const services = (await getCollection("services")).sort(
 const projects = (await getCollection("projects"))
   .filter((p) => p.data.featured)
   .sort((a, b) => a.data.order - b.data.order);
+
+const testimonials = (await getCollection("testimonials"))
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((t) => t.data);
 
 const allFaqs = (await getCollection("faqs")).sort(
   (a, b) => a.data.order - b.data.order,
@@ -297,25 +302,20 @@ const proof = [
     </div>
   </Section>
 
-  <!-- ===== References (honest, no fabricated quotes) ===== -->
-  <Section surface="stone">
-    <div
-      class="title-block flex flex-col items-start gap-6 p-8 sm:flex-row sm:items-center sm:justify-between sm:p-10"
-    >
-      <div class="max-w-xl">
-        <Eyebrow class="mb-4">Working with us</Eyebrow>
-        <p class="text-xl leading-snug text-ink sm:text-2xl">
-          A single accurate base that every consultant on the project can rely
-          on — measured once, drawn properly.
-        </p>
-        <p class="mt-4 text-sm text-ink-muted">
-          Client references are available on request.
-        </p>
-      </div>
-      <LinkButton href="/about/" variant="outline" size="md" class="shrink-0">
+  <!-- ===== Testimonials ===== -->
+  <Section surface="stone" labelledby="testimonials-heading">
+    <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <SectionHeading
+        id="testimonials-heading"
+        eyebrow="Working with us"
+        title="What clients say."
+        intro="A single accurate base that every consultant on the project can rely on — measured once, drawn properly."
+      />
+      <LinkButton href="/about/" variant="outline" size="sm" class="shrink-0">
         About the practice
       </LinkButton>
     </div>
+    <Testimonials items={testimonials} />
   </Section>
 
   <!-- ===== FAQ preview ===== -->

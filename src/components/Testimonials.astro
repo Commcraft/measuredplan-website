@@ -1,0 +1,33 @@
+---
+// Client testimonials grid. Attributions are anonymized by client type —
+// no personal names or company names are shown.
+interface Item {
+  quote: string;
+  name: string;
+  role: string;
+  company: string;
+}
+interface Props {
+  items: Item[];
+}
+const { items } = Astro.props;
+---
+
+<div class="mt-12 grid gap-6 md:grid-cols-3">
+  {
+    items.map((t) => (
+      <figure class="title-block flex h-full flex-col bg-white p-6 lg:p-7">
+        <span class="datum-tick mb-5" aria-hidden="true" />
+        <blockquote class="flex-1 text-[1.05rem] leading-relaxed text-ink">
+          <p>{t.quote}</p>
+        </blockquote>
+        <figcaption class="mt-6 border-t border-line pt-4">
+          <p class="font-medium text-ink">{t.name}</p>
+          <p class="mt-1 font-mono text-xs text-ink-muted">
+            {t.role} · {t.company}
+          </p>
+        </figcaption>
+      </figure>
+    ))
+  }
+</div>
