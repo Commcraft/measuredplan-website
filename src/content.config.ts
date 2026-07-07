@@ -31,6 +31,7 @@ const services = defineCollection({
         z.object({
           variant: z.enum(["floorplan", "elevation", "leaseplan", "section"]),
           caption: z.string(),
+          image: z.string().optional(), // real anonymized sheet, overrides SVG
         }),
       )
       .default([]),
@@ -49,10 +50,14 @@ const projects = defineCollection({
     location: z.string(),
     scopeLine: z.string(),
     deliverables: z.array(z.string()),
-    variant: z.enum(["floorplan", "elevation", "leaseplan", "section"]),
+    // Real, anonymized project image (title blocks / addresses removed).
+    image: z.string().optional(),
+    // Fallback drawing-style SVG when no real image is set.
+    variant: z
+      .enum(["floorplan", "elevation", "leaseplan", "section"])
+      .default("floorplan"),
     date: z.string(),
     featured: z.boolean().default(false),
-    images: z.array(z.string()).default([]), // [TODO] real anonymised sheets
   }),
 });
 

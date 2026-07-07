@@ -168,27 +168,47 @@ const proof = [
     />
     <div class="mt-12 grid gap-6 md:grid-cols-3">
       <figure>
-        <PlanThumb variant="floorplan" label="Sample floor plan" datum />
+        <div class="title-block aspect-[4/3] overflow-hidden">
+          <img
+            src="/projects/commercial-floorplan.webp"
+            alt="As-built floor plan for a commercial building"
+            loading="lazy"
+            class="h-full w-full bg-white object-cover object-top"
+          />
+        </div>
         <figcaption class="mt-3 font-mono text-xs text-ink-muted">
-          Floor plan · 1/4" = 1'-0" · DWG + PDF
+          As-built floor plan · 1/8" = 1'-0" · DWG + PDF
         </figcaption>
       </figure>
       <figure>
-        <PlanThumb variant="elevation" label="Sample elevation" />
+        <div class="title-block aspect-[4/3] overflow-hidden">
+          <img
+            src="/projects/area-schedule.webp"
+            alt="Square-footage schedule across multiple floors"
+            loading="lazy"
+            class="h-full w-full bg-white object-cover object-top"
+          />
+        </div>
         <figcaption class="mt-3 font-mono text-xs text-ink-muted">
-          Elevation · 1/8" = 1'-0" · DWG + PDF
+          Area schedule · by suite · PDF + XLSX
         </figcaption>
       </figure>
       <figure>
-        <PlanThumb variant="leaseplan" label="Sample lease plan" />
+        <div class="title-block aspect-[4/3] overflow-hidden">
+          <img
+            src="/projects/modern-home.webp"
+            alt="3D rendering produced from a measured survey"
+            loading="lazy"
+            class="h-full w-full object-cover"
+          />
+        </div>
         <figcaption class="mt-3 font-mono text-xs text-ink-muted">
-          Lease exhibit · BOMA area · 1/8" = 1'-0"
+          3D visualization · from measured survey
         </figcaption>
       </figure>
     </div>
     <p class="mt-6 max-w-2xl text-sm text-ink-muted">
-      Representative samples of drawing output. Anonymised project sheets will be
-      added as they are released.
+      Recent project work. Client names and property addresses have been removed.
     </p>
   </Section>
 
@@ -222,8 +242,8 @@ const proof = [
       <SectionHeading
         id="projects-heading"
         eyebrow="Selected work"
-        title="Representative drawing types."
-        intro="Sample sheets showing the standard of output across the services we offer."
+        title="Recent projects."
+        intro="A sample of measured surveys and drawings across the services we offer."
       />
       <LinkButton href="/projects" variant="outline" size="sm" class="shrink-0">
         View all
@@ -233,7 +253,18 @@ const proof = [
       {
         projects.map((p) => (
           <article class="flex flex-col">
-            <PlanThumb variant={p.data.variant} label={p.data.title} />
+            {p.data.image ? (
+              <div class="title-block aspect-[4/3] overflow-hidden">
+                <img
+                  src={p.data.image}
+                  alt={`${p.data.title} — measured drawing`}
+                  loading="lazy"
+                  class="h-full w-full bg-white object-cover object-top"
+                />
+              </div>
+            ) : (
+              <PlanThumb variant={p.data.variant} label={p.data.title} />
+            )}
             <div class="mt-4">
               <span class="eyebrow">{p.data.buildingType}</span>
               <h3 class="mt-2 text-lg leading-snug">{p.data.title}</h3>

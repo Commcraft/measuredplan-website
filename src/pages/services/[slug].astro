@@ -143,12 +143,23 @@ const crumbs = [
         <SectionHeading
           eyebrow="Sample sheets"
           title="A sense of the output."
-          intro="Representative drawing styles for this service. Anonymised project sheets are added as they are released."
+          intro="Recent work for this service. Client names and property addresses have been removed."
         />
         <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {d.samples.map((s, i) => (
             <figure>
-              <PlanThumb variant={s.variant} label={s.caption} datum={i === 0} />
+              {s.image ? (
+                <div class="title-block aspect-[4/3] overflow-hidden">
+                  <img
+                    src={s.image}
+                    alt={s.caption}
+                    loading="lazy"
+                    class="h-full w-full bg-white object-cover object-top"
+                  />
+                </div>
+              ) : (
+                <PlanThumb variant={s.variant} label={s.caption} datum={i === 0} />
+              )}
               <figcaption class="mt-3 font-mono text-xs text-ink-muted">
                 {s.caption}
               </figcaption>
@@ -249,7 +260,18 @@ const crumbs = [
         <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((p) => (
             <article>
-              <PlanThumb variant={p.data.variant} label={p.data.title} />
+              {p.data.image ? (
+                <div class="title-block aspect-[4/3] overflow-hidden">
+                  <img
+                    src={p.data.image}
+                    alt={`${p.data.title} — measured drawing`}
+                    loading="lazy"
+                    class="h-full w-full bg-white object-cover object-top"
+                  />
+                </div>
+              ) : (
+                <PlanThumb variant={p.data.variant} label={p.data.title} />
+              )}
               <div class="mt-4">
                 <span class="eyebrow">{p.data.buildingType}</span>
                 <h3 class="mt-2 text-lg leading-snug">{p.data.title}</h3>

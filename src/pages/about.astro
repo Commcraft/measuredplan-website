@@ -2,7 +2,6 @@
 import CTASection from "@/components/CTASection.astro";
 import Eyebrow from "@/components/Eyebrow.astro";
 import PageIntro from "@/components/PageIntro.astro";
-import PlanThumb from "@/components/PlanThumb.astro";
 import Section from "@/components/Section.astro";
 import SectionHeading from "@/components/SectionHeading.astro";
 import SpecTable from "@/components/SpecTable.astro";
@@ -96,9 +95,19 @@ const crumbs = [
           across Western North Carolina.
         </p>
       </div>
-      <div>
-        <PlanThumb variant="floorplan" label="Measured floor plan" datum />
-      </div>
+      <figure>
+        <div class="title-block overflow-hidden">
+          <img
+            src="/projects/commercial-floorplan.webp"
+            alt="As-built floor plan from a recent measured survey"
+            loading="lazy"
+            class="block h-auto w-full bg-white"
+          />
+        </div>
+        <figcaption class="mt-3 font-mono text-xs text-ink-muted">
+          As-built floor plan · recent project
+        </figcaption>
+      </figure>
     </div>
   </Section>
 

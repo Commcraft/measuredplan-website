@@ -35,8 +35,8 @@ const crumbs = [
 >
   <PageIntro
     eyebrow="Selected work"
-    title="Sample plans and drawing quality."
-    intro="A representative selection of the drawings we produce, by service. These panels show the standard and structure of our output."
+    title="Recent projects and drawing quality."
+    intro="A selection of recent measured surveys and drawings across residential and commercial projects. Filter by service to see the type of work we produce."
     crumbs={crumbs}
   />
 
@@ -44,9 +44,9 @@ const crumbs = [
     <div class="container">
       <div class="surface-cad -mx-6 mb-10 border-y border-line px-6 py-3 sm:mx-0 sm:border sm:px-4">
         <p class="text-sm text-ink-muted">
-          <span class="font-medium text-ink">Note:</span> these are representative
-          sample drawings, not client project sheets. Anonymised project work will
-          be published here as it is released.
+          <span class="font-medium text-ink">Note:</span> a selection of recent
+          measured-survey and drawing projects. Client names and property
+          addresses have been removed.
         </p>
       </div>
 
@@ -79,11 +79,23 @@ const crumbs = [
               data-building={p.data.buildingType}
               data-scope={p.data.scopeLine}
               data-deliverables={p.data.deliverables.join(" · ")}
+              data-image={p.data.image}
               data-project
             >
-              <div class="transition-colors">
-                <PlanThumb variant={p.data.variant} label={p.data.title} />
-              </div>
+              {p.data.image ? (
+                <div class="title-block aspect-[4/3] overflow-hidden transition-colors group-hover:border-line-strong">
+                  <img
+                    src={p.data.image}
+                    alt={`${p.data.title} — measured drawing`}
+                    loading="lazy"
+                    class="h-full w-full bg-white object-cover object-top"
+                  />
+                </div>
+              ) : (
+                <div class="transition-colors">
+                  <PlanThumb variant={p.data.variant} label={p.data.title} />
+                </div>
+              )}
               <div class="mt-4">
                 <span class="eyebrow">{p.data.buildingType}</span>
                 <h2 class="mt-2 text-lg leading-snug transition-colors group-hover:text-red-deep">
@@ -178,16 +190,25 @@ const crumbs = [
   cards.forEach((card) =>
     card.addEventListener("click", () => {
       if (!dialog || !lbFigure) return;
-      const svg = card.querySelector("svg");
       lbFigure.innerHTML = "";
-      if (svg) {
-        const clone = svg.cloneNode(true) as SVGElement;
-        clone.removeAttribute("style");
-        const wrap = document.createElement("div");
-        wrap.className = "title-block overflow-hidden";
-        wrap.appendChild(clone);
-        lbFigure.appendChild(wrap);
+      const wrap = document.createElement("div");
+      wrap.className = "title-block overflow-hidden bg-white";
+      const image = card.dataset.image;
+      if (image) {
+        const img = document.createElement("img");
+        img.src = image;
+        img.alt = (card.dataset.title ?? "") + " — measured drawing";
+        img.className = "block h-auto w-full";
+        wrap.appendChild(img);
+      } else {
+        const svg = card.querySelector("svg");
+        if (svg) {
+          const clone = svg.cloneNode(true) as SVGElement;
+          clone.removeAttribute("style");
+          wrap.appendChild(clone);
+        }
       }
+      lbFigure.appendChild(wrap);
       if (lbTitle) lbTitle.textContent = card.dataset.title ?? "";
       if (lbBuilding) lbBuilding.textContent = card.dataset.building ?? "";
       if (lbScope) lbScope.textContent = card.dataset.scope ?? "";
