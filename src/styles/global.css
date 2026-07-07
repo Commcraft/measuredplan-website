@@ -402,3 +402,37 @@
     transition-duration: 0.001ms !important;
   }
 }
+
+/* Leaflet service-area map - squared, on-brand controls. */
+.leaflet-container {
+  font-family: var(--font-sans);
+  background: var(--mp-cad);
+}
+.leaflet-bar,
+.leaflet-bar a,
+.leaflet-bar a:hover {
+  border-radius: 0;
+  color: var(--mp-ink);
+  border-color: var(--mp-line);
+}
+.leaflet-touch .leaflet-bar a {
+  border-radius: 0;
+}
+.sa-tip.leaflet-tooltip {
+  background: var(--mp-ink);
+  color: var(--mp-paper);
+  border: 0;
+  border-radius: 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 2px 7px;
+  box-shadow: none;
+  white-space: nowrap;
+}
+.sa-tip.leaflet-tooltip-right::before {
+  border-right-color: var(--mp-ink);
+}
+.leaflet-control-attribution {
+  font-size: 10px;
+  background: rgba(247, 245, 240, 0.85);
+}
