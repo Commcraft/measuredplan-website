@@ -5,12 +5,7 @@ import Container from "@/components/Container.astro";
 import Eyebrow from "@/components/Eyebrow.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import PageIntro from "@/components/PageIntro.astro";
-import {
-  BUSINESS,
-  FORMSPREE_ID,
-  FORMSPREE_CONFIGURED,
-  SITE_URL,
-} from "@/consts";
+import { BUSINESS, CONTACT_FORM_CONFIGURED, SITE_URL } from "@/consts";
 import DefaultLayout from "@/layouts/DefaultLayout.astro";
 import { breadcrumbJsonLd } from "@/lib/seo";
 
@@ -18,12 +13,12 @@ const services = (await getCollection("services")).sort(
   (a, b) => a.data.order - b.data.order,
 );
 
-// Static-host contact backend. When a Formspree ID is configured the form
-// POSTs to Formspree and redirects to /contact/thanks/. Until then it falls
-// back to composing an email in the visitor's mail app, so the contact route
-// never breaks in production.
-const formAction = FORMSPREE_CONFIGURED
-  ? `https://formspree.io/f/${FORMSPREE_ID}`
+// Static-host contact backend (FormSubmit — free, no account). When
+// configured the form POSTs to FormSubmit, which emails BUSINESS.email and
+// redirects to /contact/thanks/. Otherwise it falls back to composing an
+// email in the visitor's mail app, so the contact route never breaks.
+const formAction = CONTACT_FORM_CONFIGURED
+  ? `https://formsubmit.co/${BUSINESS.email}`
   : undefined;
 const thanksUrl = `${SITE_URL}/contact/thanks/`;
 
@@ -108,7 +103,7 @@ const crumbs = [
         <!-- Quote form -->
         <div>
           {
-            !FORMSPREE_CONFIGURED && (
+            !CONTACT_FORM_CONFIGURED && (
               <div
                 class="mb-8 flex items-start gap-3 border border-line surface-cad px-4 py-3.5"
                 role="note"
@@ -136,26 +131,29 @@ const crumbs = [
             id="quote-form"
             class="space-y-6"
             data-email={BUSINESS.email}
-            data-mode={FORMSPREE_CONFIGURED ? "formspree" : "mailto"}
+            data-mode={CONTACT_FORM_CONFIGURED ? "backend" : "mailto"}
             action={formAction}
-            method={FORMSPREE_CONFIGURED ? "POST" : undefined}
+            method={CONTACT_FORM_CONFIGURED ? "POST" : undefined}
           >
             {
-              FORMSPREE_CONFIGURED && (
+              CONTACT_FORM_CONFIGURED && (
                 <>
+                  {/* FormSubmit configuration fields */}
                   <input type="hidden" name="_next" value={thanksUrl} />
                   <input
                     type="hidden"
                     name="_subject"
                     value="New quote request — MeasuredPlan"
                   />
+                  <input type="hidden" name="_template" value="table" />
+                  <input type="hidden" name="_captcha" value="false" />
                   {/* Honeypot: bots fill this hidden field; humans never see it. */}
                   <div class="absolute left-[-9999px]" aria-hidden="true">
                     <label>
                       Leave this field empty
                       <input
                         type="text"
-                        name="_gotcha"
+                        name="_honey"
                         tabindex="-1"
                         autocomplete="off"
                       />
@@ -280,10 +278,15 @@ const crumbs = [
     status.classList.toggle("text-red-deep", isError);
   }
 
-  if (form && form.dataset.mode === "formspree") {
-    // Progressive enhancement: submit via fetch so we can show an inline
-    // error without leaving the page. On success Formspree returns 200 and
-    // we send the visitor to the thank-you page.
+  if (form && form.dataset.mode === "backend") {
+    // Progressive enhancement: submit via FormSubmit's JSON (AJAX) endpoint so
+    // we can show an inline error and keep the visitor on-site. On success we
+    // send them to the thank-you page. With JS disabled the form's native
+    // action still posts to FormSubmit, which redirects via the _next field.
+    const ajaxAction = form.action.replace(
+      "formsubmit.co/",
+      "formsubmit.co/ajax/",
+    );
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const submit = form.querySelector<HTMLButtonElement>(
@@ -292,16 +295,18 @@ const crumbs = [
       if (submit) submit.disabled = true;
       showStatus("Sending your request…");
       try {
-        const res = await fetch(form.action, {
+        const res = await fetch(ajaxAction, {
           method: "POST",
           body: new FormData(form),
           headers: { Accept: "application/json" },
         });
-        if (res.ok) {
+        const data = await res.json().catch(() => null);
+        const ok = res.ok && data && String(data.success) === "true";
+        if (ok) {
           window.location.href = "/contact/thanks/";
           return;
         }
-        throw new Error(String(res.status));
+        throw new Error(data?.message || String(res.status));
       } catch {
         if (submit) submit.disabled = false;
         showStatus(

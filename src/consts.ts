@@ -28,13 +28,20 @@ export const BUSINESS = {
   formats: ["PDF", "DWG", "IFC"],
 } as const;
 
-// Formspree form ID for the quote form (static-host compatible backend).
-// Create a free form at https://formspree.io, then paste its ID here
-// (the part after /f/ in the endpoint, e.g. "xyzabcd1").
-// While this is the [TODO] placeholder, the form falls back to opening the
-// visitor's email app so the contact route keeps working.
-export const FORMSPREE_ID = "[TODO: Formspree form ID]";
-export const FORMSPREE_CONFIGURED = /^[a-zA-Z0-9]+$/.test(FORMSPREE_ID);
+// Contact form backend — free, static-host-friendly, no monthly cap.
+//
+// Default: FormSubmit (https://formsubmit.co) — genuinely free, no account and
+// no API key. Submissions are delivered to BUSINESS.email. One-time setup:
+// after the site is live, submit the form once with your own details, then
+// click the activation link FormSubmit emails to that address. Every
+// submission after that lands straight in the inbox.
+//
+// Set provider to "none" to fall back to opening the visitor's email app
+// (mailto), which keeps the contact route working with no backend at all.
+export const CONTACT_FORM = {
+  provider: "formsubmit" as "formsubmit" | "none",
+} as const;
+export const CONTACT_FORM_CONFIGURED = CONTACT_FORM.provider !== "none";
 
 // Primary navigation (see site-brief §2).
 export const NAV_LINKS = [
