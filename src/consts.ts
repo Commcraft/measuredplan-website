@@ -89,12 +89,11 @@ export const SITE_METADATA = {
   robots: { index: true, follow: true },
   icons: {
     icon: [
-      { url: "/favicon/favicon.ico", sizes: "48x48" },
-      { url: "/favicon/favicon.svg", type: "image/svg+xml" },
-      { url: "/favicon/favicon-96x96.png", sizes: "96x96", type: "image/png" },
+      { url: "/favicon.ico", sizes: "16x16 32x32 48x48" },
+      { url: "/measuredplan-favicon-32.svg", type: "image/svg+xml" },
     ],
-    apple: [{ url: "/favicon/apple-touch-icon.png", sizes: "180x180" }],
-    shortcut: [{ url: "/favicon/favicon.ico" }],
+    apple: [{ url: "/measuredplan-apple-touch-180.png", sizes: "180x180" }],
+    shortcut: [{ url: "/favicon.ico" }],
   },
   openGraph: {
     title: `${SITE_TITLE} — Measured Building Surveys · Asheville, NC`,
@@ -102,9 +101,9 @@ export const SITE_METADATA = {
     siteName: SITE_TITLE,
     images: [
       {
-        url: "/og-image.jpg",
-        width: 1200,
-        height: 630,
+        url: "/measuredplan-social-1024.png",
+        width: 1024,
+        height: 1024,
         alt: "MeasuredPlan — precise measured building surveys and CAD drawings",
       },
     ],
@@ -113,7 +112,7 @@ export const SITE_METADATA = {
     card: "summary_large_image",
     title: `${SITE_TITLE} — Measured Building Surveys · Asheville, NC`,
     description: SITE_DESCRIPTION,
-    images: ["/og-image.jpg"],
+    images: ["/measuredplan-social-1024.png"],
   },
 };
 
@@ -124,7 +123,7 @@ export const ORGANIZATION_JSONLD = {
   name: BUSINESS.name,
   description: SITE_DESCRIPTION,
   url: SITE_URL,
-  image: `${SITE_URL}/og-image.jpg`,
+  image: `${SITE_URL}/measuredplan-social-1024.png`,
   areaServed: "Western North Carolina",
   address: {
     "@type": "PostalAddress",
