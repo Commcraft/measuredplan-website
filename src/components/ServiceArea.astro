@@ -1,0 +1,173 @@
+---
+// Core & extended service area. The tier structure and Asheville / Western
+// North Carolina framing come from confirmed business facts; town names are
+// illustrative examples of each tier ("such as"), easy to edit in the arrays
+// below. Rendered as a concentric survey-ring datum graphic rather than a card
+// grid, to vary the page rhythm.
+import Eyebrow from "./Eyebrow.astro";
+
+const core = [
+  "Asheville",
+  "Black Mountain",
+  "Weaverville",
+  "Fletcher",
+  "Arden",
+  "Fairview",
+  "Swannanoa",
+  "Candler",
+];
+const extended = [
+  "Hendersonville",
+  "Waynesville",
+  "Brevard",
+  "Marion",
+  "Burnsville",
+  "Sylva",
+  "Marshall",
+  "Lake Lure",
+];
+---
+
+<div class="grid items-center gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+  <!-- Concentric survey-ring datum graphic -->
+  <div class="relative mx-auto w-full max-w-sm">
+    <svg
+      viewBox="0 0 320 320"
+      class="h-auto w-full"
+      role="img"
+      aria-label="Concentric coverage rings centered on Asheville, with a core area and an extended Western North Carolina area."
+    >
+      <defs>
+        <pattern
+          id="sa-grid"
+          width="20"
+          height="20"
+          patternUnits="userSpaceOnUse"
+        >
+          <path
+            d="M20 0H0V20"
+            fill="none"
+            stroke="var(--mp-ink)"
+            stroke-opacity="0.06"
+            stroke-width="1"></path>
+        </pattern>
+      </defs>
+      <rect x="0" y="0" width="320" height="320" fill="url(#sa-grid)"></rect>
+
+      <!-- extended ring -->
+      <circle
+        cx="160"
+        cy="160"
+        r="140"
+        fill="var(--mp-red)"
+        fill-opacity="0.03"
+        stroke="var(--mp-ink)"
+        stroke-opacity="0.28"
+        stroke-width="1"
+        stroke-dasharray="2 5"></circle>
+      <!-- core ring -->
+      <circle
+        cx="160"
+        cy="160"
+        r="82"
+        fill="var(--mp-red)"
+        fill-opacity="0.05"
+        stroke="var(--mp-ink)"
+        stroke-opacity="0.5"
+        stroke-width="1"></circle>
+
+      <!-- compass ticks -->
+      {
+        Array.from({ length: 12 }).map((_, i) => {
+          const a = (i * 30 * Math.PI) / 180;
+          const x1 = 160 + Math.sin(a) * 134;
+          const y1 = 160 - Math.cos(a) * 134;
+          const x2 = 160 + Math.sin(a) * 140;
+          const y2 = 160 - Math.cos(a) * 140;
+          return (
+            <line
+              x1={x1}
+              y1={y1}
+              x2={x2}
+              y2={y2}
+              stroke="var(--mp-ink)"
+              stroke-opacity="0.35"
+              stroke-width="1"
+            />
+          );
+        })
+      }
+
+      <!-- center crosshair + Asheville datum -->
+      <line
+        x1="160"
+        y1="146"
+        x2="160"
+        y2="174"
+        stroke="var(--mp-ink)"
+        stroke-opacity="0.5"
+        stroke-width="1"></line>
+      <line
+        x1="146"
+        y1="160"
+        x2="174"
+        y2="160"
+        stroke="var(--mp-ink)"
+        stroke-opacity="0.5"
+        stroke-width="1"></line>
+      <rect x="153" y="153" width="14" height="14" fill="var(--mp-red)"></rect>
+
+      <text
+        x="160"
+        y="192"
+        text-anchor="middle"
+        class="fill-ink"
+        style="font-family: var(--font-mono, monospace); font-size: 11px; letter-spacing: 0.08em;"
+        >ASHEVILLE</text
+      >
+    </svg>
+    <div class="mt-4 flex justify-center gap-6 font-mono text-xs text-ink-muted">
+      <span class="flex items-center gap-2">
+        <span class="h-2.5 w-2.5 bg-red" aria-hidden="true"></span>Core
+      </span>
+      <span class="flex items-center gap-2">
+        <span
+          class="h-2.5 w-2.5 border border-line-strong"
+          aria-hidden="true"></span>Extended
+      </span>
+    </div>
+  </div>
+
+  <!-- Tiers -->
+  <div>
+    <div class="border-l-2 border-red pl-5">
+      <Eyebrow class="mb-2">Core service area</Eyebrow>
+      <p class="text-[1.05rem] leading-relaxed text-ink">
+        Asheville and Greater Asheville - on-site measured work at standard
+        scheduling, with no out-of-town travel premium.
+      </p>
+      <p class="mt-3 font-mono text-xs leading-relaxed text-ink-muted">
+        {core.join("  ·  ")}
+      </p>
+    </div>
+
+    <div class="mt-8 border-l-2 border-line-strong pl-5">
+      <Eyebrow class="mb-2">Extended service area</Eyebrow>
+      <p class="text-[1.05rem] leading-relaxed text-ink">
+        Across Western North Carolina - towns such as those below, with any
+        travel included in the fixed quote.
+      </p>
+      <p class="mt-3 font-mono text-xs leading-relaxed text-ink-muted">
+        {extended.join("  ·  ")}
+      </p>
+    </div>
+
+    <p class="mt-8 text-sm text-ink-muted">
+      Outside Western North Carolina? We take on select projects further afield
+      by arrangement - <a
+        href="/contact/"
+        class="text-ink underline underline-offset-4">ask about your location</a
+      >.
+    </p>
+  </div>
+</div>
