@@ -16,6 +16,10 @@ const services = defineCollection({
     intro: z.string(), // 1-2 sentences at top of the page
     seoTitle: z.string(),
     seoDescription: z.string(),
+    // One-line "choose this if…" decision aid for the service page callout.
+    chooseThisIf: z.string().optional(),
+    // Cross-sell: slugs of related services for the "you might also need" strip.
+    related: z.array(z.string()).default([]),
     forWho: z.array(z.string()),
     included: z.array(z.string()),
     typicalInputs: z.array(z.string()),
