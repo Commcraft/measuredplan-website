@@ -16,14 +16,15 @@ export const SITE_DESCRIPTION =
 // Business details — replace [TODO] values before launch.
 export const BUSINESS = {
   name: "MeasuredPlan",
-  legalName: "[TODO: registered company name]",
-  email: "[TODO: hello@measuredplan.com]",
-  phone: "[TODO: +44 telephone]",
-  phoneHref: "[TODO: +44telephone]",
+  legalName: "[TODO: registered business name]",
+  email: "info@measuredplan.com",
+  phone: "(828) 215-4724",
+  phoneHref: "+18282154724",
   hours: "Monday to Friday, 9am – 5pm",
-  areaServed: "[TODO: coverage area + travel radius]",
-  address: "[TODO: registered address]",
-  companyNumber: "[TODO: company registration number]",
+  areaServed: "Serving Western North Carolina",
+  location: "Asheville, NC",
+  address: "[TODO: full mailing address]",
+  companyNumber: "[TODO: business registration, if shown]",
   formats: ["PDF", "DWG", "IFC"],
 } as const;
 
@@ -124,8 +125,14 @@ export const ORGANIZATION_JSONLD = {
   description: SITE_DESCRIPTION,
   url: SITE_URL,
   image: `${SITE_URL}/og-image.jpg`,
-  areaServed: BUSINESS.areaServed,
+  areaServed: "Western North Carolina",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Asheville",
+    addressRegion: "NC",
+    addressCountry: "US",
+  },
   email: BUSINESS.email,
   telephone: BUSINESS.phone,
-  priceRange: "££",
+  priceRange: "$$",
 };
