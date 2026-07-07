@@ -83,7 +83,8 @@
   /* Focus rings are ink, never red (accessibility + red budget). */
   --ring: var(--mp-ink);
 
-  --radius: 0.25rem;
+  /* Rectilinear — square corners everywhere (cards, images, buttons, inputs). */
+  --radius: 0;
 
   /* Shadows are near-zero; hairline ink borders carry structure. */
   --shadow-2xs: none;
@@ -149,13 +150,13 @@
   --color-red-inverse: var(--mp-red-inverse);
   --color-red-tint: var(--mp-red-tint);
 
-  --radius-xs: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 1px);
-  --radius-md: var(--radius);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 2);
-  --radius-2xl: calc(var(--radius) * 3);
-  --radius-3xl: calc(var(--radius) * 4);
+  --radius-xs: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
+  --radius-3xl: 0;
 
   --breakpoint-sm: 640px;
   --breakpoint-md: 768px;
@@ -240,7 +241,7 @@
   :where(a, button, input, textarea, select, [tabindex]):focus-visible {
     outline: 2px solid var(--mp-ink);
     outline-offset: 2px;
-    border-radius: 1px;
+    border-radius: 0;
   }
   .band-ink
     :where(a, button, input, textarea, select, [tabindex]):focus-visible {
@@ -300,6 +301,13 @@
   }
   .band-ink .eyebrow {
     color: var(--mp-muted-inverse);
+  }
+
+  /* Perf: skip rendering off-screen sections for faster paint & scroll.
+     `auto` remembers the rendered height so the scrollbar stays stable. */
+  .section-cv {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 720px;
   }
 
   /* Datum tick — the red square end-stop from the logo, used sparingly */
