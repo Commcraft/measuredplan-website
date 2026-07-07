@@ -1,0 +1,15 @@
+{
+  "name": "MeasuredPlan",
+  "short_name": "MeasuredPlan",
+  "icons": [
+    {
+      "src": "/icons/measuredplan-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "theme_color": "#0B1726",
+  "background_color": "#F7F5F0",
+  "display": "browser"
+}
