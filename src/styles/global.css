@@ -7,7 +7,7 @@
 @custom-variant band-ink (&:is(.band-ink *));
 
 /* ------------------------------------------------------------------ *
- * MeasuredPlan — theme foundation
+ * MeasuredPlan - theme foundation
  * Light-only site. Palette v1.1 is locked (see CLAUDE.md / site-brief).
  * Dark sections are a scoped `.band-ink` class, never a theme toggle.
  * ------------------------------------------------------------------ */
@@ -83,7 +83,7 @@
   /* Focus rings are ink, never red (accessibility + red budget). */
   --ring: var(--mp-ink);
 
-  /* Rectilinear — square corners everywhere (cards, images, buttons, inputs). */
+  /* Rectilinear - square corners everywhere (cards, images, buttons, inputs). */
   --radius: 0;
 
   /* Shadows are near-zero; hairline ink borders carry structure. */
@@ -193,7 +193,7 @@
   }
 }
 
-/* Content container — architectural, generous, capped for readability. */
+/* Content container - architectural, generous, capped for readability. */
 @utility container {
   margin-inline: auto;
   padding-inline: 1.5rem;
@@ -264,7 +264,7 @@
  * MeasuredPlan design-system utilities
  * ------------------------------------------------------------------ */
 @layer components {
-  /* Dark ink band — footer, CTA. Reverses text and red. */
+  /* Dark ink band - footer, CTA. Reverses text and red. */
   .band-ink {
     background-color: var(--mp-ink);
     color: var(--mp-paper);
@@ -290,7 +290,7 @@
     background-color: var(--mp-cad-mist);
   }
 
-  /* Mono eyebrow / label — the technical voice */
+  /* Mono eyebrow / label - the technical voice */
   .eyebrow {
     font-family: var(--font-mono);
     font-size: 0.75rem;
@@ -310,7 +310,7 @@
     contain-intrinsic-size: auto 720px;
   }
 
-  /* Datum tick — the red square end-stop from the logo, used sparingly */
+  /* Datum tick - the red square end-stop from the logo, used sparingly */
   .datum-tick {
     display: inline-block;
     width: 0.5rem;
@@ -344,7 +344,7 @@
     right: 0;
   }
 
-  /* CAD grid — subtle plan-paper background for technical surfaces */
+  /* CAD grid - subtle plan-paper background for technical surfaces */
   .cad-grid {
     background-color: var(--mp-cad-mist);
     background-image:
@@ -376,7 +376,7 @@
     background-size: 28px 28px;
   }
 
-  /* Title-block corner card — the signature technical card */
+  /* Title-block corner card - the signature technical card */
   .title-block {
     background-color: var(--mp-white);
     border: 1px solid var(--mp-line-subtle);
@@ -389,7 +389,7 @@
   }
 }
 
-/* Reduced motion — honour user preference. */
+/* Reduced motion - honour user preference. */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

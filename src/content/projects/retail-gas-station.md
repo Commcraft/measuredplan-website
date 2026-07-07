@@ -1,5 +1,5 @@
 ---
-title: Retail store with gas station — construction set
+title: Retail store with gas station - construction set
 order: 2
 service: ["cad-drafting"]
 buildingType: Commercial / retail

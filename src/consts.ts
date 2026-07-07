@@ -13,14 +13,14 @@ export const SITE_DESCRIPTION =
   "as-built drawings and CAD documentation for architects, property owners " +
   "and real estate professionals across Western North Carolina.";
 
-// Business details — replace [TODO] values before launch.
+// Business details - replace [TODO] values before launch.
 export const BUSINESS = {
   name: "MeasuredPlan",
   legalName: "[TODO: registered business name]",
   email: "info@measuredplan.com",
   phone: "(828) 998-7120",
   phoneHref: "+18289987120",
-  hours: "Monday to Friday, 9am – 5pm",
+  hours: "Monday to Friday, 9am - 5pm",
   areaServed: "Serving Western North Carolina",
   location: "Asheville, NC",
   address: "[TODO: full mailing address]",
@@ -28,9 +28,9 @@ export const BUSINESS = {
   formats: ["PDF", "DWG", "IFC"],
 } as const;
 
-// Contact form backend — free, static-host-friendly, no monthly cap.
+// Contact form backend - free, static-host-friendly, no monthly cap.
 //
-// Default: FormSubmit (https://formsubmit.co) — genuinely free, no account and
+// Default: FormSubmit (https://formsubmit.co) - genuinely free, no account and
 // no API key. Submissions are delivered to BUSINESS.email. One-time setup:
 // after the site is live, submit the form once with your own details, then
 // click the activation link FormSubmit emails to that address. Every
@@ -83,8 +83,8 @@ export const FOOTER_LEGAL = [
 
 export const SITE_METADATA = {
   title: {
-    default: `${SITE_TITLE} — As-Built Surveys & Floor Plans · Asheville, NC`,
-    template: `%s — ${SITE_TITLE}`,
+    default: `${SITE_TITLE} - As-Built Surveys & Floor Plans · Asheville, NC`,
+    template: `%s - ${SITE_TITLE}`,
   },
   description: SITE_DESCRIPTION,
   authors: [{ name: "MeasuredPlan" }],
@@ -100,7 +100,7 @@ export const SITE_METADATA = {
     shortcut: [{ url: "/favicon.ico" }],
   },
   openGraph: {
-    title: `${SITE_TITLE} — As-Built Surveys & Floor Plans · Asheville, NC`,
+    title: `${SITE_TITLE} - As-Built Surveys & Floor Plans · Asheville, NC`,
     description: SITE_DESCRIPTION,
     siteName: SITE_TITLE,
     images: [
@@ -108,13 +108,13 @@ export const SITE_METADATA = {
         url: "/og-cover.jpg",
         width: 1200,
         height: 630,
-        alt: "MeasuredPlan — precise measured building surveys and CAD drawings",
+        alt: "MeasuredPlan - precise measured building surveys and CAD drawings",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_TITLE} — As-Built Surveys & Floor Plans · Asheville, NC`,
+    title: `${SITE_TITLE} - As-Built Surveys & Floor Plans · Asheville, NC`,
     description: SITE_DESCRIPTION,
     images: ["/og-cover.jpg"],
   },

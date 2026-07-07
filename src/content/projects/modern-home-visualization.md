@@ -1,5 +1,5 @@
 ---
-title: Modern home — survey to 3D visualization
+title: Modern home - survey to 3D visualization
 order: 5
 service: ["3d-scanning", "cad-drafting"]
 buildingType: Single-family home

@@ -1,5 +1,5 @@
 ---
-title: Multifamily development — survey to 3D
+title: Multifamily development - survey to 3D
 order: 9
 service: ["measured-building-surveys", "3d-scanning", "cad-drafting"]
 buildingType: Multifamily development

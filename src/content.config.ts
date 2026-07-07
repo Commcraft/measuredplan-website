@@ -10,7 +10,7 @@ const services = defineCollection({
     optional: z.boolean().default(false),
     eyebrow: z.string(), // e.g. imperial scales
     summary: z.string(), // one line, used on cards
-    intro: z.string(), // 1–2 sentences at top of the page
+    intro: z.string(), // 1-2 sentences at top of the page
     seoTitle: z.string(),
     seoDescription: z.string(),
     forWho: z.array(z.string()),

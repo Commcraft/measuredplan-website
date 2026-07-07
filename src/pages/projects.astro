@@ -30,7 +30,7 @@ const crumbs = [
 
 <DefaultLayout
   title="Sample Plans & Recent Projects"
-  description="Sample measured survey drawings — floor plans, elevations, sections and lease plans — showing the standard of MeasuredPlan's output across services."
+  description="Sample measured survey drawings - floor plans, elevations, sections and lease plans - showing the standard of MeasuredPlan's output across services."
   jsonLd={[breadcrumbJsonLd(crumbs)]}
 >
   <PageIntro
@@ -86,7 +86,7 @@ const crumbs = [
                 <div class="title-block aspect-[4/3] overflow-hidden transition-colors group-hover:border-line-strong">
                   <img
                     src={p.data.image}
-                    alt={`${p.data.title} — measured drawing`}
+                    alt={`${p.data.title} - measured drawing`}
                     loading="lazy"
             decoding="async"
                     class="h-full w-full bg-white object-cover object-top"
@@ -198,7 +198,7 @@ const crumbs = [
       if (image) {
         const img = document.createElement("img");
         img.src = image;
-        img.alt = (card.dataset.title ?? "") + " — measured drawing";
+        img.alt = (card.dataset.title ?? "") + " - measured drawing";
         img.className = "block h-auto w-full";
         wrap.appendChild(img);
       } else {

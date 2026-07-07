@@ -1,5 +1,5 @@
 ---
-title: Estate home — as-built & 3D model
+title: Estate home - as-built & 3D model
 order: 8
 service: ["3d-scanning", "cad-drafting"]
 buildingType: Single-family home

@@ -5,6 +5,7 @@ import Container from "@/components/Container.astro";
 import CTASection from "@/components/CTASection.astro";
 import Eyebrow from "@/components/Eyebrow.astro";
 import Faq from "@/components/Faq.astro";
+import HeroField from "@/components/HeroField.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import PlanThumb from "@/components/PlanThumb.astro";
 import ProcessStrip from "@/components/ProcessStrip.astro";
@@ -76,7 +77,7 @@ const proof = [
   {
     stat: "Fixed fee",
     label: "Confirmed before we start",
-    note: "A clear scope and price with every quote — no open-ended day rates.",
+    note: "A clear scope and price with every quote - no open-ended day rates.",
   },
   {
     stat: "Asheville",
@@ -89,7 +90,8 @@ const proof = [
 <DefaultLayout jsonLd={[faqPageJsonLd(homeFaqs)]}>
   <!-- ===== Hero ===== -->
   <section class="relative overflow-hidden border-b border-line bg-paper">
-    <Container class="grid gap-12 py-16 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-16 lg:py-24">
+    <HeroField />
+    <Container class="relative z-10 grid gap-12 py-16 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-16 lg:py-24">
       <div>
         <Eyebrow class="mb-6">Measured survey practice</Eyebrow>
         <h1 class="text-[2.3rem] leading-[1.05] sm:text-5xl lg:text-[3.5rem]">
@@ -97,7 +99,7 @@ const proof = [
         </h1>
         <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-muted">
           MeasuredPlan produces precise floor plans, elevations, sections and
-          lease plans from an accurate site measure — clean, layered drawings
+          lease plans from an accurate site measure - clean, layered drawings
           you can design, permit and build from.
         </p>
         <div class="mt-9 flex flex-wrap gap-3">
@@ -184,7 +186,7 @@ const proof = [
       id="deliverables-heading"
       eyebrow="What you receive"
       title="Clean sheets, at the scale you need."
-      intro="Every drawing is issued to a consistent layer structure, with a clear title block, scale bar and north point — so it reads the same on screen, on paper and in CAD."
+      intro="Every drawing is issued to a consistent layer structure, with a clear title block, scale bar and north point - so it reads the same on screen, on paper and in CAD."
     />
     <div class="mt-12 grid gap-6 md:grid-cols-3">
       <figure>
@@ -252,7 +254,7 @@ const proof = [
       id="why-heading"
       eyebrow="Why MeasuredPlan"
       title="Accuracy, documented and easy to use."
-      intro="The value is not only in the measurement — it is in drawings that are correct, consistent and ready for the next person to work from."
+      intro="The value is not only in the measurement - it is in drawings that are correct, consistent and ready for the next person to work from."
     />
     <div class="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
       {proof.map((p) => <ProofPoint stat={p.stat} label={p.label} note={p.note} />)}
@@ -280,7 +282,7 @@ const proof = [
               <div class="title-block aspect-[4/3] overflow-hidden">
                 <img
                   src={p.data.image}
-                  alt={`${p.data.title} — measured drawing`}
+                  alt={`${p.data.title} - measured drawing`}
                   loading="lazy"
             decoding="async"
                   class="h-full w-full bg-white object-cover object-top"
@@ -309,7 +311,7 @@ const proof = [
         id="testimonials-heading"
         eyebrow="Working with us"
         title="What clients say."
-        intro="A single accurate base that every consultant on the project can rely on — measured once, drawn properly."
+        intro="A single accurate base that every consultant on the project can rely on - measured once, drawn properly."
       />
       <LinkButton href="/about/" variant="outline" size="sm" class="shrink-0">
         About the practice

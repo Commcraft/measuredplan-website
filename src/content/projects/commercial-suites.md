@@ -1,5 +1,5 @@
 ---
-title: Commercial suites — lease & area plans
+title: Commercial suites - lease & area plans
 order: 3
 service: ["lease-plans", "area-reports"]
 buildingType: Commercial suites

@@ -1,5 +1,5 @@
 ---
-title: Luxury home — survey to 3D model
+title: Luxury home - survey to 3D model
 order: 7
 service: ["3d-scanning", "measured-building-surveys"]
 buildingType: Single-family home

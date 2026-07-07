@@ -1,5 +1,5 @@
 ---
-title: Custom home — as-built & existing conditions
+title: Custom home - as-built & existing conditions
 order: 6
 service: ["measured-building-surveys", "cad-drafting"]
 buildingType: Single-family home
