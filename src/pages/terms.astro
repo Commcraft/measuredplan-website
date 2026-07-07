@@ -1,0 +1,77 @@
+---
+import PageIntro from "@/components/PageIntro.astro";
+import Section from "@/components/Section.astro";
+import { BUSINESS } from "@/consts";
+import DefaultLayout from "@/layouts/DefaultLayout.astro";
+import { breadcrumbJsonLd } from "@/lib/seo";
+
+const crumbs = [
+  { label: "Home", href: "/" },
+  { label: "Terms", href: "/terms" },
+];
+---
+
+<DefaultLayout
+  title="Terms"
+  description="The terms on which MeasuredPlan provides measured survey and drawing services, including scope, fees, delivery and revisions."
+  noindex={true}
+  jsonLd={[breadcrumbJsonLd(crumbs)]}
+>
+  <PageIntro
+    eyebrow="Legal"
+    title="Terms of service"
+    intro="The basis on which we provide measured survey and drawing work."
+    crumbs={crumbs}
+  />
+
+  <Section surface="paper">
+    <div
+      class="prose prose-sm max-w-2xl prose-headings:font-display prose-headings:tracking-tight prose-headings:text-ink prose-p:text-ink-muted prose-li:text-ink-muted prose-a:text-ink"
+    >
+      <p class="font-mono text-xs text-ink-muted">Last updated: [TODO: date]</p>
+
+      <h2>Scope of work</h2>
+      <p>
+        Each project is defined by the quote we issue and you accept. The quote
+        sets out the drawings, scales, formats and fee for the agreed scope.
+      </p>
+
+      <h2>Fees and payment</h2>
+      <p>
+        Fees are fixed for the agreed scope. Additional work beyond that scope is
+        quoted separately before it starts. [TODO: state payment terms and
+        whether a deposit applies.]
+      </p>
+
+      <h2>Delivery and revisions</h2>
+      <p>
+        Drawings are checked before issue. One revision against the survey is
+        included; further changes are quoted separately and tracked with a
+        revision reference.
+      </p>
+
+      <h2>Access and safety</h2>
+      <p>
+        You are responsible for arranging safe access to the areas to be
+        surveyed. [TODO: state any site access, health and safety requirements.]
+      </p>
+
+      <h2>Liability</h2>
+      <p>
+        [TODO: set out the limitation of liability and the professional
+        indemnity position. Have this section reviewed before launch.]
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        Questions about these terms? Email
+        <a href={`mailto:${BUSINESS.email}`}>{BUSINESS.email}</a>.
+      </p>
+
+      <p class="text-sm">
+        This is a working draft. [TODO: have the final terms reviewed before
+        launch.]
+      </p>
+    </div>
+  </Section>
+</DefaultLayout>

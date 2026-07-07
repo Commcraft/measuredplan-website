@@ -3,8 +3,17 @@
 @import "tw-animate-css";
 @plugin "@tailwindcss/typography";
 
-@custom-variant dark (&:is(.dark *));
+/* Utilities can target dark ink bands with the `band-ink:` variant. */
+@custom-variant band-ink (&:is(.band-ink *));
 
+/* ------------------------------------------------------------------ *
+ * MeasuredPlan — theme foundation
+ * Light-only site. Palette v1.1 is locked (see CLAUDE.md / site-brief).
+ * Dark sections are a scoped `.band-ink` class, never a theme toggle.
+ * ------------------------------------------------------------------ */
+
+/* Display + body: DM Sans (self-hosted, 4 weights).
+   Utility/measurements: system monospace (no external font dependency). */
 @font-face {
   font-family: "DM Sans";
   src: url("/fonts/dm-sans/DMSans-Regular.ttf") format("truetype");
@@ -12,7 +21,6 @@
   font-style: normal;
   font-display: swap;
 }
-
 @font-face {
   font-family: "DM Sans";
   src: url("/fonts/dm-sans/DMSans-Medium.ttf") format("truetype");
@@ -20,7 +28,6 @@
   font-style: normal;
   font-display: swap;
 }
-
 @font-face {
   font-family: "DM Sans";
   src: url("/fonts/dm-sans/DMSans-SemiBold.ttf") format("truetype");
@@ -28,7 +35,6 @@
   font-style: normal;
   font-display: swap;
 }
-
 @font-face {
   font-family: "DM Sans";
   src: url("/fonts/dm-sans/DMSans-Bold.ttf") format("truetype");
@@ -38,106 +44,72 @@
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.92 0.04 86.47);
-  --primary-foreground: oklch(0.31 0.02 86.64);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  /* ---- Locked MeasuredPlan palette --------------------------------- */
+  --mp-ink: #0b1726;
+  --mp-graphite: #20262c;
+  --mp-paper: #f7f5f0;
+  --mp-white: #ffffff;
+  --mp-stone: #ece9e1;
+  --mp-cad-mist: #eef1f3;
+  --mp-line-subtle: #d6d3cb;
+  --mp-line-strong: #838d97;
+  --mp-line-inverse: #2a3542;
+  --mp-muted: #5f6973;
+  --mp-muted-inverse: #a8b0b8;
+  --mp-red: #c21f3a;
+  --mp-red-deep: #a5192f;
+  --mp-red-inverse: #df4b57;
+  --mp-red-tint: #f8e9e9;
 
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
+  /* ---- shadcn semantic tokens mapped to the palette ---------------- */
+  --background: var(--mp-paper);
+  --foreground: var(--mp-ink);
+  --card: var(--mp-white);
+  --card-foreground: var(--mp-ink);
+  --popover: var(--mp-white);
+  --popover-foreground: var(--mp-ink);
+  --primary: var(--mp-red);
+  --primary-foreground: var(--mp-paper);
+  --secondary: var(--mp-stone);
+  --secondary-foreground: var(--mp-ink);
+  --muted: var(--mp-stone);
+  --muted-foreground: var(--mp-muted);
+  --accent: var(--mp-cad-mist);
+  --accent-foreground: var(--mp-ink);
+  --destructive: var(--mp-red);
+  --destructive-foreground: var(--mp-white);
+  --border: var(--mp-line-subtle);
+  --input: var(--mp-line-subtle);
+  /* Focus rings are ink, never red (accessibility + red budget). */
+  --ring: var(--mp-ink);
 
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --radius: 0.25rem;
 
-  --radius: 8px;
+  /* Shadows are near-zero; hairline ink borders carry structure. */
+  --shadow-2xs: none;
+  --shadow-xs: none;
+  --shadow-sm: 0 1px 2px 0 color-mix(in srgb, var(--mp-ink) 5%, transparent);
+  --shadow: 0 1px 2px 0 color-mix(in srgb, var(--mp-ink) 6%, transparent);
+  --shadow-md: 0 2px 8px -2px color-mix(in srgb, var(--mp-ink) 8%, transparent);
+  --shadow-lg: 0 6px 20px -6px
+    color-mix(in srgb, var(--mp-ink) 10%, transparent);
+  --shadow-xl: 0 12px 32px -10px
+    color-mix(in srgb, var(--mp-ink) 12%, transparent);
+  --shadow-2xl: 0 20px 48px -12px
+    color-mix(in srgb, var(--mp-ink) 16%, transparent);
 
-  --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
-  --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
-  --shadow-sm:
-    0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
-  --shadow: 0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 1px 2px -1px hsl(0 0% 0% / 0.1);
-  --shadow-md:
-    0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 2px 4px -1px hsl(0 0% 0% / 0.1);
-  --shadow-lg:
-    0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 4px 6px -1px hsl(0 0% 0% / 0.1);
-  --shadow-xl:
-    0 1px 3px 0px hsl(0 0% 0% / 0.1), 0 8px 10px -1px hsl(0 0% 0% / 0.1);
-  --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
-
-  --font-dm-sans: "DM Sans", sans-serif;
-  --font-inter: "inter", sans-serif;
-
-  --font-sans:
-    var(--font-dm-sans), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  /* Fonts */
+  --font-dm-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-dm-sans);
   --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
   --font-mono:
-    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
-    "Courier New", monospace;
+    ui-monospace, "SFMono-Regular", "SF Mono", Menlo, Consolas,
+    "Liberation Mono", monospace;
 
-  /* StyleGlide provides a better abstraction for fonts */
   --display-family: var(--font-sans);
-  --text-family: var(--font-inter);
+  --text-family: var(--font-sans);
   --display-weight: 600;
   --text-weight: 400;
-}
-
-.dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
 }
 
 @theme inline {
@@ -161,49 +133,39 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
+  /* ---- MeasuredPlan brand colours as first-class utilities --------- */
+  --color-ink: var(--mp-ink);
+  --color-graphite: var(--mp-graphite);
+  --color-paper: var(--mp-paper);
+  --color-stone: var(--mp-stone);
+  --color-cad: var(--mp-cad-mist);
+  --color-line: var(--mp-line-subtle);
+  --color-line-strong: var(--mp-line-strong);
+  --color-line-inverse: var(--mp-line-inverse);
+  --color-ink-muted: var(--mp-muted);
+  --color-ink-muted-inverse: var(--mp-muted-inverse);
+  --color-red: var(--mp-red);
+  --color-red-deep: var(--mp-red-deep);
+  --color-red-inverse: var(--mp-red-inverse);
+  --color-red-tint: var(--mp-red-tint);
 
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-
-  --radius-xs: calc(var(--radius) - 4px);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
+  --radius-xs: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 1px);
+  --radius-md: var(--radius);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 2 - 4px);
-  --radius-2xl: calc(var(--radius) * 2);
-  --radius-3xl: calc(var(--radius) * 3);
-  --radius-4xl: calc(var(--radius) * 4);
-
-  --shadow-2xs: var(--shadow-2xs);
-  --shadow-xs: var(--shadow-xs);
-  --shadow-sm: var(--shadow-sm);
-  --shadow: var(--shadow);
-  --shadow-md: var(--shadow-md);
-  --shadow-lg: var(--shadow-lg);
-  --shadow-xl: var(--shadow-xl);
-  --shadow-2xl: var(--shadow-2xl);
+  --radius-xl: calc(var(--radius) * 2);
+  --radius-2xl: calc(var(--radius) * 3);
+  --radius-3xl: calc(var(--radius) * 4);
 
   --breakpoint-sm: 640px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 1024px;
   --breakpoint-xl: 1280px;
-  --breakpoint-2xl: 1400px; /* default is 1536px */
+  --breakpoint-2xl: 1400px;
 
   --font-sans: var(--font-sans);
   --font-serif: var(--font-serif);
   --font-mono: var(--font-mono);
-
   --font-display: var(--display-family);
   --font-text: var(--text-family);
   --font-weight-display: var(--display-weight);
@@ -230,44 +192,64 @@
   }
 }
 
+/* Content container — architectural, generous, capped for readability. */
 @utility container {
   margin-inline: auto;
   padding-inline: 1.5rem;
+  width: 100%;
+  @media (width >= 768px) {
+    padding-inline: 2.5rem;
+  }
   @media (width >= 1400px) {
-    max-width: 1220px;
+    max-width: 1240px;
   }
 }
 
-@layer utilities {
-  body,
-  .font-text {
-    font-family: var(--font-text);
-    font-weight: var(--text-weight);
+@layer base {
+  * {
+    border-color: var(--border);
   }
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--text-family);
+    font-weight: var(--text-weight);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
   h1,
   h2,
-  .font-display {
-    font-family: var(--font-display);
+  h3,
+  h4 {
+    font-family: var(--display-family);
     font-weight: var(--display-weight);
-    -webkit-font-feature-settings:
-      "ss02" on,
-      "ss03" on,
-      "ss04" on;
-    -moz-font-feature-settings:
-      "ss02" on,
-      "ss03" on,
-      "ss04" on;
-    -ms-font-feature-settings:
-      "ss02" on,
-      "ss03" on,
-      "ss04" on;
-    font-feature-settings:
-      "ss02" on,
-      "ss03" on,
-      "ss04" on; /* Enables the special `a` character and other characters for DM Sans */
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-wrap: balance;
+    color: var(--mp-ink);
   }
-  .font-mono {
-    font-family: var(--font-mono), monospace;
+
+  /* Ink focus ring, visible on every interactive element (a11y). */
+  :where(a, button, input, textarea, select, [tabindex]):focus-visible {
+    outline: 2px solid var(--mp-ink);
+    outline-offset: 2px;
+    border-radius: 1px;
+  }
+  .band-ink
+    :where(a, button, input, textarea, select, [tabindex]):focus-visible {
+    outline-color: var(--mp-paper);
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--mp-red) 18%, transparent);
+    color: var(--mp-ink);
   }
 }
 
@@ -275,31 +257,140 @@
   button {
     cursor: pointer;
   }
-  [class*="border"] {
-    @apply border-border;
+}
+
+/* ------------------------------------------------------------------ *
+ * MeasuredPlan design-system utilities
+ * ------------------------------------------------------------------ */
+@layer components {
+  /* Dark ink band — footer, CTA. Reverses text and red. */
+  .band-ink {
+    background-color: var(--mp-ink);
+    color: var(--mp-paper);
+    --foreground: var(--mp-paper);
+    --muted-foreground: var(--mp-muted-inverse);
+    --border: var(--mp-line-inverse);
+    --primary: var(--mp-red-inverse);
+    --card: var(--mp-graphite);
+    --card-foreground: var(--mp-paper);
+  }
+  .band-ink h1,
+  .band-ink h2,
+  .band-ink h3,
+  .band-ink h4 {
+    color: var(--mp-paper);
+  }
+
+  /* Editorial / technical surfaces */
+  .surface-stone {
+    background-color: var(--mp-stone);
+  }
+  .surface-cad {
+    background-color: var(--mp-cad-mist);
+  }
+
+  /* Mono eyebrow / label — the technical voice */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--mp-muted);
+  }
+  .band-ink .eyebrow {
+    color: var(--mp-muted-inverse);
+  }
+
+  /* Datum tick — the red square end-stop from the logo, used sparingly */
+  .datum-tick {
+    display: inline-block;
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: var(--mp-red);
+    flex: none;
+  }
+  .band-ink .datum-tick {
+    background-color: var(--mp-red-inverse);
+  }
+
+  /* Hairline dimension rule with end stops (section divider) */
+  .dim-rule {
+    position: relative;
+    height: 1px;
+    background-color: var(--mp-line-subtle);
+  }
+  .dim-rule::before,
+  .dim-rule::after {
+    content: "";
+    position: absolute;
+    top: -3px;
+    width: 1px;
+    height: 7px;
+    background-color: var(--mp-line-strong);
+  }
+  .dim-rule::before {
+    left: 0;
+  }
+  .dim-rule::after {
+    right: 0;
+  }
+
+  /* CAD grid — subtle plan-paper background for technical surfaces */
+  .cad-grid {
+    background-color: var(--mp-cad-mist);
+    background-image:
+      linear-gradient(
+        to right,
+        color-mix(in srgb, var(--mp-line-strong) 26%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--mp-line-strong) 26%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 28px 28px;
+  }
+  .cad-grid-paper {
+    background-color: var(--mp-paper);
+    background-image:
+      linear-gradient(
+        to right,
+        color-mix(in srgb, var(--mp-line-subtle) 55%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--mp-line-subtle) 55%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 28px 28px;
+  }
+
+  /* Title-block corner card — the signature technical card */
+  .title-block {
+    background-color: var(--mp-white);
+    border: 1px solid var(--mp-line-subtle);
+    border-radius: var(--radius);
+  }
+
+  .font-mono {
+    font-family: var(--font-mono);
+    font-feature-settings: "tnum" on;
   }
 }
 
-html,
-body {
-  scroll-behavior: smooth;
-}
-body {
-  position: relative;
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
+/* Reduced motion — honour user preference. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
   *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }

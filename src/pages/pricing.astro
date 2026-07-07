@@ -1,14 +1,188 @@
 ---
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { getCollection } from "astro:content";
 
-import { Background } from '@/components/background';
-import { Pricing } from '@/components/blocks/pricing';
-import { PricingTable } from '@/components/blocks/pricing-table';
-import DefaultLayout from '@/layouts/DefaultLayout.astro';
+import CTASection from "@/components/CTASection.astro";
+import Faq from "@/components/Faq.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import PageIntro from "@/components/PageIntro.astro";
+import Section from "@/components/Section.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import DefaultLayout from "@/layouts/DefaultLayout.astro";
+import { breadcrumbJsonLd, faqPageJsonLd } from "@/lib/seo";
+
+const services = (await getCollection("services")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+const factors = [
+  {
+    title: "Floor area & storeys",
+    body: "The size of the property and the number of levels to measure and draw.",
+  },
+  {
+    title: "Building complexity",
+    body: "Ornate, irregular or heavily subdivided buildings take longer to measure and draft.",
+  },
+  {
+    title: "Access & occupancy",
+    body: "Occupied properties, restricted access and travel distance all affect the fee.",
+  },
+  {
+    title: "Outputs required",
+    body: "Which drawings, scales and formats you need — from a single plan to a full set.",
+  },
+];
+
+const included = [
+  "A site visit and measured survey",
+  "Layered DWG and scaled PDF",
+  "A clear title block, scale bar and north point",
+  "One revision against the survey",
+];
+
+const pricingFaqs = [
+  {
+    question: "How is VAT handled?",
+    answer:
+      "Quotes state whether VAT is included. [TODO: confirm VAT registration status and how it is shown on quotes.]",
+  },
+  {
+    question: "When is payment due?",
+    answer:
+      "Payment terms are set out on the quote and invoice. [TODO: confirm standard payment terms — e.g. on delivery, or a deposit for larger projects.]",
+  },
+  {
+    question: "Do you publish fixed prices?",
+    answer:
+      "Fees depend on the property and the drawings required, so every project is quoted individually. We can give an indicative range once we know the basics.",
+  },
+  {
+    question: "Is the quote fixed?",
+    answer:
+      "Yes. The fee is fixed for the agreed scope. If the scope changes, any additional work is quoted separately before it starts.",
+  },
+];
+
+const crumbs = [
+  { label: "Home", href: "/" },
+  { label: "Pricing", href: "/pricing" },
+];
 ---
-<DefaultLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
-  <Background>
-    <Pricing client:only='react' className="py-28 text-center lg:pt-44 lg:pb-32" />
-    <PricingTable />
-  </Background>
+
+<DefaultLayout
+  title="Pricing"
+  description="How MeasuredPlan fees work: quote-based pricing driven by floor area, building complexity, access and the outputs you need. A site visit, layered DWG and PDF, and one revision are always included."
+  jsonLd={[breadcrumbJsonLd(crumbs), faqPageJsonLd(pricingFaqs)]}
+>
+  <PageIntro
+    eyebrow="Pricing"
+    title="Clear, fixed-fee quotes for every project."
+    intro="We don't publish one-size-fits-all prices, because the right fee depends on the property and the drawings you need. Instead, every project is quoted individually — and the quote is fixed for the agreed scope."
+    crumbs={crumbs}
+  />
+
+  <!-- How fees are calculated -->
+  <Section surface="paper">
+    <SectionHeading
+      eyebrow="How fees are calculated"
+      title="Four things move the fee."
+      intro="Tell us about these and we can give you an accurate, fixed quote — usually within one working day."
+    />
+    <div class="mt-12 grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
+      {
+        factors.map((f, i) => (
+          <div class="flex flex-col bg-white p-6 lg:p-7">
+            <span class="font-mono text-sm text-ink-muted">
+              {String(i + 1).padStart(2, "0")}
+            </span>
+            <h3 class="mt-4 text-lg leading-snug">{f.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-ink-muted">{f.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- Indicative fee table -->
+  <Section surface="stone">
+    <SectionHeading
+      eyebrow="By service"
+      title="What each service covers."
+      intro="Indicative fees are available on request. Send the property details for a fixed quote."
+    />
+    <div class="mt-12 overflow-hidden border border-line">
+      {
+        services.map((s, i) => (
+          <div
+            class:list={[
+              "grid gap-4 bg-white p-6 sm:grid-cols-[1.4fr_1fr_auto] sm:items-center sm:gap-8 sm:p-7",
+              i > 0 && "border-t border-line",
+            ]}
+          >
+            <div>
+              <div class="flex items-center gap-3">
+                <h3 class="text-lg leading-snug">{s.data.title}</h3>
+                {s.data.optional && (
+                  <span class="font-mono text-[0.6rem] uppercase tracking-wider text-ink-muted">
+                    Optional
+                  </span>
+                )}
+              </div>
+              <p class="mt-1.5 text-sm text-ink-muted">{s.data.summary}</p>
+            </div>
+            <p class="font-mono text-sm text-ink">{s.data.fromFee}</p>
+            <LinkButton
+              href={`/services/${s.id}`}
+              variant="outline"
+              size="sm"
+              class="justify-self-start sm:justify-self-end"
+            >
+              Details
+            </LinkButton>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- Always included -->
+  <Section surface="paper">
+    <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+      <SectionHeading
+        eyebrow="Always included"
+        title="What every quote covers."
+      />
+      <ul class="grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-2">
+        {
+          included.map((item) => (
+            <li class="flex items-start gap-3 bg-white p-5 text-[0.95rem] text-ink">
+              <span class="datum-tick mt-1.5" aria-hidden="true" />
+              {item}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Section>
+
+  <!-- Pricing FAQ -->
+  <Section surface="cad">
+    <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+      <SectionHeading eyebrow="Questions" title="Payment, VAT and terms." />
+      <div>
+        <Faq items={pricingFaqs} />
+        <div class="mt-8">
+          <LinkButton href="/faq" variant="ghost" size="sm">
+            All questions →
+          </LinkButton>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <CTASection
+    title="Send your property details for a fixed quote."
+    secondaryLabel="See services"
+    secondaryHref="/services"
+  />
 </DefaultLayout>

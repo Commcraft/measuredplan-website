@@ -1,0 +1,154 @@
+---
+import Container from "./Container.astro";
+import LinkButton from "./LinkButton.astro";
+import Logo from "./Logo.astro";
+import { NAV_LINKS, PRIMARY_CTA } from "../consts";
+
+const path = Astro.url.pathname;
+const isActive = (href: string) =>
+  href === "/" ? path === "/" : path === href || path.startsWith(href + "/");
+---
+
+<header
+  class="sticky top-0 z-50 border-b border-line bg-paper/90 backdrop-blur-sm"
+  data-site-header
+>
+  <Container>
+    <div class="flex h-16 items-center justify-between gap-4 sm:h-[4.5rem]">
+      <Logo />
+
+      <nav aria-label="Primary" class="hidden lg:block">
+        <ul class="flex items-center gap-8">
+          {
+            NAV_LINKS.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  aria-current={isActive(link.href) ? "page" : undefined}
+                  class:list={[
+                    "relative flex items-center gap-2 py-2 text-sm font-medium transition-colors",
+                    isActive(link.href)
+                      ? "text-ink"
+                      : "text-ink-muted hover:text-ink",
+                  ]}
+                >
+                  {isActive(link.href) && (
+                    <span class="datum-tick" aria-hidden="true" />
+                  )}
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div class="hidden items-center lg:flex">
+        <LinkButton href={PRIMARY_CTA.href} size="sm">{PRIMARY_CTA.label}</LinkButton>
+      </div>
+
+      <button
+        type="button"
+        class="grid size-10 place-items-center border border-line text-ink lg:hidden"
+        aria-label="Open menu"
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        data-menu-toggle
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+          data-icon-open
+        >
+          <path d="M3 6h18M3 12h18M3 18h18" stroke-linecap="round"></path>
+        </svg>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          aria-hidden="true"
+          class="hidden"
+          data-icon-close
+        >
+          <path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"></path>
+        </svg>
+      </button>
+    </div>
+  </Container>
+
+  <!-- Mobile navigation -->
+  <div
+    id="mobile-nav"
+    class="hidden border-t border-line bg-paper lg:hidden"
+    data-mobile-nav
+  >
+    <Container>
+      <nav aria-label="Mobile" class="py-4">
+        <ul class="flex flex-col divide-y divide-line">
+          {
+            NAV_LINKS.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  aria-current={isActive(link.href) ? "page" : undefined}
+                  class:list={[
+                    "flex items-center gap-2.5 py-3.5 text-base font-medium",
+                    isActive(link.href) ? "text-ink" : "text-ink-muted",
+                  ]}
+                >
+                  {isActive(link.href) && (
+                    <span class="datum-tick" aria-hidden="true" />
+                  )}
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <div class="pt-5">
+          <LinkButton href={PRIMARY_CTA.href} size="lg" class="w-full">
+            {PRIMARY_CTA.label}
+          </LinkButton>
+        </div>
+      </nav>
+    </Container>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
+  const panel = document.querySelector<HTMLElement>("[data-mobile-nav]");
+  const iconOpen = document.querySelector<SVGElement>("[data-icon-open]");
+  const iconClose = document.querySelector<SVGElement>("[data-icon-close]");
+
+  function setOpen(open: boolean) {
+    if (!toggle || !panel || !iconOpen || !iconClose) return;
+    panel.classList.toggle("hidden", !open);
+    toggle.setAttribute("aria-expanded", String(open));
+    toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+    iconOpen.classList.toggle("hidden", open);
+    iconClose.classList.toggle("hidden", !open);
+  }
+
+  toggle?.addEventListener("click", () => {
+    const open = toggle.getAttribute("aria-expanded") === "true";
+    setOpen(!open);
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") setOpen(false);
+  });
+
+  // Close after navigating (view transitions / anchor clicks)
+  panel?.querySelectorAll("a").forEach((a) =>
+    a.addEventListener("click", () => setOpen(false)),
+  );
+</script>

@@ -1,0 +1,206 @@
+---
+import { getCollection } from "astro:content";
+
+import CTASection from "@/components/CTASection.astro";
+import PageIntro from "@/components/PageIntro.astro";
+import PlanThumb from "@/components/PlanThumb.astro";
+import Section from "@/components/Section.astro";
+import DefaultLayout from "@/layouts/DefaultLayout.astro";
+import { breadcrumbJsonLd } from "@/lib/seo";
+
+const projects = (await getCollection("projects")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const services = (await getCollection("services")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const serviceName = (slug: string) =>
+  services.find((s) => s.id === slug)?.data.title ?? slug;
+
+const filters = [
+  { id: "all", label: "All work" },
+  ...services.map((s) => ({ id: s.id, label: s.data.title })),
+];
+
+const crumbs = [
+  { label: "Home", href: "/" },
+  { label: "Projects", href: "/projects" },
+];
+---
+
+<DefaultLayout
+  title="Projects & sample plans"
+  description="Sample measured survey drawings — floor plans, elevations, sections and lease plans — showing the standard of MeasuredPlan's output across services."
+  jsonLd={[breadcrumbJsonLd(crumbs)]}
+>
+  <PageIntro
+    eyebrow="Selected work"
+    title="Sample plans and drawing quality."
+    intro="A representative selection of the drawings we produce, by service. These panels show the standard and structure of our output."
+    crumbs={crumbs}
+  />
+
+  <Section surface="paper" bare>
+    <div class="container">
+      <div class="surface-cad -mx-6 mb-10 border-y border-line px-6 py-3 sm:mx-0 sm:border sm:px-4">
+        <p class="text-sm text-ink-muted">
+          <span class="font-medium text-ink">Note:</span> these are representative
+          sample drawings, not client project sheets. Anonymised project work will
+          be published here as it is released.
+        </p>
+      </div>
+
+      <div class="mb-10 flex flex-wrap gap-2" role="group" aria-label="Filter projects by service">
+        {
+          filters.map((f, i) => (
+            <button
+              type="button"
+              data-filter={f.id}
+              aria-pressed={i === 0 ? "true" : "false"}
+              class="border border-line px-4 py-2 font-mono text-xs text-ink-muted transition-colors aria-pressed:border-ink aria-pressed:bg-ink aria-pressed:text-paper hover:text-ink"
+            >
+              {f.label}
+            </button>
+          ))
+        }
+      </div>
+
+      <div
+        id="project-grid"
+        class="grid gap-6 pb-20 sm:grid-cols-2 lg:grid-cols-3"
+      >
+        {
+          projects.map((p) => (
+            <button
+              type="button"
+              class="group flex flex-col text-left"
+              data-services={p.data.service.join(" ")}
+              data-title={p.data.title}
+              data-building={p.data.buildingType}
+              data-scope={p.data.scopeLine}
+              data-deliverables={p.data.deliverables.join(" · ")}
+              data-project
+            >
+              <div class="transition-colors">
+                <PlanThumb variant={p.data.variant} label={p.data.title} />
+              </div>
+              <div class="mt-4">
+                <span class="eyebrow">{p.data.buildingType}</span>
+                <h2 class="mt-2 text-lg leading-snug transition-colors group-hover:text-red-deep">
+                  {p.data.title}
+                </h2>
+                <p class="mt-2 text-sm leading-relaxed text-ink-muted">
+                  {p.data.scopeLine}
+                </p>
+                <ul class="mt-4 flex flex-wrap gap-2">
+                  {p.data.service.map((s) => (
+                    <li class="border border-line px-2.5 py-1 font-mono text-[0.65rem] uppercase tracking-wide text-ink-muted">
+                      {serviceName(s)}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </button>
+          ))
+        }
+      </div>
+      <p id="project-empty" class="hidden pb-20 text-ink-muted">
+        No sample drawings for that service yet.
+      </p>
+    </div>
+  </Section>
+
+  <!-- Lightbox -->
+  <dialog
+    id="project-lightbox"
+    class="m-auto w-[min(92vw,720px)] rounded-md border border-line bg-paper p-0 backdrop:bg-ink/60"
+    aria-label="Project drawing detail"
+  >
+    <div class="flex items-center justify-between border-b border-line px-5 py-3">
+      <span class="eyebrow" data-lb-building></span>
+      <button
+        type="button"
+        class="grid size-8 place-items-center border border-line text-ink hover:bg-stone"
+        aria-label="Close"
+        data-lb-close
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"></path>
+        </svg>
+      </button>
+    </div>
+    <div class="p-5 sm:p-6">
+      <div data-lb-figure class="mb-5"></div>
+      <h2 class="text-xl leading-snug" data-lb-title></h2>
+      <p class="mt-2 text-sm leading-relaxed text-ink-muted" data-lb-scope></p>
+      <p class="mt-4 font-mono text-xs text-ink-muted" data-lb-deliverables></p>
+    </div>
+  </dialog>
+
+  <CTASection />
+</DefaultLayout>
+
+<script>
+  // Filter
+  const buttons = document.querySelectorAll<HTMLButtonElement>("[data-filter]");
+  const cards = document.querySelectorAll<HTMLElement>("[data-project]");
+  const empty = document.getElementById("project-empty");
+
+  buttons.forEach((btn) =>
+    btn.addEventListener("click", () => {
+      const filter = btn.dataset.filter!;
+      buttons.forEach((b) =>
+        b.setAttribute("aria-pressed", String(b === btn)),
+      );
+      let visible = 0;
+      cards.forEach((card) => {
+        const services = (card.dataset.services ?? "").split(" ");
+        const show = filter === "all" || services.includes(filter);
+        card.classList.toggle("hidden", !show);
+        if (show) visible++;
+      });
+      empty?.classList.toggle("hidden", visible > 0);
+    }),
+  );
+
+  // Lightbox
+  const dialog = document.getElementById(
+    "project-lightbox",
+  ) as HTMLDialogElement | null;
+  const lbFigure = dialog?.querySelector<HTMLElement>("[data-lb-figure]");
+  const lbTitle = dialog?.querySelector<HTMLElement>("[data-lb-title]");
+  const lbBuilding = dialog?.querySelector<HTMLElement>("[data-lb-building]");
+  const lbScope = dialog?.querySelector<HTMLElement>("[data-lb-scope]");
+  const lbDeliverables = dialog?.querySelector<HTMLElement>(
+    "[data-lb-deliverables]",
+  );
+
+  cards.forEach((card) =>
+    card.addEventListener("click", () => {
+      if (!dialog || !lbFigure) return;
+      const svg = card.querySelector("svg");
+      lbFigure.innerHTML = "";
+      if (svg) {
+        const clone = svg.cloneNode(true) as SVGElement;
+        clone.removeAttribute("style");
+        const wrap = document.createElement("div");
+        wrap.className = "title-block overflow-hidden";
+        wrap.appendChild(clone);
+        lbFigure.appendChild(wrap);
+      }
+      if (lbTitle) lbTitle.textContent = card.dataset.title ?? "";
+      if (lbBuilding) lbBuilding.textContent = card.dataset.building ?? "";
+      if (lbScope) lbScope.textContent = card.dataset.scope ?? "";
+      if (lbDeliverables)
+        lbDeliverables.textContent = card.dataset.deliverables ?? "";
+      dialog.showModal();
+    }),
+  );
+
+  dialog
+    ?.querySelector("[data-lb-close]")
+    ?.addEventListener("click", () => dialog.close());
+  dialog?.addEventListener("click", (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+</script>

@@ -1,0 +1,53 @@
+---
+// MeasuredPlan lockup: the official datum mark (public/brand/measuredplan-mark.svg,
+// used unmodified) paired with the "MeasuredPlan" wordmark set in the display face.
+//
+// NOTE: the dedicated wordmark SVGs named in CLAUDE.md
+// (measuredplan-logo-header.svg / -small.svg / -wordmark-paper.svg) are NOT
+// present in the repo. Rather than invent or recolour the logo, this lockup
+// uses the shipped mark as-is beside a typographic wordmark. The datum red is
+// never altered. See the build report for the missing-asset note.
+
+interface Props {
+  tone?: "ink" | "paper"; // wordmark colour — paper is for dark bands
+  markSize?: number; // px, square
+  href?: string | null;
+  class?: string;
+}
+const {
+  tone = "ink",
+  markSize = 30,
+  href = "/",
+  class: className = "",
+} = Astro.props;
+
+const wordmarkColor = tone === "paper" ? "text-paper" : "text-ink";
+const Tag = href ? "a" : "span";
+---
+
+<Tag
+  href={href ?? undefined}
+  class:list={[
+    "inline-flex items-center gap-2.5 rounded-sm",
+    className,
+  ]}
+  aria-label="MeasuredPlan — home"
+>
+  <img
+    src="/brand/measuredplan-mark.svg"
+    width={markSize}
+    height={markSize}
+    alt=""
+    aria-hidden="true"
+    class="shrink-0"
+    style={`width:${markSize}px;height:${markSize}px`}
+  />
+  <span
+    class:list={[
+      "font-display text-[1.2rem] font-semibold leading-none tracking-[-0.02em]",
+      wordmarkColor,
+    ]}
+  >
+    Measured<span class="font-normal">Plan</span>
+  </span>
+</Tag>

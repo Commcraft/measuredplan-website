@@ -1,76 +1,63 @@
-# Mainline Astro Template
+# MeasuredPlan — website
 
-Mainline is a free template built with shadcn/ui, Tailwind 4 and Astro 5.
+Marketing site for **MeasuredPlan**, a premium measured survey practice
+(floor plans, elevations, sections, lease plans, topographical surveys).
 
-- [Demo](https://mainline-astro-template.vercel.app/)
-- [Documentation](https://docs.shadcnblocks.com/templates/getting-started)
-- [Figma](https://www.figma.com/design/cFCLMj7DFv0sK7EVsqKeTa/Mainline?node-id=23250-13201&t=I1nAdchDpknii5Bd-1)
+Built as a fully static [Astro 5](https://astro.build) site with Tailwind 4.
+The single source of truth for structure, content and design direction is
+[`docs/site-brief.md`](docs/site-brief.md); working rules are in
+[`CLAUDE.md`](CLAUDE.md).
 
-![Mainline Astro Template screenshot](./public/og-image.jpg)
+## Stack
 
-## Getting Started
+- **Astro 5** — static output, no client framework shipped
+- **Tailwind CSS 4** — design tokens in `src/styles/global.css`
+- **MDX + content collections** — `services`, `projects`, `testimonials`, `faqs`
+- **DM Sans** (self-hosted) for display/body, system monospace for technical labels
+- **Zero React islands** — interactivity (mobile nav, project filter, lightbox,
+  FAQ accordions) is native HTML + small inline scripts
+
+## Getting started
 
 ```bash
 npm install
+npm run dev        # local dev server
+npm run build      # production build (must pass before every commit)
+npx astro check    # type + content checks (must pass before every commit)
+npm run lint       # eslint --fix
 ```
 
-```bash
-npm run dev
+## Structure
+
+```
+src/
+  components/      design-system components (Astro) — header, footer, cards,
+                   plan visuals, spec tables, buttons, CTA band …
+  content/         services / projects / testimonials / faqs collections
+  layouts/         DefaultLayout (header + footer + SEO head)
+  pages/           routes (see sitemap below)
+  styles/global.css  locked palette → design tokens
+  lib/seo.ts       JSON-LD helpers (ProfessionalService, Service, FAQPage)
+public/
+  brand/           MeasuredPlan datum mark (used unmodified)
+  favicon/         favicons & app icons
+  fonts/dm-sans/   self-hosted font files
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Routes
 
-## Features
+`/` · `/services` · `/services/[slug]` (5 services) · `/projects` ·
+`/pricing` · `/about` · `/faq` · `/contact` · `/privacy` · `/terms` · `404`
 
-### Core Technology Stack
+## Brand
 
-- **Astro 5** built with Astro
-- **Tailwind CSS 4** for styling
-- **shadcn/ui** components
-- **TypeScript** support
-- **React 19**
+Palette v1.1 is locked — see `CLAUDE.md`. Warm paper canvas, ink text, a single
+red used only as the datum/accent (logo, one primary CTA per viewport, active
+markers, error states). No gradients, no stock imagery; visuals are original
+CSS/SVG measured-plan linework.
 
-### Key Features
+## Before launch
 
-- **Shadcn UI**: uses [shadcn/ui](https://ui.shadcn.com/) core UI components
-- **Theme System**: Dark/light mode with `astro-themes`, compatible with [tweakcn](https://tweakcn.com)
-- **MDX Support**: For content pages
-- **Animations**: Motion library (Framer Motion) integration
-- **Prettier**: Pre-configured code formatting
-- **Custom Fonts**: DM Sans font family included
-- **Icons**: Lucide React + React Icons libraries
-- **Styleglide Integration**: For component previews/development
-- **Responsive Design**: Mobile-friendly layout
-- **SEO Ready**: Proper metadata and OG images included
-
-### Pre-built Pages
-
-- Home/Landing page
-- About page
-- Pricing page
-- FAQ page
-- Contact page with form
-- Login/Signup pages
-
-### Blocks
-
-- Hero section
-- Logo showcase/marquee
-- Features section
-- Resource allocation section
-- Testimonials with carousel
-- Pricing table
-- FAQ with accordion
-- Footer
-- Navigation bar
-
-## Deployment
-
-Production-ready and tested for deployment on [Vercel](https://vercel.com)
-
-## Credits
-
-- Template by [shadcnblocks.com](https://shadcnblocks.com)
-- Design by [Callum Flack](https://x.com/callumflack)
-- Dev by [Yassine Zaanouni](https://x.com/YassineZaanouni)
-- Produced by [Rob Austin](https://x.com/ausrobdev)
+Search for `[TODO` across `src/` and `public/` — every unconfirmed business
+fact (contact details, coverage, fees, accreditations, insurance, legal text,
+form backend, OG image) is a greppable placeholder. See the site brief §0.

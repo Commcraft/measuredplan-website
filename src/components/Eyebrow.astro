@@ -1,0 +1,13 @@
+---
+// Mono technical label with an optional red datum tick.
+interface Props {
+  tick?: boolean;
+  class?: string;
+}
+const { tick = true, class: className = "" } = Astro.props;
+---
+
+<p class:list={["eyebrow flex items-center gap-2.5", className]}>
+  {tick && <span class="datum-tick" aria-hidden="true"></span>}
+  <slot />
+</p>

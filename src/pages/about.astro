@@ -1,24 +1,151 @@
 ---
+import CTASection from "@/components/CTASection.astro";
+import Eyebrow from "@/components/Eyebrow.astro";
+import PageIntro from "@/components/PageIntro.astro";
+import PlanThumb from "@/components/PlanThumb.astro";
+import Section from "@/components/Section.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import SpecTable from "@/components/SpecTable.astro";
+import DefaultLayout from "@/layouts/DefaultLayout.astro";
+import { breadcrumbJsonLd } from "@/lib/seo";
 
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+const standards = [
+  {
+    title: "Accuracy first",
+    body: "Every drawing starts from a measured survey, not an assumption. If it is on the plan, it was measured.",
+  },
+  {
+    title: "Clean, consistent layers",
+    body: "CAD files follow a consistent layer structure, so the next person can work with them straight away.",
+  },
+  {
+    title: "Readable output",
+    body: "Clear title blocks, scale bars and north points. Drawings that read the same on screen, on paper and in CAD.",
+  },
+  {
+    title: "A defined revision process",
+    body: "Drawings are checked before issue and revisions are tracked with a reference, so everyone knows which version is current.",
+  },
+  {
+    title: "Sensible file structure",
+    body: "Files are named and organised predictably, so you can find and reuse them long after delivery.",
+  },
+  {
+    title: "Practical communication",
+    body: "Plain, specific answers about scope, timing and cost — before, during and after the work.",
+  },
+];
 
-import { Background } from '@/components/background';
-import { AboutHero } from '@/components/blocks/about-hero';
-import { AboutSection } from '@/components/blocks/about-section';
-import { Investors } from '@/components/blocks/investors';
-import { DashedLine } from '@/components/dashed-line';
-import DefaultLayout from '@/layouts/DefaultLayout.astro';
+const methodRows = [
+  { label: "Measurement", value: "Laser distance measurement, disto and total station as required" },
+  { label: "Levelling", value: "Tied to a stated datum — Ordnance Datum or a site benchmark" },
+  { label: "Scanning", value: "Terrestrial laser scanning for complex and detailed buildings" },
+  { label: "Drafting", value: "AutoCAD, layered to a consistent standard" },
+  { label: "Instruments", value: "[TODO: state instrument makes/models if you wish]" },
+];
+
+const crumbs = [
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+];
 ---
 
-<DefaultLayout title={SITE_TITLE} description={SITE_DESCRIPTION} >
-    <Background>
-      <div class="py-28 lg:py-32 lg:pt-44">
-        <AboutHero />
-        <AboutSection />
-        <div class="pt-28 lg:pt-32">
-          <DashedLine className="container max-w-5xl scale-x-115" />
-          <Investors />
+<DefaultLayout
+  title="About the practice"
+  description="MeasuredPlan is a measured survey practice producing precise floor plans, elevations, sections and lease plans, with a focus on accuracy, clean CAD and clear documentation."
+  jsonLd={[breadcrumbJsonLd(crumbs)]}
+>
+  <PageIntro
+    eyebrow="The practice"
+    title="A measured survey practice built on accuracy and documentation."
+    intro="MeasuredPlan produces precise survey drawings for the people who rely on them — architects, property owners and solicitors. The work is deliberately unshowy: measure carefully, draw clearly, deliver something genuinely usable."
+    crumbs={crumbs}
+  />
+
+  <!-- Story + visual -->
+  <Section surface="paper">
+    <div class="grid gap-12 lg:grid-cols-[1.2fr_1fr] lg:items-center lg:gap-16">
+      <div class="space-y-5 text-[1.05rem] leading-relaxed text-ink-muted">
+        <p>
+          Good drawings are quiet infrastructure. When a floor plan is accurate,
+          a lease plan is compliant and a site survey is properly levelled, the
+          projects built on them run more smoothly — fewer surprises, fewer
+          revisions, less wasted cost.
+        </p>
+        <p>
+          That is the whole intent of the practice: to be the dependable
+          starting point. We measure what is actually there, draft it to a
+          consistent standard, and hand over files that the next person can
+          pick up and use without having to check our work.
+        </p>
+        <p>
+          <span class="text-ink">The team.</span> [TODO: describe the practice —
+          solo surveyor or small team, relevant experience and background.]
+        </p>
+      </div>
+      <div>
+        <PlanThumb variant="floorplan" label="Measured floor plan" datum />
+      </div>
+    </div>
+  </Section>
+
+  <!-- Standards -->
+  <Section surface="stone">
+    <SectionHeading
+      eyebrow="Our standard"
+      title="What “premium” actually means here."
+      intro="Not gloss — discipline. These are the concrete standards behind every drawing we issue."
+    />
+    <div class="mt-12 grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+      {
+        standards.map((s) => (
+          <div class="flex flex-col bg-white p-6 lg:p-7">
+            <h3 class="text-lg leading-snug">{s.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-ink-muted">{s.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- Method + equipment -->
+  <Section surface="paper">
+    <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+      <SectionHeading
+        eyebrow="Equipment & method"
+        title="How we measure and draft."
+      />
+      <SpecTable rows={methodRows} />
+    </div>
+  </Section>
+
+  <!-- Accreditations & insurance -->
+  <Section surface="cad">
+    <div class="title-block p-8 sm:p-10">
+      <Eyebrow class="mb-5">Accreditations & insurance</Eyebrow>
+      <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <div>
+          <h3 class="text-base font-medium text-ink">Professional membership</h3>
+          <p class="mt-2 text-sm text-ink-muted">
+            [TODO: state RICS / CICES membership or other accreditation, with
+            registration numbers if applicable.]
+          </p>
+        </div>
+        <div>
+          <h3 class="text-base font-medium text-ink">Professional indemnity</h3>
+          <p class="mt-2 text-sm text-ink-muted">
+            [TODO: state PI insurance provider and cover value.]
+          </p>
+        </div>
+        <div>
+          <h3 class="text-base font-medium text-ink">Coverage</h3>
+          <p class="mt-2 text-sm text-ink-muted">
+            [TODO: state the areas covered and travel radius.]
+          </p>
         </div>
       </div>
-    </Background>
+    </div>
+  </Section>
+
+  <CTASection />
 </DefaultLayout>

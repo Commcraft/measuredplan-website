@@ -1,0 +1,57 @@
+---
+// Shared conversion band — the single dark band pattern (besides the footer).
+import Container from "./Container.astro";
+import Eyebrow from "./Eyebrow.astro";
+import LinkButton from "./LinkButton.astro";
+import { PRIMARY_CTA } from "../consts";
+
+interface Props {
+  eyebrow?: string;
+  title?: string;
+  body?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
+}
+const {
+  eyebrow = "Start a project",
+  title = "Tell us about your property and what the drawings are for.",
+  body = "Send the address, floor area or storeys, and your deadline. We'll confirm scope, format and a fixed fee — usually within one working day.",
+  ctaLabel = PRIMARY_CTA.label,
+  ctaHref = PRIMARY_CTA.href,
+  secondaryLabel,
+  secondaryHref,
+} = Astro.props;
+---
+
+<section class="band-ink relative overflow-hidden">
+  <div class="cad-grid absolute inset-0 opacity-[0.05]" aria-hidden="true"></div>
+  <Container class="relative py-16 sm:py-20 lg:py-24">
+    <div class="grid gap-10 lg:grid-cols-[1.4fr_1fr] lg:items-end">
+      <div>
+        <Eyebrow class="mb-5">{eyebrow}</Eyebrow>
+        <h2 class="max-w-2xl text-[1.8rem] leading-tight sm:text-4xl">
+          {title}
+        </h2>
+        {
+          body && (
+            <p class="mt-5 max-w-xl text-[1.05rem] leading-relaxed text-ink-muted-inverse">
+              {body}
+            </p>
+          )
+        }
+      </div>
+      <div class="flex flex-wrap gap-3 lg:justify-end">
+        <LinkButton href={ctaHref} variant="primary" size="lg">{ctaLabel}</LinkButton>
+        {
+          secondaryLabel && secondaryHref && (
+            <LinkButton href={secondaryHref} variant="outline" size="lg">
+              {secondaryLabel}
+            </LinkButton>
+          )
+        }
+      </div>
+    </div>
+  </Container>
+</section>

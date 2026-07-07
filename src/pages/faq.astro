@@ -1,22 +1,54 @@
 ---
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { getCollection } from "astro:content";
 
-import { Background } from '@/components/background';
-import { FAQ } from '@/components/blocks/faq';
-import { Testimonials } from '@/components/blocks/testimonials';
-import { DashedLine } from '@/components/dashed-line';
-import DefaultLayout from '@/layouts/DefaultLayout.astro';
+import CTASection from "@/components/CTASection.astro";
+import Faq from "@/components/Faq.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import PageIntro from "@/components/PageIntro.astro";
+import Section from "@/components/Section.astro";
+import DefaultLayout from "@/layouts/DefaultLayout.astro";
+import { breadcrumbJsonLd, faqPageJsonLd } from "@/lib/seo";
+
+const faqEntries = (await getCollection("faqs")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const items = faqEntries.map((f) => ({
+  question: f.data.question,
+  answer: f.data.answer,
+}));
+
+const crumbs = [
+  { label: "Home", href: "/" },
+  { label: "FAQ", href: "/faq" },
+];
 ---
-<DefaultLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
-  <Background>
-    <FAQ
-      client:only='react'
-      className="py-28 text-center lg:pt-44 lg:pb-32"
-      className2="max-w-xl lg:grid-cols-1"
-      headerTag="h1"
-    />
-    <DashedLine className="mx-auto max-w-xl" />
-    <Testimonials dashedLineClassName="hidden" client:only='react'
-    />
-  </Background>
+
+<DefaultLayout
+  title="Frequently asked questions"
+  description="Answers to common questions about measured surveys: what we need to start, site measurements, working from old plans, file formats, turnaround, revisions and how quotes work."
+  jsonLd={[breadcrumbJsonLd(crumbs), faqPageJsonLd(items)]}
+>
+  <PageIntro
+    eyebrow="FAQ"
+    title="Frequently asked questions."
+    intro="The practical questions clients ask before starting a measured survey. If yours isn't here, get in touch and we'll answer it directly."
+    crumbs={crumbs}
+  />
+
+  <Section surface="paper">
+    <div class="grid gap-12 lg:grid-cols-[0.7fr_1.3fr] lg:gap-16">
+      <div class="lg:sticky lg:top-28 lg:h-fit">
+        <p class="text-ink-muted">
+          Every project is different, so treat these as a starting point. We'll
+          confirm the specifics for your property when we quote.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <LinkButton href="/contact" size="md">Ask a question</LinkButton>
+        </div>
+      </div>
+      <Faq items={items} />
+    </div>
+  </Section>
+
+  <CTASection />
 </DefaultLayout>

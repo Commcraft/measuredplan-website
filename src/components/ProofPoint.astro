@@ -1,0 +1,17 @@
+---
+// Compact fact / proof point. Fact-first, no superlatives.
+interface Props {
+  stat: string;
+  label: string;
+  note?: string;
+}
+const { stat, label, note } = Astro.props;
+---
+
+<div class="flex flex-col">
+  <span class="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl"
+    >{stat}</span
+  >
+  <span class="mt-2 text-sm font-medium text-ink">{label}</span>
+  {note && <span class="mt-1 text-sm leading-relaxed text-ink-muted">{note}</span>}
+</div>

@@ -1,0 +1,273 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection, render } from "astro:content";
+
+import CTASection from "@/components/CTASection.astro";
+import Eyebrow from "@/components/Eyebrow.astro";
+import Faq from "@/components/Faq.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import PageIntro from "@/components/PageIntro.astro";
+import PlanThumb from "@/components/PlanThumb.astro";
+import ProcessStrip from "@/components/ProcessStrip.astro";
+import Section from "@/components/Section.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import SpecTable from "@/components/SpecTable.astro";
+import DefaultLayout from "@/layouts/DefaultLayout.astro";
+import { serviceJsonLd, faqPageJsonLd, breadcrumbJsonLd } from "@/lib/seo";
+
+export const getStaticPaths = (async () => {
+  const services = await getCollection("services");
+  return services.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}) satisfies GetStaticPaths;
+
+const { entry } = Astro.props;
+const d = entry.data;
+const { Content } = await render(entry);
+
+const projects = (await getCollection("projects"))
+  .filter((p) => p.data.service.includes(entry.id))
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3);
+
+const process = [
+  { title: "Enquiry", body: "Confirm scope, format and a fixed fee." },
+  { title: "Site visit", body: "Measure on site to a stated datum." },
+  { title: "Drawing", body: "Draft in CAD, checked against the survey." },
+  { title: "Delivery", body: "A clean, scaled set in your formats." },
+];
+
+const specRows = [
+  { label: "Accuracy", value: d.spec.accuracy },
+  { label: "Scales", value: d.spec.scales },
+  { label: "Formats", value: d.spec.formats },
+  { label: "Method", value: d.spec.method },
+];
+
+const crumbs = [
+  { label: "Home", href: "/" },
+  { label: "Services", href: "/services" },
+  { label: d.title, href: `/services/${entry.id}` },
+];
+---
+
+<DefaultLayout
+  title={d.seoTitle}
+  description={d.seoDescription}
+  jsonLd={[
+    breadcrumbJsonLd(crumbs),
+    serviceJsonLd({ name: d.title, description: d.summary, slug: entry.id }),
+    faqPageJsonLd(d.faqs),
+  ]}
+>
+  <PageIntro
+    eyebrow={d.eyebrow}
+    title={d.title}
+    intro={d.intro}
+    crumbs={crumbs}
+  />
+
+  <!-- Overview + who it's for -->
+  <Section surface="paper">
+    <div class="grid gap-12 lg:grid-cols-[1.3fr_1fr] lg:gap-16">
+      <div class="prose-tech max-w-none text-[1.05rem] leading-relaxed text-ink-muted [&>p]:mt-5 [&>p:first-child]:mt-0">
+        <Content />
+      </div>
+      <aside class="title-block h-fit p-6 sm:p-7">
+        <Eyebrow class="mb-4">Who it's for</Eyebrow>
+        <ul class="space-y-3">
+          {
+            d.forWho.map((who) => (
+              <li class="flex items-start gap-3 text-sm text-ink">
+                <span
+                  class="mt-1.5 h-1 w-1 shrink-0 bg-line-strong"
+                  aria-hidden="true"
+                />
+                {who}
+              </li>
+            ))
+          }
+        </ul>
+      </aside>
+    </div>
+  </Section>
+
+  <!-- What's included + typical inputs -->
+  <Section surface="stone">
+    <div class="grid gap-10 md:grid-cols-2 lg:gap-16">
+      <div>
+        <SectionHeading eyebrow="What's included" title="Deliverables" as="h2" />
+        <ul class="mt-8 divide-y divide-line border-y border-line">
+          {
+            d.included.map((item) => (
+              <li class="flex items-start gap-3 py-3.5 text-[0.95rem] text-ink">
+                <span class="datum-tick mt-1.5" aria-hidden="true" />
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+        <ul class="mt-6 flex flex-wrap gap-2">
+          {
+            d.deliverables.map((f) => (
+              <li class="border border-line bg-white px-3 py-1 font-mono text-xs text-ink-muted">
+                {f}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div>
+        <SectionHeading eyebrow="Typical inputs" title="What we need" as="h2" />
+        <ul class="mt-8 space-y-4">
+          {
+            d.typicalInputs.map((item, i) => (
+              <li class="flex items-start gap-4">
+                <span class="font-mono text-sm text-ink-muted">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span class="text-[0.95rem] leading-relaxed text-ink">
+                  {item}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Sample sheets -->
+  {
+    d.samples.length > 0 && (
+      <Section surface="paper">
+        <SectionHeading
+          eyebrow="Sample sheets"
+          title="A sense of the output."
+          intro="Representative drawing styles for this service. Anonymised project sheets are added as they are released."
+        />
+        <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {d.samples.map((s, i) => (
+            <figure>
+              <PlanThumb variant={s.variant} label={s.caption} datum={i === 0} />
+              <figcaption class="mt-3 font-mono text-xs text-ink-muted">
+                {s.caption}
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </Section>
+    )
+  }
+
+  <!-- Specification -->
+  <Section surface="cad">
+    <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+      <SectionHeading
+        eyebrow="Specification"
+        title="How the work is measured and delivered."
+      />
+      <SpecTable rows={specRows} />
+    </div>
+  </Section>
+
+  <!-- Use cases -->
+  <Section surface="paper">
+    <SectionHeading eyebrow="Use cases" title="Where this service fits." />
+    <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        d.useCases.map((u) => (
+          <div class="title-block p-6">
+            <h3 class="text-lg leading-snug">{u.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-ink-muted">{u.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- Process mini -->
+  <Section surface="stone">
+    <SectionHeading eyebrow="Process" title="From enquiry to delivery." />
+    <ProcessStrip steps={process} class="mt-10" />
+  </Section>
+
+  <!-- Fees -->
+  <Section surface="paper">
+    <div
+      class="title-block grid gap-8 p-8 sm:p-10 lg:grid-cols-[1fr_1fr] lg:items-center"
+    >
+      <div>
+        <Eyebrow class="mb-4">Fees</Eyebrow>
+        <p class="font-display text-3xl font-semibold text-ink sm:text-4xl">
+          {d.fromFee}
+        </p>
+        <p class="mt-3 max-w-md text-ink-muted">
+          Every project is quoted individually. Three things move the fee:
+        </p>
+        <ul class="mt-5 space-y-2.5">
+          {
+            d.feeFactors.map((f) => (
+              <li class="flex items-center gap-3 text-sm text-ink">
+                <span class="h-1 w-1 bg-line-strong" aria-hidden="true" />
+                {f}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="lg:justify-self-end">
+        <LinkButton href="/contact" size="lg">Request a quote</LinkButton>
+        <p class="mt-3 text-sm text-ink-muted">
+          Usually confirmed within one working day.
+        </p>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Service FAQ -->
+  {
+    d.faqs.length > 0 && (
+      <Section surface="cad">
+        <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+          <SectionHeading eyebrow="Questions" title={`About ${d.title.toLowerCase()}.`} />
+          <Faq items={d.faqs} />
+        </div>
+      </Section>
+    )
+  }
+
+  <!-- Related projects -->
+  {
+    projects.length > 0 && (
+      <Section surface="paper">
+        <div class="flex items-end justify-between gap-6">
+          <SectionHeading eyebrow="Related work" title="Drawings of this type." />
+          <LinkButton href="/projects" variant="outline" size="sm" class="shrink-0">
+            All work
+          </LinkButton>
+        </div>
+        <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {projects.map((p) => (
+            <article>
+              <PlanThumb variant={p.data.variant} label={p.data.title} />
+              <div class="mt-4">
+                <span class="eyebrow">{p.data.buildingType}</span>
+                <h3 class="mt-2 text-lg leading-snug">{p.data.title}</h3>
+                <p class="mt-2 text-sm text-ink-muted">{p.data.scopeLine}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </Section>
+    )
+  }
+
+  <div class="border-t border-line bg-paper">
+    <div class="container flex flex-wrap items-center gap-x-6 gap-y-2 py-6 font-mono text-xs text-ink-muted">
+      <a href="/services" class="hover:text-ink">← All services</a>
+      <a href="/contact" class="hover:text-ink">Request a quote →</a>
+    </div>
+  </div>
+
+  <CTASection />
+</DefaultLayout>

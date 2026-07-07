@@ -1,0 +1,160 @@
+---
+// Honest drawing-style sample panels (no fake proof, no stock imagery).
+// Four technical variants rendered as lightweight SVG.
+type Variant = "floorplan" | "elevation" | "leaseplan" | "section";
+interface Props {
+  variant?: Variant;
+  label?: string;
+  class?: string;
+  datum?: boolean; // show the single red datum
+}
+const {
+  variant = "floorplan",
+  label,
+  class: className = "",
+  datum = false,
+} = Astro.props;
+const ink = "#0B1726";
+const line = "#838D97";
+const dim = "#5F6973";
+const red = "#C21F3A";
+const paper = "#F7F5F0";
+---
+
+<div
+  class:list={[
+    "title-block relative overflow-hidden",
+    className,
+  ]}
+>
+  <svg
+    viewBox="0 0 400 300"
+    xmlns="http://www.w3.org/2000/svg"
+    class="block h-auto w-full"
+    role="img"
+    aria-label={label ?? `${variant} sample drawing`}
+    style="font-family: ui-monospace, Menlo, monospace;"
+  >
+    <rect width="400" height="300" fill={paper}></rect>
+    <g stroke={line} stroke-width="0.5" opacity="0.2">
+      {
+        Array.from({ length: 15 }).map((_, i) => (
+          <line x1={i * 28} y1="0" x2={i * 28} y2="300" />
+        ))
+      }
+      {
+        Array.from({ length: 11 }).map((_, i) => (
+          <line x1="0" y1={i * 28} x2="400" y2={i * 28} />
+        ))
+      }
+    </g>
+
+    {
+      variant === "floorplan" && (
+        <g>
+          <g stroke={ink} fill="none" stroke-width="1.8">
+            <rect x="70" y="70" width="260" height="160" />
+            <rect x="77" y="77" width="246" height="146" />
+          </g>
+          <g stroke={ink} stroke-width="1.3">
+            <line x1="190" y1="77" x2="190" y2="223" />
+            <line x1="197" y1="77" x2="197" y2="223" />
+            <line x1="197" y1="150" x2="323" y2="150" />
+            <line x1="197" y1="157" x2="323" y2="157" />
+          </g>
+          <path d="M190 110 A 33 33 0 0 1 194 143" fill="none" stroke={ink} stroke-width="0.9" />
+          <g stroke={line} stroke-width="0.8" fill={dim} font-size="9">
+            <line x1="70" y1="52" x2="330" y2="52" />
+            <line x1="70" y1="47" x2="70" y2="57" />
+            <line x1="330" y1="47" x2="330" y2="57" />
+            <text x="200" y="45" text-anchor="middle">6800</text>
+          </g>
+        </g>
+      )
+    }
+
+    {
+      variant === "elevation" && (
+        <g>
+          <g stroke={ink} fill="none" stroke-width="1.8">
+            <path d="M60 235 L60 120 L200 70 L340 120 L340 235 Z" />
+          </g>
+          <g stroke={ink} stroke-width="1">
+            <rect x="90" y="150" width="34" height="42" fill="none" />
+            <rect x="150" y="150" width="34" height="42" fill="none" />
+            <rect x="216" y="150" width="34" height="42" fill="none" />
+            <rect x="276" y="150" width="34" height="42" fill="none" />
+            <rect x="176" y="188" width="34" height="47" fill="none" />
+            <line x1="107" y1="150" x2="107" y2="192" />
+            <line x1="90" y1="171" x2="124" y2="171" />
+          </g>
+          <line x1="60" y1="235" x2="340" y2="235" stroke={ink} stroke-width="2" />
+          <g stroke={line} stroke-width="0.8" fill={dim} font-size="9">
+            <line x1="44" y1="70" x2="44" y2="235" />
+            <text x="30" y="155" text-anchor="middle" transform="rotate(-90 30 155)">
+              6100
+            </text>
+          </g>
+        </g>
+      )
+    }
+
+    {
+      variant === "leaseplan" && (
+        <g>
+          <g stroke={ink} fill="none" stroke-width="1.6">
+            <path d="M80 80 L300 80 L300 150 L240 150 L240 220 L80 220 Z" />
+          </g>
+          <path
+            d="M80 80 L300 80 L300 150 L240 150 L240 220 L80 220 Z"
+            fill={red}
+            opacity="0.06"
+          />
+          <g stroke={line} stroke-width="0.8" fill={dim} font-size="9">
+            <line x1="80" y1="62" x2="300" y2="62" />
+            <line x1="80" y1="57" x2="80" y2="67" />
+            <line x1="300" y1="57" x2="300" y2="67" />
+            <text x="190" y="55" text-anchor="middle">DEMISE</text>
+          </g>
+          <text x="150" y="160" fill={ink} font-size="10" letter-spacing="0.08em">
+            UNIT 4
+          </text>
+        </g>
+      )
+    }
+
+    {
+      variant === "section" && (
+        <g>
+          <g stroke={ink} fill="none" stroke-width="1.6">
+            <path d="M70 70 L330 70 L330 230 L70 230 Z" />
+            <line x1="70" y1="150" x2="330" y2="150" />
+          </g>
+          <g stroke={ink} stroke-width="6" opacity="0.9">
+            <line x1="70" y1="150" x2="330" y2="150" />
+          </g>
+          <g stroke={line} stroke-width="0.8" fill={dim} font-size="9">
+            <line x1="52" y1="70" x2="52" y2="150" />
+            <line x1="52" y1="150" x2="52" y2="230" />
+            <text x="40" y="112" text-anchor="middle" transform="rotate(-90 40 112)">
+              2700
+            </text>
+          </g>
+          <text x="150" y="200" fill={dim} font-size="9">GROUND</text>
+          <text x="150" y="120" fill={dim} font-size="9">FIRST</text>
+        </g>
+      )
+    }
+
+    {
+      datum && (
+        <g>
+          <rect x="30" y="264" width="10" height="10" fill={red} />
+          <text x="46" y="273" fill={red} font-size="9" letter-spacing="0.06em">
+            DATUM
+          </text>
+        </g>
+      )
+    }
+  </svg>
+</div>

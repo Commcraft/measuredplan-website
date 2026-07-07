@@ -1,0 +1,94 @@
+---
+import { getCollection } from "astro:content";
+
+import CTASection from "@/components/CTASection.astro";
+import Eyebrow from "@/components/Eyebrow.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import PageIntro from "@/components/PageIntro.astro";
+import ProcessStrip from "@/components/ProcessStrip.astro";
+import Section from "@/components/Section.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import ServiceCard from "@/components/ServiceCard.astro";
+import DefaultLayout from "@/layouts/DefaultLayout.astro";
+import { breadcrumbJsonLd } from "@/lib/seo";
+
+const services = (await getCollection("services")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+const process = [
+  { title: "Enquiry", body: "Tell us the property and what the drawings are for." },
+  { title: "Site visit", body: "We measure on site to a stated datum." },
+  { title: "Drawing", body: "We draft in CAD and check against the survey." },
+  { title: "Delivery", body: "A clean, scaled set in your chosen formats." },
+];
+
+const crumbs = [
+  { label: "Home", href: "/" },
+  { label: "Services", href: "/services" },
+];
+---
+
+<DefaultLayout
+  title="Services"
+  description="Measured survey services: measured building surveys, lease plans, topographical surveys, 3D scanning and area reports — delivered as clean, usable drawings."
+  jsonLd={[breadcrumbJsonLd(crumbs)]}
+>
+  <PageIntro
+    eyebrow="Services"
+    title="Measured survey services, from plan to registration."
+    intro="Whatever the property and whatever the drawings are for, the aim is the same: an accurate record, drawn clearly and delivered in a format you can use."
+    crumbs={crumbs}
+  />
+
+  <Section surface="paper">
+    <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        services.map((s) => (
+          <ServiceCard
+            href={`/services/${s.id}`}
+            title={s.data.title}
+            eyebrow={s.data.eyebrow}
+            summary={s.data.summary}
+            deliverables={s.data.deliverables.slice(0, 3)}
+            optional={s.data.optional}
+          />
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- Not sure which survey you need? -->
+  <Section surface="stone">
+    <div
+      class="title-block grid gap-6 p-8 sm:p-10 lg:grid-cols-[1.3fr_1fr] lg:items-center"
+    >
+      <div>
+        <Eyebrow class="mb-4">Not sure which plan you need?</Eyebrow>
+        <h2 class="text-2xl leading-snug sm:text-3xl">
+          Describe the property and the purpose — we will confirm the right
+          drawing route.
+        </h2>
+        <p class="mt-4 max-w-xl text-ink-muted">
+          Planning, a lease, a refurbishment or a record: the right survey and
+          scale depend on what the drawings are for. Send the details and we will
+          recommend the correct scope before you commit.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-3 lg:justify-end">
+        <LinkButton href="/contact" size="md">Request a quote</LinkButton>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Process summary -->
+  <Section surface="paper">
+    <SectionHeading
+      eyebrow="Process"
+      title="The same clear route, whichever service you need."
+    />
+    <ProcessStrip steps={process} class="mt-10" />
+  </Section>
+
+  <CTASection />
+</DefaultLayout>

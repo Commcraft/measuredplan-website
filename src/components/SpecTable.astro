@@ -1,0 +1,32 @@
+---
+// Specification table — technical rows with mono values.
+interface Row {
+  label: string;
+  value: string | string[];
+}
+interface Props {
+  rows: Row[];
+  class?: string;
+}
+const { rows, class: className = "" } = Astro.props;
+---
+
+<dl
+  class:list={[
+    "title-block divide-y divide-line overflow-hidden",
+    className,
+  ]}
+>
+  {
+    rows.map((row) => (
+      <div class="grid grid-cols-1 gap-1 px-5 py-4 sm:grid-cols-[minmax(0,1fr)_minmax(0,1.6fr)] sm:gap-6 sm:px-6">
+        <dt class="eyebrow flex items-center pt-0.5">{row.label}</dt>
+        <dd class="font-mono text-sm leading-relaxed text-ink">
+          {Array.isArray(row.value)
+            ? row.value.join("  ·  ")
+            : row.value}
+        </dd>
+      </div>
+    ))
+  }
+</dl>

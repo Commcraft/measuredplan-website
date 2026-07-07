@@ -1,0 +1,80 @@
+---
+import PageIntro from "@/components/PageIntro.astro";
+import Section from "@/components/Section.astro";
+import { BUSINESS } from "@/consts";
+import DefaultLayout from "@/layouts/DefaultLayout.astro";
+import { breadcrumbJsonLd } from "@/lib/seo";
+
+const crumbs = [
+  { label: "Home", href: "/" },
+  { label: "Privacy", href: "/privacy" },
+];
+---
+
+<DefaultLayout
+  title="Privacy policy"
+  description="How MeasuredPlan collects, uses and protects the personal information you share when requesting a quote or measured survey."
+  noindex={true}
+  jsonLd={[breadcrumbJsonLd(crumbs)]}
+>
+  <PageIntro
+    eyebrow="Legal"
+    title="Privacy policy"
+    intro="How we handle the information you share when you enquire about, or commission, a measured survey."
+    crumbs={crumbs}
+  />
+
+  <Section surface="paper">
+    <div
+      class="prose prose-sm max-w-2xl prose-headings:font-display prose-headings:tracking-tight prose-headings:text-ink prose-p:text-ink-muted prose-li:text-ink-muted prose-a:text-ink"
+    >
+      <p class="font-mono text-xs text-ink-muted">Last updated: [TODO: date]</p>
+
+      <h2>Who we are</h2>
+      <p>
+        {BUSINESS.name} ({BUSINESS.legalName}) provides measured survey and
+        drawing services. This policy explains what personal information we
+        collect and how we use it. [TODO: confirm the data controller details
+        and registered address.]
+      </p>
+
+      <h2>Information we collect</h2>
+      <ul>
+        <li>Contact details you provide — name, email, phone.</li>
+        <li>Property details relevant to a survey or quote.</li>
+        <li>Correspondence and project information you share with us.</li>
+      </ul>
+
+      <h2>How we use it</h2>
+      <ul>
+        <li>To respond to enquiries and prepare quotes.</li>
+        <li>To carry out and deliver commissioned work.</li>
+        <li>To keep records of projects and correspondence.</li>
+      </ul>
+
+      <h2>Sharing and retention</h2>
+      <p>
+        We do not sell your information. [TODO: state any third parties used for
+        hosting, email or file transfer, and how long records are kept.]
+      </p>
+
+      <h2>Your rights</h2>
+      <p>
+        You can ask us to access, correct or delete the personal information we
+        hold about you. [TODO: confirm the process and how to make a request
+        under UK GDPR.]
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        For any privacy question, email
+        <a href={`mailto:${BUSINESS.email}`}>{BUSINESS.email}</a>.
+      </p>
+
+      <p class="text-sm">
+        This is a working draft. [TODO: have the final policy reviewed before
+        launch.]
+      </p>
+    </div>
+  </Section>
+</DefaultLayout>

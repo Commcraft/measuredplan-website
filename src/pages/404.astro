@@ -1,43 +1,31 @@
 ---
-import { ArrowLeft } from "lucide-react";
-
-import { Background } from "@/components/background";
-import { Button } from "@/components/ui/button";
-import BasicLayout from "@/layouts/BasicLayout.astro";
+import Container from "@/components/Container.astro";
+import Eyebrow from "@/components/Eyebrow.astro";
+import LinkButton from "@/components/LinkButton.astro";
 import DefaultLayout from "@/layouts/DefaultLayout.astro";
 ---
 
-<DefaultLayout title="404: Not Found" description="Sorry, the page you're looking for doesn't exist.">
-  <Background>
-    <div class="container flex min-h-[70vh] flex-col items-center justify-center py-28 text-center lg:min-h-[80vh] lg:py-32">
-      <div class="relative z-10 max-w-2xl">
-        <h1 class="from-foreground to-foreground/70 relative mb-6 bg-linear-to-br bg-clip-text py-2 text-5xl font-bold text-transparent sm:text-6xl lg:text-7xl">
-          Page Not Found
-        </h1>
-
-        <p class="text-muted-foreground mb-10 text-xl">
-          Sorry, we couldn't find the page you're looking for. The page might
-          have been removed or the URL might be incorrect.
-        </p>
-
-        <div class="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-          <a href="/">
-          <Button size="lg" className="group min-w-[200px] gap-2">
-              <ArrowLeft className="size-5 transition-transform group-hover:-translate-x-1" />
-              Back to Home
-            </Button>
-          </a>
-          <a href="/contact">
-            <Button
-            variant="outline"
-            size="lg"
-            className="min-w-[200px]"
-            >
-              Contact Support
-            </Button>
-           </a>
-        </div>
+<DefaultLayout
+  title="Page not found"
+  description="This page isn't on the plan. Find services, projects or get in touch."
+  noindex={true}
+>
+  <section class="cad-grid-paper border-b border-line">
+    <Container class="flex min-h-[62vh] flex-col items-center justify-center py-24 text-center">
+      <Eyebrow class="mb-6 justify-center">Error 404</Eyebrow>
+      <p class="font-mono text-sm text-ink-muted">/{Astro.url.pathname.slice(1)}</p>
+      <h1 class="mt-4 text-4xl sm:text-5xl lg:text-6xl">
+        This page isn't on the plan.
+      </h1>
+      <p class="mt-5 max-w-md text-lg text-ink-muted">
+        The page may have moved or the address may be mistyped. Here are the
+        useful routes back.
+      </p>
+      <div class="mt-9 flex flex-wrap justify-center gap-3">
+        <LinkButton href="/" size="lg">Home</LinkButton>
+        <LinkButton href="/services" variant="outline" size="lg">Services</LinkButton>
+        <LinkButton href="/contact" variant="outline" size="lg">Contact</LinkButton>
       </div>
-    </div>
-  </Background>
-</DefaultLayout> 
+    </Container>
+  </section>
+</DefaultLayout>

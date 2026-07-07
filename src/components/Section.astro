@@ -1,0 +1,53 @@
+---
+// Vertical rhythm wrapper. `surface` sets the section background per the
+// colour rules: paper (canvas), white (raised), stone (editorial),
+// cad (technical), ink (single dark band).
+import Container from "./Container.astro";
+
+type Surface = "paper" | "white" | "stone" | "cad" | "ink";
+interface Props {
+  surface?: Surface;
+  id?: string;
+  class?: string;
+  containerClass?: string;
+  bare?: boolean; // skip the inner Container
+  labelledby?: string;
+}
+
+const {
+  surface = "paper",
+  id,
+  class: className = "",
+  containerClass = "",
+  bare = false,
+  labelledby,
+} = Astro.props;
+
+const surfaces: Record<Surface, string> = {
+  paper: "bg-paper",
+  white: "bg-white",
+  stone: "surface-stone",
+  cad: "surface-cad",
+  ink: "band-ink",
+};
+---
+
+<section
+  id={id}
+  aria-labelledby={labelledby}
+  class:list={[
+    surfaces[surface],
+    "py-16 sm:py-20 lg:py-28",
+    className,
+  ]}
+>
+  {
+    bare ? (
+      <slot />
+    ) : (
+      <Container class={containerClass}>
+        <slot />
+      </Container>
+    )
+  }
+</section>

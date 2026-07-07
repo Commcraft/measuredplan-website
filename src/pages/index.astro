@@ -1,30 +1,292 @@
 ---
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { getCollection } from "astro:content";
 
-import { Background } from '@/components/background';
-import { FAQ } from '@/components/blocks/faq';
-import { Features } from '@/components/blocks/features';
-import { Hero } from '@/components/blocks/hero';
-import { Logos } from '@/components/blocks/logos';
-import { Pricing } from '@/components/blocks/pricing';
-import { ResourceAllocation } from '@/components/blocks/resource-allocation';
-import { Testimonials } from '@/components/blocks/testimonials';
-import DefaultLayout from '@/layouts/DefaultLayout.astro';
+import Container from "@/components/Container.astro";
+import CTASection from "@/components/CTASection.astro";
+import Eyebrow from "@/components/Eyebrow.astro";
+import Faq from "@/components/Faq.astro";
+import LinkButton from "@/components/LinkButton.astro";
+import PlanThumb from "@/components/PlanThumb.astro";
+import PlanVisual from "@/components/PlanVisual.astro";
+import ProcessStrip from "@/components/ProcessStrip.astro";
+import ProofPoint from "@/components/ProofPoint.astro";
+import Section from "@/components/Section.astro";
+import SectionHeading from "@/components/SectionHeading.astro";
+import ServiceCard from "@/components/ServiceCard.astro";
+import { SITE_TAGLINE, BUSINESS } from "@/consts";
+import DefaultLayout from "@/layouts/DefaultLayout.astro";
+import { faqPageJsonLd } from "@/lib/seo";
 
+const services = (await getCollection("services")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const projects = (await getCollection("projects"))
+  .filter((p) => p.data.featured)
+  .sort((a, b) => a.data.order - b.data.order);
 
+const allFaqs = (await getCollection("faqs")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const homeFaqs = allFaqs
+  .filter((f) => f.data.services.length === 0)
+  .slice(0, 5)
+  .map((f) => ({ question: f.data.question, answer: f.data.answer }));
 
+const process = [
+  {
+    title: "Enquiry",
+    body: "Send the property details and what the drawings are for. We confirm scope, format and a fixed fee.",
+  },
+  {
+    title: "Site visit",
+    body: "We measure on site, recording the building or site accurately to a stated datum.",
+  },
+  {
+    title: "Drawing",
+    body: "We draft in CAD to a consistent layer structure, checked against the survey.",
+  },
+  {
+    title: "Delivery",
+    body: "You receive a clean, scaled set in the agreed formats, with one revision included.",
+  },
+];
+
+const trust = [
+  "Measured on site",
+  "Layered CAD output",
+  `${BUSINESS.formats.join(" · ")} delivery`,
+  "Fixed-fee quotes",
+];
+
+const proof = [
+  {
+    stat: "PDF · DWG · IFC",
+    label: "Delivered in usable formats",
+    note: "Layered AutoCAD DWG and scaled PDF as standard, IFC where a model is needed.",
+  },
+  {
+    stat: "1 revision",
+    label: "Included as standard",
+    note: "Drawings are checked before issue; corrections against the survey are included.",
+  },
+  {
+    stat: "Fixed fee",
+    label: "Confirmed before we start",
+    note: "A clear scope and price with every quote — no open-ended day rates.",
+  },
+  {
+    stat: "Insured",
+    label: "Professional indemnity cover",
+    note: "[TODO: state PI insurance value and any RICS / CICES membership]",
+  },
+];
 ---
 
-<DefaultLayout title={SITE_TITLE} description={SITE_DESCRIPTION} >
-  <Background className="via-muted to-muted/80">
-    <Hero />
-    <Logos client:only="react"/> 
-    <Features />
-    <ResourceAllocation />
-  </Background>
-  <Testimonials client:only='react'/>
-  <Background variant="bottom">
-    <Pricing client:only='react'/>
-    <FAQ client:only='react'/>
-  </Background>
+<DefaultLayout jsonLd={[faqPageJsonLd(homeFaqs)]}>
+  <!-- ===== Hero ===== -->
+  <section class="relative overflow-hidden border-b border-line bg-paper">
+    <Container class="grid gap-12 py-16 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-16 lg:py-24">
+      <div>
+        <Eyebrow class="mb-6">Measured survey practice</Eyebrow>
+        <h1 class="text-[2.3rem] leading-[1.05] sm:text-5xl lg:text-[3.5rem]">
+          Measured building surveys, drawn properly.
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-muted">
+          MeasuredPlan produces precise floor plans, elevations, sections and
+          lease plans from an accurate site measure — clean, layered drawings
+          you can design, plan and register from.
+        </p>
+        <div class="mt-9 flex flex-wrap gap-3">
+          <LinkButton href="/contact" size="lg">Request a quote</LinkButton>
+          <LinkButton href="/projects" variant="outline" size="lg">
+            View sample plans
+          </LinkButton>
+        </div>
+        <ul class="mt-10 flex flex-wrap gap-x-6 gap-y-3">
+          {
+            trust.map((item) => (
+              <li class="flex items-center gap-2 font-mono text-xs text-ink-muted">
+                <span class="h-1 w-1 bg-line-strong" aria-hidden="true" />
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="relative">
+        <PlanVisual class="shadow-lg" />
+      </div>
+    </Container>
+  </section>
+
+  <!-- ===== Trust bar ===== -->
+  <div class="surface-cad border-b border-line">
+    <Container class="flex flex-wrap items-center justify-between gap-x-8 gap-y-3 py-5">
+      <p class="eyebrow">For architects · property owners · solicitors</p>
+      <p class="font-mono text-xs text-ink-muted">
+        {SITE_TAGLINE}
+      </p>
+    </Container>
+  </div>
+
+  <!-- ===== Services grid ===== -->
+  <Section surface="paper" labelledby="services-heading">
+    <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <SectionHeading
+        id="services-heading"
+        eyebrow="Services"
+        title="Drawings for planning, design and property."
+        intro="Five measured survey services, each delivered as clean, usable drawings. Not sure which you need? We will tell you."
+      />
+      <LinkButton href="/services" variant="outline" size="sm" class="shrink-0">
+        All services
+      </LinkButton>
+    </div>
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        services.map((s) => (
+          <ServiceCard
+            href={`/services/${s.id}`}
+            title={s.data.title}
+            eyebrow={s.data.eyebrow}
+            summary={s.data.summary}
+            deliverables={s.data.deliverables.slice(0, 3)}
+            optional={s.data.optional}
+          />
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- ===== Deliverables strip ===== -->
+  <Section surface="stone" labelledby="deliverables-heading">
+    <SectionHeading
+      id="deliverables-heading"
+      eyebrow="What you receive"
+      title="Clean sheets, at the scale you need."
+      intro="Every drawing is issued to a consistent layer structure, with a clear title block, scale bar and north point — so it reads the same on screen, on paper and in CAD."
+    />
+    <div class="mt-12 grid gap-6 md:grid-cols-3">
+      <figure>
+        <PlanThumb variant="floorplan" label="Sample floor plan" datum />
+        <figcaption class="mt-3 font-mono text-xs text-ink-muted">
+          Floor plan · 1:50 @ A3 · DWG + PDF
+        </figcaption>
+      </figure>
+      <figure>
+        <PlanThumb variant="elevation" label="Sample elevation" />
+        <figcaption class="mt-3 font-mono text-xs text-ink-muted">
+          Elevation · 1:100 @ A3 · DWG + PDF
+        </figcaption>
+      </figure>
+      <figure>
+        <PlanThumb variant="leaseplan" label="Sample lease plan" />
+        <figcaption class="mt-3 font-mono text-xs text-ink-muted">
+          Lease plan · Land Registry · 1:100
+        </figcaption>
+      </figure>
+    </div>
+    <p class="mt-6 max-w-2xl text-sm text-ink-muted">
+      Representative samples of drawing output. Anonymised project sheets will be
+      added as they are released.
+    </p>
+  </Section>
+
+  <!-- ===== Process ===== -->
+  <Section surface="paper" labelledby="process-heading">
+    <SectionHeading
+      id="process-heading"
+      eyebrow="Process"
+      title="A clear route from enquiry to delivery."
+      intro="Four steps, every project. You always know what happens next and what you will receive."
+    />
+    <ProcessStrip steps={process} class="mt-12" />
+  </Section>
+
+  <!-- ===== Why MeasuredPlan ===== -->
+  <Section surface="cad" labelledby="why-heading">
+    <SectionHeading
+      id="why-heading"
+      eyebrow="Why MeasuredPlan"
+      title="Accuracy, documented and easy to use."
+      intro="The value is not only in the measurement — it is in drawings that are correct, consistent and ready for the next person to work from."
+    />
+    <div class="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+      {proof.map((p) => <ProofPoint stat={p.stat} label={p.label} note={p.note} />)}
+    </div>
+  </Section>
+
+  <!-- ===== Featured projects ===== -->
+  <Section surface="paper" labelledby="projects-heading">
+    <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <SectionHeading
+        id="projects-heading"
+        eyebrow="Selected work"
+        title="Representative drawing types."
+        intro="Sample sheets showing the standard of output across the services we offer."
+      />
+      <LinkButton href="/projects" variant="outline" size="sm" class="shrink-0">
+        View all
+      </LinkButton>
+    </div>
+    <div class="mt-12 grid gap-6 md:grid-cols-3">
+      {
+        projects.map((p) => (
+          <article class="flex flex-col">
+            <PlanThumb variant={p.data.variant} label={p.data.title} />
+            <div class="mt-4">
+              <span class="eyebrow">{p.data.buildingType}</span>
+              <h3 class="mt-2 text-lg leading-snug">{p.data.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-ink-muted">
+                {p.data.scopeLine}
+              </p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </Section>
+
+  <!-- ===== References (honest, no fabricated quotes) ===== -->
+  <Section surface="stone">
+    <div
+      class="title-block flex flex-col items-start gap-6 p-8 sm:flex-row sm:items-center sm:justify-between sm:p-10"
+    >
+      <div class="max-w-xl">
+        <Eyebrow class="mb-4">Working with us</Eyebrow>
+        <p class="text-xl leading-snug text-ink sm:text-2xl">
+          A single accurate base that every consultant on the project can rely
+          on — measured once, drawn properly.
+        </p>
+        <p class="mt-4 text-sm text-ink-muted">
+          Client references are available on request.
+        </p>
+      </div>
+      <LinkButton href="/about" variant="outline" size="md" class="shrink-0">
+        About the practice
+      </LinkButton>
+    </div>
+  </Section>
+
+  <!-- ===== FAQ preview ===== -->
+  <Section surface="paper" labelledby="faq-heading">
+    <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+      <SectionHeading
+        id="faq-heading"
+        eyebrow="Questions"
+        title="What clients ask before starting."
+        intro="A few of the most common questions. The full list is on the FAQ page."
+      />
+      <div>
+        <Faq items={homeFaqs} />
+        <div class="mt-8">
+          <LinkButton href="/faq" variant="ghost" size="sm">
+            All questions →
+          </LinkButton>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <CTASection secondaryLabel="View services" secondaryHref="/services" />
 </DefaultLayout>
