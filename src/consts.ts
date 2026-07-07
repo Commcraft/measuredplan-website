@@ -101,9 +101,9 @@ export const SITE_METADATA = {
     siteName: SITE_TITLE,
     images: [
       {
-        url: "/measuredplan-social-1024.png",
-        width: 1024,
-        height: 1024,
+        url: "/og-cover.jpg",
+        width: 1200,
+        height: 630,
         alt: "MeasuredPlan — precise measured building surveys and CAD drawings",
       },
     ],
@@ -112,7 +112,7 @@ export const SITE_METADATA = {
     card: "summary_large_image",
     title: `${SITE_TITLE} — Measured Building Surveys · Asheville, NC`,
     description: SITE_DESCRIPTION,
-    images: ["/measuredplan-social-1024.png"],
+    images: ["/og-cover.jpg"],
   },
 };
 
@@ -123,7 +123,7 @@ export const ORGANIZATION_JSONLD = {
   name: BUSINESS.name,
   description: SITE_DESCRIPTION,
   url: SITE_URL,
-  image: `${SITE_URL}/measuredplan-social-1024.png`,
+  image: `${SITE_URL}/og-cover.jpg`,
   areaServed: "Western North Carolina",
   address: {
     "@type": "PostalAddress",

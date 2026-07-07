@@ -7,7 +7,6 @@ import Eyebrow from "@/components/Eyebrow.astro";
 import Faq from "@/components/Faq.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import PlanThumb from "@/components/PlanThumb.astro";
-import PlanVisual from "@/components/PlanVisual.astro";
 import ProcessStrip from "@/components/ProcessStrip.astro";
 import ProofPoint from "@/components/ProofPoint.astro";
 import Section from "@/components/Section.astro";
@@ -113,9 +112,25 @@ const proof = [
           }
         </ul>
       </div>
-      <div class="relative">
-        <PlanVisual class="shadow-lg" />
-      </div>
+      <figure class="relative">
+        <div class="title-block overflow-hidden shadow-lg">
+          <img
+            src="/projects/luxury-home-3d.webp"
+            alt="A 3D model produced from a MeasuredPlan measured building survey"
+            width="1600"
+            height="1010"
+            fetchpriority="high"
+            decoding="async"
+            class="block h-auto w-full bg-white"
+          />
+          <figcaption
+            class="flex items-center gap-2.5 border-t border-line bg-white px-4 py-2.5 font-mono text-xs text-ink-muted"
+          >
+            <span class="datum-tick" aria-hidden="true"></span>
+            3D model · from a measured survey
+          </figcaption>
+        </div>
+      </figure>
     </Container>
   </section>
 
