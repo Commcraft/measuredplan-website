@@ -55,6 +55,21 @@ const methodRows = [
   },
 ];
 
+const team = [
+  {
+    name: "Alfredas Zalys",
+    role: "CEO",
+    photo: "/team/alfredas-zalys.webp",
+    bio: "Alfredas leads MeasuredPlan with more than 20 years of experience in property measurement and measured building documentation. His work is focused on accuracy, consistency and dependable delivery — ensuring every project is handled with the level of care required for planning, design, leasing and property decision-making.",
+  },
+  {
+    name: "Benas Rimsa",
+    role: "COO",
+    photo: "/team/benas-rimsa.webp",
+    bio: "Benas brings over 15 years of financial and operational management experience to MeasuredPlan. As COO, he oversees the commercial and operational side of the business, helping ensure clients receive a clear, reliable service with transparent communication, efficient processes and strong value from first inquiry to final delivery.",
+  },
+];
+
 const crumbs = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about/" },
@@ -109,6 +124,39 @@ const crumbs = [
           As-built floor plan · recent project
         </figcaption>
       </figure>
+    </div>
+  </Section>
+
+  <!-- Leadership -->
+  <Section surface="cad">
+    <SectionHeading
+      eyebrow="Leadership"
+      title="The people behind the practice."
+      intro="MeasuredPlan is led by two principals who between them cover the technical and the commercial side of every project."
+    />
+    <div class="mt-12 grid gap-6 md:grid-cols-2">
+      {
+        team.map((person) => (
+          <div class="title-block flex flex-col gap-6 bg-white p-6 sm:flex-row sm:p-7">
+            <img
+              src={person.photo}
+              alt={`${person.name}, ${person.role} of MeasuredPlan`}
+              width="640"
+              height="640"
+              loading="lazy"
+              decoding="async"
+              class="h-28 w-28 shrink-0 border border-line bg-white object-cover sm:h-32 sm:w-32"
+            />
+            <div>
+              <h3 class="text-lg leading-snug text-ink">{person.name}</h3>
+              <p class="eyebrow mt-1.5">{person.role}</p>
+              <p class="mt-4 text-sm leading-relaxed text-ink-muted">
+                {person.bio}
+              </p>
+            </div>
+          </div>
+        ))
+      }
     </div>
   </Section>
 
