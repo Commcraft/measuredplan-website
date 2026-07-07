@@ -279,43 +279,14 @@ const crumbs = [
   }
 
   if (form && form.dataset.mode === "backend") {
-    // Progressive enhancement: submit via FormSubmit's JSON (AJAX) endpoint so
-    // we can show an inline error and keep the visitor on-site. On success we
-    // send them to the thank-you page. With JS disabled the form's native
-    // action still posts to FormSubmit, which redirects via the _next field.
-    const ajaxAction = form.action.replace(
-      "formsubmit.co/",
-      "formsubmit.co/ajax/",
-    );
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const submit = form.querySelector<HTMLButtonElement>(
-        'button[type="submit"]',
-      );
-      if (submit) submit.disabled = true;
+    // Native POST to FormSubmit — the reliable, documented flow. FormSubmit
+    // emails the submission to the practice and redirects to /contact/thanks/
+    // via the hidden _next field. (On the very first submission FormSubmit
+    // shows a one-time "confirm your email" page instead of redirecting.)
+    // We only surface a lightweight sending state; the browser handles the
+    // rest, so there is no CORS or AJAX activation edge case to trip on.
+    form.addEventListener("submit", () => {
       showStatus("Sending your request…");
-      try {
-        const res = await fetch(ajaxAction, {
-          method: "POST",
-          body: new FormData(form),
-          headers: { Accept: "application/json" },
-        });
-        const data = await res.json().catch(() => null);
-        const ok = res.ok && data && String(data.success) === "true";
-        if (ok) {
-          window.location.href = "/contact/thanks/";
-          return;
-        }
-        throw new Error(data?.message || String(res.status));
-      } catch {
-        if (submit) submit.disabled = false;
-        showStatus(
-          "Something went wrong sending the form. Please email " +
-            (form.dataset.email || "") +
-            " and we'll pick it up right away.",
-          true,
-        );
-      }
     });
   } else if (form) {
     // Fallback (no backend configured yet): compose the inquiry as an email.
