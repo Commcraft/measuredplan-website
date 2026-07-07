@@ -9,9 +9,9 @@ export const SITE_URL = "https://measuredplan.com";
 export const SITE_TITLE = "MeasuredPlan";
 export const SITE_TAGLINE = "Measured building surveys, drawn properly";
 export const SITE_DESCRIPTION =
-  "MeasuredPlan produces precise measured survey drawings — floor plans, " +
-  "elevations, sections and lease plans — for architects, property owners " +
-  "and solicitors.";
+  "MeasuredPlan produces precise measured building surveys, floor plans, " +
+  "as-built drawings and CAD documentation for architects, property owners " +
+  "and real estate professionals across Western North Carolina.";
 
 // Business details — replace [TODO] values before launch.
 export const BUSINESS = {
@@ -47,10 +47,10 @@ export const FOOTER_SERVICES = [
     label: "Measured building surveys",
     href: "/services/measured-building-surveys",
   },
-  { label: "Lease plans", href: "/services/lease-plans" },
-  { label: "Topographical surveys", href: "/services/topographical-surveys" },
-  { label: "3D scanning", href: "/services/3d-scanning" },
-  { label: "Area reports", href: "/services/area-reports" },
+  { label: "Lease & property plans", href: "/services/lease-plans" },
+  { label: "CAD drafting", href: "/services/cad-drafting" },
+  { label: "3D laser scanning", href: "/services/3d-scanning" },
+  { label: "Area & square footage reports", href: "/services/area-reports" },
 ] as const;
 
 export const FOOTER_COMPANY = [
@@ -67,21 +67,21 @@ export const FOOTER_LEGAL = [
 
 export const SITE_METADATA = {
   title: {
-    default: `${SITE_TITLE} — Measured building surveys & lease plans`,
+    default: `${SITE_TITLE} — Measured Building Surveys · Asheville, NC`,
     template: `%s — ${SITE_TITLE}`,
   },
   description: SITE_DESCRIPTION,
   keywords: [
     "measured building survey",
-    "measured survey",
-    "floor plans",
-    "lease plans",
-    "Land Registry lease plan",
-    "topographical survey",
-    "elevations and sections",
     "as-built drawings",
-    "CAD floor plans",
-    "measured plan",
+    "floor plans",
+    "CAD drafting",
+    "lease exhibit",
+    "space plans",
+    "BOMA square footage",
+    "3D laser scanning",
+    "Asheville NC",
+    "Western North Carolina",
   ],
   authors: [{ name: "MeasuredPlan" }],
   creator: "MeasuredPlan",
@@ -97,7 +97,7 @@ export const SITE_METADATA = {
     shortcut: [{ url: "/favicon/favicon.ico" }],
   },
   openGraph: {
-    title: `${SITE_TITLE} — Measured building surveys & lease plans`,
+    title: `${SITE_TITLE} — Measured Building Surveys · Asheville, NC`,
     description: SITE_DESCRIPTION,
     siteName: SITE_TITLE,
     images: [
@@ -105,13 +105,13 @@ export const SITE_METADATA = {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "MeasuredPlan — precise measured survey drawings",
+        alt: "MeasuredPlan — precise measured building surveys and CAD drawings",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_TITLE} — Measured building surveys & lease plans`,
+    title: `${SITE_TITLE} — Measured Building Surveys · Asheville, NC`,
     description: SITE_DESCRIPTION,
     images: ["/og-image.jpg"],
   },

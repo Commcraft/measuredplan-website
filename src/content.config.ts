@@ -8,7 +8,7 @@ const services = defineCollection({
     title: z.string(),
     order: z.number(),
     optional: z.boolean().default(false),
-    eyebrow: z.string(), // e.g. "1:50 · 1:100"
+    eyebrow: z.string(), // e.g. imperial scales
     summary: z.string(), // one line, used on cards
     intro: z.string(), // 1–2 sentences at top of the page
     seoTitle: z.string(),

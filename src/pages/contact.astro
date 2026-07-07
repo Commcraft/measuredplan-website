@@ -94,41 +94,31 @@ const crumbs = [
         <!-- Quote form -->
         <div>
           <!--
-            BACKEND STATUS — the form is wired for Netlify Forms (data-netlify),
-            with a honeypot. Delivery activates once the site is deployed to
-            Netlify AND the receiving email is confirmed. Until then, submissions
-            are not received: use the email / phone above.
-            TODO: confirm host (Netlify vs Astro action + Resend) and set the
-            receiving address, then remove this notice. See site-brief §3.7.
+            The site is static (GitHub Pages), so the form has no server.
+            Submitting composes an email in the visitor's mail app, addressed
+            to BUSINESS.email, with the fields filled in. The email/phone above
+            are always available as a direct fallback.
           -->
           <div
-            class="mb-8 flex items-start gap-3 border border-line bg-red-tint px-4 py-3.5"
+            class="mb-8 flex items-start gap-3 border border-line surface-cad px-4 py-3.5"
             role="note"
           >
             <span
-              class="mt-1.5 h-1.5 w-1.5 shrink-0 bg-red"
+              class="mt-1.5 h-1.5 w-1.5 shrink-0 bg-line-strong"
               aria-hidden="true"
             ></span>
             <p class="text-sm leading-relaxed text-ink">
-              <span class="font-medium">Form delivery is being finalised.</span>
-              To enquire now, email
+              Submitting opens your email app with the details filled in. You can
+              also email
               <a
                 href={`mailto:${BUSINESS.email}`}
                 class="underline underline-offset-4">{BUSINESS.email}</a
-              > or call {BUSINESS.phone}.
+              > or call {BUSINESS.phone} directly.
             </p>
           </div>
 
-          <form
-            name="quote"
-            method="POST"
-            data-netlify="true"
-            netlify-honeypot="bot-field"
-            class="space-y-6"
-          >
-            <input type="hidden" name="form-name" value="quote" />
-            <p class="hidden" aria-hidden="true">
-              <label>Leave this field empty <input name="bot-field" /></label>
+          <form id="quote-form" data-email={BUSINESS.email} class="space-y-6">
+            <p id="quote-status" class="hidden text-sm text-ink" role="status">
             </p>
 
             <div class="grid gap-6 sm:grid-cols-2">
@@ -180,15 +170,15 @@ const crumbs = [
                 <select id="property-type" name="property-type" class={field}>
                   <option value="">Select…</option>
                   <option>House</option>
-                  <option>Flat / apartment</option>
+                  <option>Apartment / condo</option>
                   <option>Commercial</option>
                   <option>Land / site</option>
                   <option>Other</option>
                 </select>
               </div>
               <div>
-                <label for="size" class={labelCls}>Approx. floor area or storeys</label>
-                <input id="size" name="size" type="text" class={field} placeholder="e.g. 120 m², or 2 storeys" />
+                <label for="size" class={labelCls}>Approx. floor area or stories</label>
+                <input id="size" name="size" type="text" class={field} placeholder="e.g. 1,200 sq ft, or 2 stories" />
               </div>
             </div>
 
@@ -205,7 +195,7 @@ const crumbs = [
 
             <div>
               <label for="details" class={labelCls}>Project details</label>
-              <textarea id="details" name="details" rows="5" required class={field} placeholder="What are the drawings for? Planning, a lease, a refurbishment, a record…"></textarea>
+              <textarea id="details" name="details" rows="5" required class={field} placeholder="What are the drawings for? Permitting, a lease, a renovation, a record…"></textarea>
             </div>
 
             <div>
@@ -228,3 +218,46 @@ const crumbs = [
     </Container>
   </section>
 </DefaultLayout>
+
+<script>
+  // Static site: compose the enquiry as an email in the visitor's mail app.
+  const form = document.getElementById("quote-form") as HTMLFormElement | null;
+  const status = document.getElementById("quote-status");
+
+  form?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const to = form.dataset.email || "";
+    const data = new FormData(form);
+    const val = (n: string) => (data.get(n) as string) || "";
+    const services = data.getAll("service").join(", ");
+
+    const lines = [
+      `Name: ${val("name")}`,
+      `Email: ${val("email")}`,
+      `Phone: ${val("phone")}`,
+      `Property / location: ${val("location")}`,
+      `Service needed: ${services}`,
+      `Property type: ${val("property-type")}`,
+      `Approx. size: ${val("size")}`,
+      `Timeline: ${val("timeline")}`,
+      "",
+      "Project details:",
+      val("details"),
+      "",
+      "Existing files:",
+      val("files"),
+    ];
+
+    const subject = `Quote request — ${val("name") || "MeasuredPlan"}`;
+    const href = `mailto:${to}?subject=${encodeURIComponent(
+      subject,
+    )}&body=${encodeURIComponent(lines.join("\n"))}`;
+
+    if (status) {
+      status.textContent =
+        "Opening your email app… if nothing happens, email " + to + " directly.";
+      status.classList.remove("hidden");
+    }
+    window.location.href = href;
+  });
+</script>

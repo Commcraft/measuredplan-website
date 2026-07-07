@@ -1,10 +1,10 @@
 ---
-title: Victorian terrace — measured survey
+title: Historic home — measured survey
 order: 1
 service: ["measured-building-surveys"]
-buildingType: Terraced house
+buildingType: Historic home
 location: Representative sample
-scopeLine: Full measured survey — floor plans, elevations and a section for a rear extension design.
+scopeLine: Full measured survey — floor plans, elevations and a section for a rear addition design.
 deliverables: ["Floor plans", "Elevations", "Section", "DWG + PDF"]
 variant: floorplan
 date: "2026"

@@ -28,7 +28,7 @@ const standards = [
   },
   {
     title: "Sensible file structure",
-    body: "Files are named and organised predictably, so you can find and reuse them long after delivery.",
+    body: "Files are named and organized predictably, so you can find and reuse them long after delivery.",
   },
   {
     title: "Practical communication",
@@ -37,11 +37,23 @@ const standards = [
 ];
 
 const methodRows = [
-  { label: "Measurement", value: "Laser distance measurement, disto and total station as required" },
-  { label: "Levelling", value: "Tied to a stated datum — Ordnance Datum or a site benchmark" },
-  { label: "Scanning", value: "Terrestrial laser scanning for complex and detailed buildings" },
+  {
+    label: "Measurement",
+    value: "Laser distance meters and a 3D laser scanner as required",
+  },
+  {
+    label: "Scanning",
+    value: "Terrestrial laser scanning for complex and detailed buildings",
+  },
   { label: "Drafting", value: "AutoCAD, layered to a consistent standard" },
-  { label: "Instruments", value: "[TODO: state instrument makes/models if you wish]" },
+  {
+    label: "Area standards",
+    value: "BOMA for commercial, ANSI Z765 for residential",
+  },
+  {
+    label: "Instruments",
+    value: "[TODO: state instrument makes/models if you wish]",
+  },
 ];
 
 const crumbs = [
@@ -58,7 +70,7 @@ const crumbs = [
   <PageIntro
     eyebrow="The practice"
     title="A measured survey practice built on accuracy and documentation."
-    intro="MeasuredPlan produces precise survey drawings for the people who rely on them — architects, property owners and solicitors. The work is deliberately unshowy: measure carefully, draw clearly, deliver something genuinely usable."
+    intro="MeasuredPlan produces precise survey drawings for the people who rely on them — architects, property owners and attorneys. The work is deliberately unshowy: measure carefully, draw clearly, deliver something genuinely usable."
     crumbs={crumbs}
   />
 
@@ -68,9 +80,9 @@ const crumbs = [
       <div class="space-y-5 text-[1.05rem] leading-relaxed text-ink-muted">
         <p>
           Good drawings are quiet infrastructure. When a floor plan is accurate,
-          a lease plan is compliant and a site survey is properly levelled, the
-          projects built on them run more smoothly — fewer surprises, fewer
-          revisions, less wasted cost.
+          a lease exhibit is clear and an as-built reflects the building as it
+          really is, the projects built on them run more smoothly — fewer
+          surprises, fewer revisions, less wasted cost.
         </p>
         <p>
           That is the whole intent of the practice: to be the dependable
@@ -119,28 +131,31 @@ const crumbs = [
     </div>
   </Section>
 
-  <!-- Accreditations & insurance -->
+  <!-- Insurance, scope & coverage -->
   <Section surface="cad">
     <div class="title-block p-8 sm:p-10">
-      <Eyebrow class="mb-5">Accreditations & insurance</Eyebrow>
+      <Eyebrow class="mb-5">Insurance, scope & coverage</Eyebrow>
       <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         <div>
-          <h3 class="text-base font-medium text-ink">Professional membership</h3>
+          <h3 class="text-base font-medium text-ink">Insurance</h3>
           <p class="mt-2 text-sm text-ink-muted">
-            [TODO: state RICS / CICES membership or other accreditation, with
-            registration numbers if applicable.]
+            [TODO: state general liability and errors &amp; omissions (E&amp;O)
+            coverage.]
           </p>
         </div>
         <div>
-          <h3 class="text-base font-medium text-ink">Professional indemnity</h3>
+          <h3 class="text-base font-medium text-ink">Scope</h3>
           <p class="mt-2 text-sm text-ink-muted">
-            [TODO: state PI insurance provider and cover value.]
+            We produce measured building drawings, as-builts and CAD
+            documentation. We do not perform licensed land or boundary surveys;
+            where one is needed we can refer a licensed North Carolina surveyor.
           </p>
         </div>
         <div>
           <h3 class="text-base font-medium text-ink">Coverage</h3>
           <p class="mt-2 text-sm text-ink-muted">
-            [TODO: state the areas covered and travel radius.]
+            Based in Asheville, serving Western North Carolina.
+            [TODO: confirm travel radius or any additional areas.]
           </p>
         </div>
       </div>

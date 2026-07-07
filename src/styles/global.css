@@ -133,7 +133,7 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* ---- MeasuredPlan brand colours as first-class utilities --------- */
+  /* ---- MeasuredPlan brand colors as first-class utilities --------- */
   --color-ink: var(--mp-ink);
   --color-graphite: var(--mp-graphite);
   --color-paper: var(--mp-paper);

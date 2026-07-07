@@ -16,7 +16,7 @@ const services = (await getCollection("services")).sort(
 
 const factors = [
   {
-    title: "Floor area & storeys",
+    title: "Floor area & stories",
     body: "The size of the property and the number of levels to measure and draw.",
   },
   {
@@ -42,9 +42,9 @@ const included = [
 
 const pricingFaqs = [
   {
-    question: "How is VAT handled?",
+    question: "Is sales tax included?",
     answer:
-      "Quotes state whether VAT is included. [TODO: confirm VAT registration status and how it is shown on quotes.]",
+      "Quotes state whether sales tax applies. [TODO: confirm how NC sales tax is handled on your invoices.]",
   },
   {
     question: "When is payment due?",
@@ -168,7 +168,7 @@ const crumbs = [
   <!-- Pricing FAQ -->
   <Section surface="cad">
     <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
-      <SectionHeading eyebrow="Questions" title="Payment, VAT and terms." />
+      <SectionHeading eyebrow="Questions" title="Payment and terms." />
       <div>
         <Faq items={pricingFaqs} />
         <div class="mt-8">
