@@ -1,8 +1,8 @@
 ---
-// Official MeasuredPlan wordmark (Satoshi Semibold lockup, from the logo pack).
-// The SVGs are fully outlined — no font dependency — and used unmodified.
-//   ink   → header wordmark (dark text, for light surfaces)
-//   paper → reversed wordmark (paper text, for dark .band-ink surfaces)
+// Official MeasuredPlan primary lockup (Satoshi wordmark + ruler + red datum),
+// from the logo pack. Fully outlined SVG — no font dependency — used unmodified.
+//   ink   → primary lockup (dark, for light surfaces)
+//   paper → reversed primary lockup (for dark .band-ink surfaces)
 interface Props {
   tone?: "ink" | "paper";
   href?: string | null;
@@ -12,8 +12,8 @@ const { tone = "ink", href = "/", class: className = "" } = Astro.props;
 
 const src =
   tone === "paper"
-    ? "/brand/measuredplan-logo-wordmark-paper.svg"
-    : "/brand/measuredplan-logo-header.svg";
+    ? "/brand/measuredplan-logo-primary-reversed.svg"
+    : "/brand/measuredplan-logo-primary.svg";
 const Tag = href ? "a" : "span";
 ---
 
@@ -25,8 +25,8 @@ const Tag = href ? "a" : "span";
   <img
     src={src}
     alt="MeasuredPlan"
-    width="220"
-    height="27.5"
-    class="h-[22px] w-auto sm:h-6"
+    width="520"
+    height="85.6"
+    class="h-8 w-auto sm:h-9"
   />
 </Tag>
