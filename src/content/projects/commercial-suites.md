@@ -8,5 +8,5 @@ scopeLine: Measured floor plan and rentable suite areas across two commercial un
 deliverables: ["Lease plan", "Suite areas", "PDF"]
 image: /projects/suites-plan.webp
 date: "2025"
-featured: true
+featured: false
 ---
