@@ -37,6 +37,34 @@ const homeFaqs = allFaqs
   .slice(0, 5)
   .map((f) => ({ question: f.data.question, answer: f.data.answer }));
 
+const routes = [
+  {
+    need: "I'm renovating or designing from an existing building.",
+    label: "Measured survey / as-built CAD",
+    href: "/services/measured-building-surveys/",
+  },
+  {
+    need: "I need square footage or a floor plan for a listing.",
+    label: "Floor plan & square-footage report",
+    href: "/services/area-reports/",
+  },
+  {
+    need: "I need drawings for a lease, suite or commercial space.",
+    label: "Lease & BOMA area plans",
+    href: "/services/lease-plans/",
+  },
+  {
+    need: "I have an old PDF, sketch or plan that needs to become CAD.",
+    label: "CAD redraw / drafting",
+    href: "/services/cad-drafting/",
+  },
+  {
+    need: "The building is complex and needs detailed capture.",
+    label: "3D laser scanning / scan-to-CAD",
+    href: "/services/3d-scanning/",
+  },
+];
+
 const process = [
   {
     title: "Inquiry",
@@ -177,6 +205,64 @@ const proof = [
           />
         ))
       }
+    </div>
+  </Section>
+
+  <!-- ===== Choose your route ===== -->
+  <Section surface="cad" labelledby="route-heading">
+    <SectionHeading
+      id="route-heading"
+      eyebrow="Choose your route"
+      title="Which drawing do you actually need?"
+      intro="Match what you're trying to do to the right service - or let us point you to it. Each route links straight to the details."
+    />
+    <div class="mt-10 border-t border-line">
+      {
+        routes.map((r) => (
+          <a
+            href={r.href}
+            class="group grid gap-1.5 border-b border-line px-3 py-5 transition-colors hover:bg-white sm:grid-cols-[1fr_auto] sm:items-center sm:gap-8 sm:px-4"
+          >
+            <p class="text-[1.05rem] leading-snug text-ink">
+              <span class="text-line-strong">“</span>
+              {r.need}
+              <span class="text-line-strong">”</span>
+            </p>
+            <span class="flex items-center gap-2 font-mono text-sm text-ink-muted transition-colors group-hover:text-red-deep">
+              {r.label}
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                aria-hidden="true"
+                class="shrink-0 transition-transform duration-150 group-hover:translate-x-1"
+              >
+                <path
+                  d="M5 12h14M13 6l6 6-6 6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
+          </a>
+        ))
+      }
+    </div>
+
+    <!-- Reassurance + CTA -->
+    <div class="title-block mt-10 flex flex-col items-start gap-6 bg-white p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+      <p class="max-w-3xl text-[1.05rem] leading-relaxed text-ink">
+        Not sure which drawing you need? Tell us the property address, what the
+        drawing is for, and your deadline. We'll recommend the correct route -
+        floor plan, measured survey, square-footage report, lease exhibit, CAD
+        redraw or scan-to-CAD - before you commit.
+      </p>
+      <LinkButton href="/contact/" size="lg" class="shrink-0">
+        Tell us about your property
+      </LinkButton>
     </div>
   </Section>
 
