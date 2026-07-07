@@ -19,7 +19,9 @@ const serviceName = (slug: string) =>
 
 const filters = [
   { id: "all", label: "All work" },
-  ...services.map((s) => ({ id: s.id, label: s.data.title })),
+  ...services
+    .filter((s) => !s.data.landingOnly)
+    .map((s) => ({ id: s.id, label: s.data.title })),
 ];
 
 const crumbs = [

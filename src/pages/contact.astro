@@ -9,9 +9,9 @@ import { BUSINESS, CONTACT_FORM_CONFIGURED, SITE_URL } from "@/consts";
 import DefaultLayout from "@/layouts/DefaultLayout.astro";
 import { breadcrumbJsonLd } from "@/lib/seo";
 
-const services = (await getCollection("services")).sort(
-  (a, b) => a.data.order - b.data.order,
-);
+const services = (await getCollection("services"))
+  .filter((s) => !s.data.landingOnly)
+  .sort((a, b) => a.data.order - b.data.order);
 
 // Static-host contact backend (FormSubmit - free, no account). When
 // configured the form POSTs to FormSubmit, which emails BUSINESS.email and

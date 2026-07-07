@@ -18,9 +18,9 @@ import { SITE_TAGLINE, BUSINESS } from "@/consts";
 import DefaultLayout from "@/layouts/DefaultLayout.astro";
 import { faqPageJsonLd } from "@/lib/seo";
 
-const services = (await getCollection("services")).sort(
-  (a, b) => a.data.order - b.data.order,
-);
+const services = (await getCollection("services"))
+  .filter((s) => !s.data.landingOnly)
+  .sort((a, b) => a.data.order - b.data.order);
 const projects = (await getCollection("projects"))
   .filter((p) => p.data.featured)
   .sort((a, b) => a.data.order - b.data.order);
@@ -46,7 +46,7 @@ const routes = [
   {
     need: "I need square footage or a floor plan for a listing.",
     label: "Floor plan & square-footage report",
-    href: "/services/area-reports/",
+    href: "/services/floor-plans-square-footage/",
   },
   {
     need: "I need drawings for a lease, suite or commercial space.",
@@ -121,14 +121,15 @@ const proof = [
     <HeroField />
     <Container class="relative z-10 grid gap-12 py-16 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-16 lg:py-24">
       <div>
-        <Eyebrow class="mb-6">Measured survey practice</Eyebrow>
+        <Eyebrow class="mb-6">Measured survey practice · Asheville, NC</Eyebrow>
         <h1 class="text-[2.3rem] leading-[1.05] sm:text-5xl lg:text-[3.5rem]">
-          Measured building surveys, drawn properly.
+          Measured surveys, floor plans and CAD for Western North Carolina.
         </h1>
         <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-muted">
-          MeasuredPlan produces precise floor plans, elevations, sections and
-          lease plans from an accurate site measure - clean, layered drawings
-          you can design, permit and build from.
+          MeasuredPlan turns an accurate on-site measure into floor plans,
+          as-built surveys, square-footage reports, lease exhibits and CAD
+          drawings - clean, layered and ready to design, permit, lease or build
+          from. Based in Asheville, working across Western North Carolina.
         </p>
         <div class="mt-9 flex flex-wrap gap-3">
           <LinkButton href="/contact/" size="lg">Request a quote</LinkButton>

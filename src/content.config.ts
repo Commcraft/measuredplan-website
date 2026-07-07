@@ -8,6 +8,9 @@ const services = defineCollection({
     title: z.string(),
     order: z.number(),
     optional: z.boolean().default(false),
+    // Landing pages: real pages at /services/<slug>/ for SEO, but kept out of
+    // the primary service grid / pricing / contact lists to avoid overlap.
+    landingOnly: z.boolean().default(false),
     eyebrow: z.string(), // e.g. imperial scales
     summary: z.string(), // one line, used on cards
     intro: z.string(), // 1-2 sentences at top of the page
