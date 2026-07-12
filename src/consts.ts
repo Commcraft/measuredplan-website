@@ -9,9 +9,8 @@ export const SITE_URL = "https://measuredplan.com";
 export const SITE_TITLE = "MeasuredPlan";
 export const SITE_TAGLINE = "Measured building surveys, drawn properly";
 export const SITE_DESCRIPTION =
-  "MeasuredPlan produces precise measured building surveys, floor plans, " +
-  "as-built drawings and CAD documentation for architects, property owners " +
-  "and real estate professionals across Western North Carolina.";
+  "Precise measured building surveys, floor plans, as-built drawings and CAD " +
+  "for architects, owners and real estate across Western North Carolina.";
 
 // Business details - replace [TODO] values before launch.
 export const BUSINESS = {
