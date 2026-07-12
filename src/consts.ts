@@ -7,10 +7,10 @@
 export const SITE_URL = "https://measuredplan.com";
 
 export const SITE_TITLE = "MeasuredPlan";
-export const SITE_TAGLINE = "Measured building surveys, drawn properly";
+export const SITE_TAGLINE = "As-built documentation, drawn properly";
 export const SITE_DESCRIPTION =
-  "Precise measured building surveys, floor plans, as-built drawings and CAD " +
-  "for architects, owners and real estate across Western North Carolina.";
+  "As-built drawings, construction drawings and concept design for architects, " +
+  "contractors, developers, homebuilders and real estate across Western North Carolina.";
 
 // Business details - replace [TODO] values before launch.
 export const BUSINESS = {
@@ -58,13 +58,16 @@ export const PRIMARY_CTA = {
 // Footer service links (kept in sync with the services collection order).
 export const FOOTER_SERVICES = [
   {
-    label: "Measured building surveys",
+    label: "As-built documentation & floor plans",
     href: "/services/measured-building-surveys/",
   },
+  { label: "Construction drawings", href: "/services/construction-drawings/" },
+  { label: "Concept design", href: "/services/concept-design/" },
   { label: "Lease & property plans", href: "/services/lease-plans/" },
   { label: "CAD drafting", href: "/services/cad-drafting/" },
   { label: "3D laser scanning", href: "/services/3d-scanning/" },
   { label: "Area & square footage reports", href: "/services/area-reports/" },
+  { label: "HOA design & approval", href: "/services/hoa-design-approval/" },
 ] as const;
 
 export const FOOTER_COMPANY = [
@@ -82,7 +85,7 @@ export const FOOTER_LEGAL = [
 
 export const SITE_METADATA = {
   title: {
-    default: `${SITE_TITLE} - As-Built Surveys & Floor Plans · Asheville, NC`,
+    default: `${SITE_TITLE} - As-Built & Construction Drawings · Western North Carolina`,
     template: `%s - ${SITE_TITLE}`,
   },
   description: SITE_DESCRIPTION,
@@ -99,7 +102,7 @@ export const SITE_METADATA = {
     shortcut: [{ url: "/favicon.ico" }],
   },
   openGraph: {
-    title: `${SITE_TITLE} - As-Built Surveys & Floor Plans · Asheville, NC`,
+    title: `${SITE_TITLE} - As-Built & Construction Drawings · Western North Carolina`,
     description: SITE_DESCRIPTION,
     siteName: SITE_TITLE,
     images: [
@@ -107,13 +110,13 @@ export const SITE_METADATA = {
         url: "/og-cover.jpg",
         width: 1200,
         height: 630,
-        alt: "MeasuredPlan - precise measured building surveys and CAD drawings",
+        alt: "MeasuredPlan - as-built drawings, construction drawings and CAD",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE_TITLE} - As-Built Surveys & Floor Plans · Asheville, NC`,
+    title: `${SITE_TITLE} - As-Built & Construction Drawings · Western North Carolina`,
     description: SITE_DESCRIPTION,
     images: ["/og-cover.jpg"],
   },

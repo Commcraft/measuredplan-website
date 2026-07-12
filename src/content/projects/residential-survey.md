@@ -1,5 +1,5 @@
 ---
-title: Residential home - measured survey
+title: Residential home - as-built floor plan
 order: 4
 service: ["measured-building-surveys"]
 buildingType: Single-family home

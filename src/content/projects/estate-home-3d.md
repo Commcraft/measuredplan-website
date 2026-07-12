@@ -4,7 +4,7 @@ order: 8
 service: ["3d-scanning", "cad-drafting"]
 buildingType: Single-family home
 location: Western North Carolina
-scopeLine: As-built floor plans and a furnished 3D model produced from a measured survey.
+scopeLine: As-built floor plans and a furnished 3D model produced from an as-built measure.
 deliverables: ["As-built plans", "3D model", "DWG"]
 image: /projects/estate-home-3d.webp
 date: "2025"

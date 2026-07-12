@@ -1,6 +1,4 @@
 ---
-import { getCollection } from "astro:content";
-
 import CTASection from "@/components/CTASection.astro";
 import Faq from "@/components/Faq.astro";
 import LinkButton from "@/components/LinkButton.astro";
@@ -10,9 +8,61 @@ import SectionHeading from "@/components/SectionHeading.astro";
 import DefaultLayout from "@/layouts/DefaultLayout.astro";
 import { breadcrumbJsonLd, faqPageJsonLd } from "@/lib/seo";
 
-const services = (await getCollection("services"))
-  .filter((s) => !s.data.landingOnly)
-  .sort((a, b) => a.data.order - b.data.order);
+// Published starting prices. Ranges are typical, not caps; the final quote is
+// confirmed once scope is known. Keep these in sync with the service pages.
+const priceList = [
+  {
+    service: "On-site measuring & existing-conditions documentation",
+    from: "$295",
+    range: "$295-$950+",
+    href: "/services/measured-building-surveys/",
+  },
+  {
+    service: "As-built floor plans",
+    from: "$395",
+    range: "$395-$1,250",
+    href: "/services/measured-building-surveys/",
+  },
+  {
+    service: "Permit-ready / construction drawings",
+    from: "$795",
+    range: "$795-$5,500+",
+    href: "/services/construction-drawings/",
+  },
+  {
+    service: "Site plans / plot plans",
+    from: "$295",
+    range: "$295-$450",
+  },
+  {
+    service: "Sketch / PDF to CAD conversion",
+    from: "$225",
+    range: "$225-$750+",
+    href: "/services/cad-drafting/",
+  },
+  {
+    service: "Commercial as-built & tenant improvement plans",
+    from: "$950",
+    range: "$950-$5,000+",
+    href: "/services/measured-building-surveys/",
+  },
+  {
+    service: "CAD drafting support for contractors",
+    from: "$75/hr",
+    range: "$75-$95/hr",
+    href: "/services/cad-drafting/",
+  },
+  {
+    service: "Concept design",
+    from: "Custom scope",
+    href: "/services/concept-design/",
+  },
+  {
+    service: "HOA design & approval",
+    from: "Custom scope",
+    href: "/services/hoa-design-approval/",
+  },
+];
 
 const factors = [
   {
@@ -34,13 +84,28 @@ const factors = [
 ];
 
 const included = [
-  "A site visit and measured survey",
+  "A site visit and on-site measurement",
   "Layered DWG and scaled PDF",
   "A clear title block, scale bar and north point",
-  "One revision against the survey",
+  "One revision against the recorded measurements",
 ];
 
 const pricingFaqs = [
+  {
+    question: "Do you publish prices?",
+    answer:
+      "Yes. Starting prices are published for each service above. Your final quote depends on floor area, complexity, access and the outputs you need - confirmed before work starts.",
+  },
+  {
+    question: "Is the quote fixed?",
+    answer:
+      "The quote is fixed for the agreed scope. If the scope changes, any additional work is quoted separately before it starts. Design services such as construction drawings and concept design are scoped per project.",
+  },
+  {
+    question: "What is rush turnaround?",
+    answer:
+      "When a project needs to jump the queue, rush turnaround is available for a surcharge of 25-35% of the project fee, confirmed at quote.",
+  },
   {
     question: "Is sales tax included?",
     answer:
@@ -51,16 +116,6 @@ const pricingFaqs = [
     answer:
       "Payment terms are set out on the quote and invoice, and confirmed before work starts.",
   },
-  {
-    question: "Do you publish fixed prices?",
-    answer:
-      "Fees depend on the property and the drawings required, so every project is quoted individually. We can give an indicative range once we know the basics.",
-  },
-  {
-    question: "Is the quote fixed?",
-    answer:
-      "Yes. The fee is fixed for the agreed scope. If the scope changes, any additional work is quoted separately before it starts.",
-  },
 ];
 
 const crumbs = [
@@ -70,23 +125,85 @@ const crumbs = [
 ---
 
 <DefaultLayout
-  title="Measured Survey Pricing · Asheville, NC"
-  description="How MeasuredPlan fees work: fixed-fee quotes driven by floor area, building complexity, access and the outputs you need. Site visit, DWG, PDF and one revision included."
+  title="Pricing · Western North Carolina"
+  description="How MeasuredPlan pricing works: published starting prices by service, with the final quote based on floor area, complexity, access and the outputs required."
   jsonLd={[breadcrumbJsonLd(crumbs), faqPageJsonLd(pricingFaqs)]}
 >
   <PageIntro
     eyebrow="Pricing"
-    title="Clear, fixed-fee quotes for every project."
-    intro="We don't publish one-size-fits-all prices, because the right fee depends on the property and the drawings you need. Instead, every project is quoted individually - and the quote is fixed for the agreed scope."
+    title="Starting prices, by service."
+    intro="Starting prices are published for each service below. Your final quote depends on the property and the drawings you need - scope and price are confirmed before any work begins."
     crumbs={crumbs}
   />
 
-  <!-- How fees are calculated -->
+  <!-- Price list -->
+  <Section surface="stone">
+    <SectionHeading
+      eyebrow="By service"
+      title="What each service starts at."
+      intro="Ranges are typical, not caps. Send the property details and we'll confirm a quote - usually within one business day."
+    />
+    <div class="mt-12 overflow-hidden border border-line">
+      {
+        priceList.map((p, i) => (
+          <div
+            class:list={[
+              "grid gap-3 bg-white p-6 sm:grid-cols-[1.6fr_auto_auto] sm:items-center sm:gap-8 sm:p-7",
+              i > 0 && "border-t border-line",
+            ]}
+          >
+            <div>
+              <h3 class="text-lg leading-snug">{p.service}</h3>
+              {p.range && (
+                <p class="mt-1 font-mono text-xs text-ink-muted">
+                  Typical range {p.range}
+                </p>
+              )}
+            </div>
+            <div class="sm:text-right">
+              {p.from.startsWith("$") ? (
+                <>
+                  <span class="block font-mono text-[0.6rem] uppercase tracking-wider text-ink-muted">
+                    Starting at
+                  </span>
+                  <span class="font-display text-xl font-semibold text-ink">
+                    {p.from}
+                  </span>
+                </>
+              ) : (
+                <span class="font-mono text-sm text-ink-muted">{p.from}</span>
+              )}
+            </div>
+            {p.href ? (
+              <LinkButton
+                href={p.href}
+                variant="outline"
+                size="sm"
+                class="justify-self-start sm:justify-self-end"
+              >
+                Details
+              </LinkButton>
+            ) : (
+              <span class="font-mono text-xs text-ink-muted sm:justify-self-end" />
+            )}
+          </div>
+        ))
+      }
+    </div>
+    <p class="mt-4 max-w-3xl text-sm text-ink-muted">
+      <span class="font-medium text-ink">Rush turnaround</span> is available for
+      a surcharge of 25-35% of the project fee, confirmed at quote. Starting
+      prices are a floor, not a fixed fee - the final scope and price are
+      confirmed before work begins.
+    </p>
+  </Section>
+
+  <!-- How the fee is calculated -->
   <Section surface="paper">
     <SectionHeading
-      eyebrow="How fees are calculated"
+      eyebrow="How the fee is calculated"
       title="Four things move the fee."
-      intro="Tell us about these and we can give you an accurate, fixed quote - usually within one business day."
+      intro="Tell us about these and we can confirm an accurate quote - usually within one business day."
     />
     <div class="mt-12 grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-2 lg:grid-cols-4">
       {
@@ -103,72 +220,33 @@ const crumbs = [
     </div>
   </Section>
 
-  <!-- Indicative fee table -->
-  <Section surface="stone">
-    <SectionHeading
-      eyebrow="By service"
-      title="What each service covers."
-      intro="Indicative fees are available on request. Send the property details for a fixed quote."
-    />
-    <div class="mt-12 overflow-hidden border border-line">
-      {
-        services.map((s, i) => (
-          <div
-            class:list={[
-              "grid gap-4 bg-white p-6 sm:grid-cols-[1.4fr_1fr_auto] sm:items-center sm:gap-8 sm:p-7",
-              i > 0 && "border-t border-line",
-            ]}
-          >
-            <div>
-              <div class="flex items-center gap-3">
-                <h3 class="text-lg leading-snug">{s.data.title}</h3>
-                {s.data.optional && (
-                  <span class="font-mono text-[0.6rem] uppercase tracking-wider text-ink-muted">
-                    Optional
-                  </span>
-                )}
-              </div>
-              <p class="mt-1.5 text-sm text-ink-muted">{s.data.summary}</p>
-            </div>
-            <p class="font-mono text-sm text-ink">{s.data.fromFee}</p>
-            <LinkButton
-              href={`/services/${s.id}/`}
-              variant="outline"
-              size="sm"
-              class="justify-self-start sm:justify-self-end"
-            >
-              Details
-            </LinkButton>
-          </div>
-        ))
-      }
-    </div>
-  </Section>
-
   <!-- Always included -->
-  <Section surface="paper">
+  <Section surface="cad">
     <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
-      <SectionHeading
-        eyebrow="Always included"
-        title="What every quote covers."
-      />
-      <ul class="grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-2">
-        {
-          included.map((item) => (
-            <li class="flex items-start gap-3 bg-white p-5 text-[0.95rem] text-ink">
-              <span class="datum-tick mt-1.5" aria-hidden="true" />
-              {item}
-            </li>
-          ))
-        }
-      </ul>
+      <SectionHeading eyebrow="Always included" title="What every quote covers." />
+      <div>
+        <ul class="grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-2">
+          {
+            included.map((item) => (
+              <li class="flex items-start gap-3 bg-white p-5 text-[0.95rem] text-ink">
+                <span class="datum-tick mt-1.5" aria-hidden="true" />
+                {item}
+              </li>
+            ))
+          }
+        </ul>
+        <p class="mt-4 text-sm text-ink-muted">
+          Construction drawings and concept design typically involve more than
+          one revision round; the revision scope is confirmed with the quote.
+        </p>
+      </div>
     </div>
   </Section>
 
   <!-- Pricing FAQ -->
-  <Section surface="cad">
+  <Section surface="paper">
     <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
-      <SectionHeading eyebrow="Questions" title="Payment and terms." />
+      <SectionHeading eyebrow="Questions" title="Pricing, payment and terms." />
       <div>
         <Faq items={pricingFaqs} />
         <div class="mt-8">
@@ -181,8 +259,8 @@ const crumbs = [
   </Section>
 
   <CTASection
-    title="Send your property details for a fixed quote."
+    title="Send your property details for a quote."
     secondaryLabel="See services"
-    secondaryHref="/services"
+    secondaryHref="/services/"
   />
 </DefaultLayout>

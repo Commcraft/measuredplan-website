@@ -52,13 +52,16 @@ const routeIcons: Record<string, string[]> = {
   ],
   doc: ["M8 3h6l4 4v14H8z", "M14 3v5h4"],
   scan: ["M12 3v3M12 18v3M3 12h3M18 12h3", "M12 8.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7z"],
+  permit: ["M7 3h8l3 3v15H7z", "M15 3v3h3", "M10 13l2 2 4-4"],
+  concept: ["M4 20l2-0.5 11-11-1.5-1.5L4.5 18z", "M14 6l1.5 1.5", "M4 20l0.6-2"],
+  hoa: ["M3 11l9-7 9 7", "M6 10v10h12V10", "M9.5 14.5l1.8 1.8 3.2-3.2"],
 };
 
 const routes = [
   {
     icon: "house",
     need: "I'm renovating or designing from an existing building.",
-    label: "Measured survey / as-built CAD",
+    label: "As-built documentation",
     href: "/services/measured-building-surveys/",
   },
   {
@@ -66,6 +69,18 @@ const routes = [
     need: "I need square footage or a floor plan for a listing.",
     label: "Floor plan & square-footage report",
     href: "/services/floor-plans-square-footage/",
+  },
+  {
+    icon: "permit",
+    need: "I need permit-ready drawings to price and build from.",
+    label: "Construction drawings",
+    href: "/services/construction-drawings/",
+  },
+  {
+    icon: "concept",
+    need: "I'm building new or reworking a layout.",
+    label: "Concept design",
+    href: "/services/concept-design/",
   },
   {
     icon: "building",
@@ -80,6 +95,12 @@ const routes = [
     href: "/services/cad-drafting/",
   },
   {
+    icon: "hoa",
+    need: "I need drawings for HOA architectural approval.",
+    label: "HOA design & approval",
+    href: "/services/hoa-design-approval/",
+  },
+  {
     icon: "scan",
     need: "The building is complex and needs detailed capture.",
     label: "3D laser scanning / scan-to-CAD",
@@ -90,7 +111,7 @@ const routes = [
 const process = [
   {
     title: "Inquiry",
-    body: "Send the property details and what the drawings are for. We confirm scope, format and a fixed fee.",
+    body: "Send the property details and what the drawings are for. We confirm scope, format and a clear price.",
   },
   {
     title: "Site visit",
@@ -98,19 +119,19 @@ const process = [
   },
   {
     title: "Drawing",
-    body: "We draft in CAD to a consistent layer structure, checked against the survey.",
+    body: "We draft in CAD to a consistent layer structure, checked against the recorded measurements.",
   },
   {
     title: "Delivery",
-    body: "You receive a clean, scaled set in the agreed formats, with one revision included.",
+    body: "You receive a clean, scaled set in the agreed formats, with a revision included.",
   },
 ];
 
 const trust = [
-  "Measured on site",
+  "On-site measurement",
   "Layered CAD output",
   `${BUSINESS.formats.join(" · ")} delivery`,
-  "Fixed-fee quotes",
+  "Starting-price quotes",
 ];
 
 const proof = [
@@ -120,19 +141,19 @@ const proof = [
     note: "Layered AutoCAD DWG and scaled PDF as standard, IFC where a model is needed.",
   },
   {
-    stat: "1 revision",
-    label: "Included as standard",
-    note: "Drawings are checked before issue; corrections against the survey are included.",
+    stat: "Revisions",
+    label: "Built into the process",
+    note: "Drawings are checked before issue; corrections against the recorded measurements are included.",
   },
   {
-    stat: "Fixed fee",
+    stat: "Clear pricing",
     label: "Confirmed before we start",
-    note: "A clear scope and price with every quote - no open-ended day rates.",
+    note: "Starting prices published by service; the final scope and price are confirmed before work begins.",
   },
   {
-    stat: "Asheville",
-    label: "Local to Western North Carolina",
-    note: "On-site measured work across the region, without the travel markup of an out-of-town firm.",
+    stat: "Western NC",
+    label: "Based locally",
+    note: "On-site work across the region, without the travel markup of an out-of-town firm.",
   },
 ];
 ---
@@ -143,15 +164,19 @@ const proof = [
     <HeroField />
     <Container class="relative z-10 grid gap-12 py-16 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-16 lg:py-24">
       <div>
-        <Eyebrow class="mb-6">Measured survey practice · Asheville, NC</Eyebrow>
+        <Eyebrow class="mb-6">
+          As-built & design drafting practice · Western North Carolina
+        </Eyebrow>
         <h1 class="text-[2.3rem] leading-[1.05] sm:text-5xl lg:text-[3.5rem]">
-          Measured surveys, floor plans and CAD for Western North Carolina.
+          As-built drawings, construction drawings and concept design for
+          Western North Carolina.
         </h1>
         <p class="mt-6 max-w-xl text-lg leading-relaxed text-ink-muted">
-          MeasuredPlan turns an accurate on-site measure into floor plans,
-          as-built surveys, square-footage reports, lease exhibits and CAD
-          drawings - clean, layered and ready to design, permit, lease or build
-          from. Based in Asheville, working across Western North Carolina.
+          MeasuredPlan produces as-built floor plans, square-footage reports and
+          lease exhibits for owners and realtors, construction drawings for
+          contractors and developers, and concept design for homebuilders -
+          drawn to ANSI, NCREC and local permitting standards. Based in Western
+          North Carolina.
         </p>
         <div class="mt-9 flex flex-wrap gap-3">
           <LinkButton href="/contact/" size="lg">Request a quote</LinkButton>
@@ -174,7 +199,7 @@ const proof = [
         <div class="title-block overflow-hidden shadow-lg">
           <img
             src="/projects/luxury-home-3d.webp"
-            alt="A 3D model produced from a MeasuredPlan measured building survey"
+            alt="A 3D model produced from a MeasuredPlan as-built measure"
             width="1600"
             height="1010"
             fetchpriority="high"
@@ -185,7 +210,7 @@ const proof = [
             class="flex items-center gap-2.5 border-t border-line bg-white px-4 py-2.5 font-mono text-xs text-ink-muted"
           >
             <span class="datum-tick" aria-hidden="true"></span>
-            3D model · from a measured survey
+            3D model · from an as-built measure
           </figcaption>
         </div>
       </figure>
@@ -195,7 +220,7 @@ const proof = [
   <!-- ===== Trust bar ===== -->
   <div class="surface-cad border-b border-line">
     <Container class="flex flex-wrap items-center justify-between gap-x-8 gap-y-3 py-5">
-      <p class="eyebrow">For architects · property owners · attorneys</p>
+      <p class="eyebrow">For architects · contractors · developers · owners</p>
       <p class="font-mono text-xs text-ink-muted">
         {SITE_TAGLINE}
       </p>
@@ -208,8 +233,8 @@ const proof = [
       <SectionHeading
         id="services-heading"
         eyebrow="Services"
-        title="Drawings for planning, design and property."
-        intro="Five measured survey services, each delivered as clean, usable drawings. Not sure which you need? We will tell you."
+        title="Drawings for design, permitting and property."
+        intro="From as-built documentation to construction drawings and concept design, each service is delivered as clean, usable drawings. Not sure which you need? We will tell you."
       />
       <LinkButton href="/services/" variant="outline" size="sm" class="shrink-0">
         All services
@@ -321,7 +346,7 @@ const proof = [
       <p class="max-w-3xl text-[1.05rem] leading-relaxed text-ink">
         Not sure which drawing you need? Tell us the property address, what the
         drawing is for, and your deadline. We'll recommend the correct route -
-        floor plan, measured survey, square-footage report, lease exhibit, CAD
+        floor plan, as-built drawings, square-footage report, lease exhibit, CAD
         redraw or scan-to-CAD - before you commit.
       </p>
       <LinkButton href="/contact/" size="lg" class="shrink-0">
@@ -418,7 +443,7 @@ const proof = [
         id="projects-heading"
         eyebrow="Selected work"
         title="Recent projects."
-        intro="A sample of measured surveys and drawings across the services we offer."
+        intro="A sample of as-built drawings and documentation across the services we offer."
       />
       <LinkButton href="/projects/" variant="outline" size="sm" class="shrink-0">
         View all
