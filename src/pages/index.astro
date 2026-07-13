@@ -10,6 +10,7 @@ import LinkButton from "@/components/LinkButton.astro";
 import PlanThumb from "@/components/PlanThumb.astro";
 import ProcessStrip from "@/components/ProcessStrip.astro";
 import ProofPoint from "@/components/ProofPoint.astro";
+import ProofStats from "@/components/ProofStats.astro";
 import Section from "@/components/Section.astro";
 import SectionHeading from "@/components/SectionHeading.astro";
 import ServiceCard from "@/components/ServiceCard.astro";
@@ -211,6 +212,9 @@ const proof = [
       </figure>
     </Container>
   </section>
+
+  <!-- ===== Proof band ===== -->
+  <ProofStats />
 
   <!-- ===== Trust bar ===== -->
   <div class="surface-cad border-b border-line">
@@ -519,5 +523,5 @@ const proof = [
     </div>
   </Section>
 
-  <CTASection secondaryLabel="View services" secondaryHref="/services" />
+  <CTASection secondaryLabel="View services" secondaryHref="/services" proof={false} />
 </DefaultLayout>

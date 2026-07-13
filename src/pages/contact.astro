@@ -5,6 +5,7 @@ import Container from "@/components/Container.astro";
 import Eyebrow from "@/components/Eyebrow.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import PageIntro from "@/components/PageIntro.astro";
+import ProofStats from "@/components/ProofStats.astro";
 import WhatsAppLink from "@/components/WhatsAppLink.astro";
 import {
   BUSINESS,
@@ -31,13 +32,6 @@ const trust = [
   { label: "Reply within one business day", sub: "Usually the same day" },
   { label: "No-obligation quote", sub: "A clear price, no commitment" },
   { label: "Your details stay private", sub: "Used only to reply to you" },
-];
-
-// Track-record proof points. Real figures from the practice.
-const stats = [
-  { value: "8", accent: "+", label: "Years in the field" },
-  { value: "500", accent: "+", label: "Projects completed" },
-  { value: "72", accent: "hr", label: "Average turnaround" },
 ];
 
 // Static-host contact backend (Web3Forms - free, no per-submission activation).
@@ -75,34 +69,7 @@ const crumbs = [
   />
 
   <!-- Track record: proof points at the point of decision. -->
-  <section class="band-ink">
-    <Container class="py-10 sm:py-12">
-      <dl
-        class="grid grid-cols-1 divide-y divide-line-inverse sm:grid-cols-3 sm:divide-x sm:divide-y-0"
-      >
-        {
-          stats.map((s, i) => (
-            <div
-              class={`flex items-baseline gap-4 py-6 sm:flex-col sm:items-start sm:gap-3 sm:py-0 ${i === 0 ? "sm:pr-8" : "sm:px-8"}`}
-            >
-              <dt class="flex items-baseline gap-1">
-                <span class="datum-tick self-center" aria-hidden="true" />
-                <span class="font-display text-5xl font-semibold leading-none tracking-tight text-paper sm:text-6xl">
-                  {s.value}
-                </span>
-                <span class="font-display text-2xl font-semibold leading-none text-red-inverse sm:text-3xl">
-                  {s.accent}
-                </span>
-              </dt>
-              <dd class="font-mono text-xs uppercase tracking-wider text-ink-muted-inverse">
-                {s.label}
-              </dd>
-            </div>
-          ))
-        }
-      </dl>
-    </Container>
-  </section>
+  <ProofStats />
 
   <section class="bg-paper py-14 sm:py-16">
     <Container>
@@ -284,6 +251,9 @@ const crumbs = [
                   data-progress-bar
                 ></div>
               </div>
+              <p class="mt-2 font-mono text-xs text-ink-muted">
+                Takes about a minute - no account needed.
+              </p>
             </div>
 
             <p
@@ -520,6 +490,71 @@ const crumbs = [
 
   const wizard = form ? initWizard(form) : null;
 
+  // --- Draft persistence --------------------------------------------------
+  // A partly-filled form is a common abandonment point (accidental reload,
+  // a tab switch to check an address). Persisting entries locally lets the
+  // visitor pick up where they left off. Cleared once the form is sent.
+  const DRAFT_KEY = "mp-quote-draft";
+  const SKIP = new Set([
+    "access_key",
+    "botcheck",
+    "redirect",
+    "subject",
+    "from_name",
+  ]);
+
+  function saveDraft(f: HTMLFormElement) {
+    try {
+      const fd = new FormData(f);
+      const data: Record<string, string | string[]> = {};
+      for (const key of new Set(fd.keys())) {
+        if (SKIP.has(key)) continue;
+        const all = fd.getAll(key).map(String);
+        data[key] = all.length > 1 ? all : all[0];
+      }
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
+    } catch {
+      /* storage unavailable (private mode) - fail quietly */
+    }
+  }
+
+  function restoreDraft(f: HTMLFormElement) {
+    try {
+      const raw = localStorage.getItem(DRAFT_KEY);
+      if (!raw) return;
+      const data = JSON.parse(raw) as Record<string, string | string[]>;
+      for (const [name, value] of Object.entries(data)) {
+        const fields = f.querySelectorAll<
+          HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+        >(`[name="${CSS.escape(name)}"]`);
+        fields.forEach((el) => {
+          if (el instanceof HTMLInputElement && el.type === "checkbox") {
+            const vals = Array.isArray(value) ? value : [value];
+            el.checked = vals.includes(el.value);
+          } else if (typeof value === "string") {
+            el.value = value;
+          }
+        });
+      }
+    } catch {
+      /* ignore malformed drafts */
+    }
+  }
+
+  function clearDraft() {
+    try {
+      localStorage.removeItem(DRAFT_KEY);
+    } catch {
+      /* ignore */
+    }
+  }
+
+  if (form) {
+    restoreDraft(form);
+    form.addEventListener("input", () => saveDraft(form));
+    form.addEventListener("change", () => saveDraft(form));
+  }
+
   // Compose the inquiry as an email in the visitor's mail app - the always-
   // available fallback so a message reaches us even if the backend is down or
   // not yet activated.
@@ -563,6 +598,7 @@ const crumbs = [
         });
         const data = await res.json().catch(() => null);
         if (res.ok && data && String(data.success) === "true") {
+          clearDraft();
           window.location.href = "/contact/thanks/";
           return;
         }
@@ -590,6 +626,7 @@ const crumbs = [
           (f.dataset.email || "") +
           " directly.",
       );
+      clearDraft();
       openMailto(f);
     });
   }

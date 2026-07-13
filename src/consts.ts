@@ -49,6 +49,14 @@ export const CONTACT_FORM_CONFIGURED =
     CONTACT_FORM.web3formsKey,
   );
 
+// Track-record proof points, shown as a social-proof band on the home and
+// contact pages. Real figures from the practice.
+export const PROOF_STATS = [
+  { value: "8", accent: "+", label: "Years in the field" },
+  { value: "500", accent: "+", label: "Projects completed" },
+  { value: "72", accent: "hr", label: "Average turnaround" },
+] as const;
+
 // Primary navigation (see site-brief §2).
 export const NAV_LINKS = [
   { label: "Services", href: "/services/" },

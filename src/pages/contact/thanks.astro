@@ -2,8 +2,28 @@
 import Container from "@/components/Container.astro";
 import Eyebrow from "@/components/Eyebrow.astro";
 import LinkButton from "@/components/LinkButton.astro";
+import ProofStats from "@/components/ProofStats.astro";
+import WhatsAppLink from "@/components/WhatsAppLink.astro";
 import { BUSINESS } from "@/consts";
 import DefaultLayout from "@/layouts/DefaultLayout.astro";
+
+// Post-conversion page. Best practice: confirm receipt, set a clear timeline,
+// tell the visitor what to do next, and offer a faster channel - so the lead
+// stays warm and the reply is expected.
+const next = [
+  {
+    title: "We review the details",
+    body: "We read your property details and confirm the right drawing route for what you need.",
+  },
+  {
+    title: "We reply with a clear price",
+    body: "You get the scope, formats and a clear price by email - usually within one business day.",
+  },
+  {
+    title: "We book the site visit",
+    body: "Once you're happy, we schedule the measurement and get your drawings underway.",
+  },
+];
 ---
 
 <DefaultLayout
@@ -12,33 +32,70 @@ import DefaultLayout from "@/layouts/DefaultLayout.astro";
   noindex={true}
 >
   <section class="cad-grid-paper border-b border-line">
-    <Container class="flex min-h-[62vh] flex-col items-center justify-center py-24 text-center">
-      <Eyebrow class="mb-6 justify-center">Request received</Eyebrow>
-      <span class="datum-tick mb-6" aria-hidden="true"></span>
-      <h1 class="text-4xl sm:text-5xl lg:text-6xl">Thanks - it's on its way.</h1>
-      <p class="mt-5 max-w-xl text-lg text-ink-muted">
-        Your request has reached us. We'll review the details and reply with the
-        right drawing route, scope and a clear price - usually within one business
-        day.
-      </p>
-      <p class="mt-4 max-w-xl text-sm text-ink-muted">
-        Need to reach us sooner? Email
-        <a
-          href={`mailto:${BUSINESS.email}`}
-          class="text-ink underline underline-offset-4">{BUSINESS.email}</a
-        >
-        or call
-        <a
-          href={`tel:${BUSINESS.phoneHref}`}
-          class="text-ink underline underline-offset-4">{BUSINESS.phone}</a
-        >.
-      </p>
-      <div class="mt-9 flex flex-wrap justify-center gap-3">
-        <LinkButton href="/" size="lg">Back to home</LinkButton>
-        <LinkButton href="/projects/" variant="outline" size="lg">
-          View sample plans
+    <Container class="py-20 sm:py-24">
+      <div class="mx-auto max-w-2xl text-center">
+        <Eyebrow class="mb-6 justify-center">Request received</Eyebrow>
+        <span class="datum-tick mx-auto mb-6 block" aria-hidden="true"></span>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl">
+          We've got your request<span class="title-dot" aria-hidden="true"></span>
+        </h1>
+        <p class="mt-5 text-lg text-ink-muted">
+          Thanks for the details. We'll review them and reply with the right
+          drawing route, scope and a clear price - usually within one business
+          day.
+        </p>
+      </div>
+
+      <!-- What happens next -->
+      <ol
+        class="mx-auto mt-14 grid max-w-4xl gap-8 text-left sm:grid-cols-3"
+      >
+        {
+          next.map((step, i) => (
+            <li class="relative border-t border-line pt-6">
+              <span
+                class="datum-tick absolute left-0 top-[-0.25rem]"
+                aria-hidden="true"
+              />
+              <span class="font-mono text-xs text-ink-muted">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <h2 class="mt-2 text-lg leading-snug">{step.title}</h2>
+              <p class="mt-2 text-[0.95rem] leading-relaxed text-ink-muted">
+                {step.body}
+              </p>
+            </li>
+          ))
+        }
+      </ol>
+
+      <!-- Faster channel + reassurance -->
+      <div
+        class="mx-auto mt-12 flex max-w-2xl flex-col items-center gap-4 border border-line bg-white/60 px-6 py-7 text-center"
+      >
+        <p class="text-[1.05rem] leading-relaxed text-ink">
+          Need it sooner, or want to talk it through? A quick WhatsApp message or
+          call is the fastest way to reach us.
+        </p>
+        <div class="flex flex-wrap items-center justify-center gap-3">
+          <WhatsAppLink variant="solid" />
+          <LinkButton href={`tel:${BUSINESS.phoneHref}`} variant="outline" size="md">
+            Call {BUSINESS.phone}
+          </LinkButton>
+        </div>
+      </div>
+
+      <!-- Keep them on the site while they wait -->
+      <div class="mx-auto mt-10 flex max-w-2xl flex-wrap justify-center gap-3">
+        <LinkButton href="/projects/" variant="ghost" size="md">
+          Browse recent projects →
+        </LinkButton>
+        <LinkButton href="/pricing/" variant="ghost" size="md">
+          See starting prices →
         </LinkButton>
       </div>
     </Container>
   </section>
+
+  <ProofStats />
 </DefaultLayout>

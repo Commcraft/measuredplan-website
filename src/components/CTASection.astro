@@ -1,5 +1,7 @@
 ---
 // Shared conversion band - the single dark band pattern (besides the footer).
+import { getCollection } from "astro:content";
+
 import Container from "./Container.astro";
 import Eyebrow from "./Eyebrow.astro";
 import LinkButton from "./LinkButton.astro";
@@ -13,6 +15,8 @@ interface Props {
   ctaHref?: string;
   secondaryLabel?: string;
   secondaryHref?: string;
+  /** Show a short client quote beside the CTA (social proof at the action). */
+  proof?: boolean;
 }
 const {
   eyebrow = "Start a project",
@@ -22,9 +26,19 @@ const {
   ctaHref = PRIMARY_CTA.href,
   secondaryLabel,
   secondaryHref,
+  proof = true,
 } = Astro.props;
 const hasDot = /\.\s*$/.test(title);
 const titleMain = hasDot ? title.replace(/\.\s*$/, "") : title;
+
+// One short client quote, placed right beside the action. Evidence: social
+// proof adjacent to a CTA lifts conversion. Kept factual from the collection.
+const testimonials = proof
+  ? (await getCollection("testimonials")).sort(
+      (a, b) => a.data.order - b.data.order,
+    )
+  : [];
+const quote = testimonials[0]?.data;
 ---
 
 <section class="band-ink relative overflow-hidden">
@@ -41,6 +55,18 @@ const titleMain = hasDot ? title.replace(/\.\s*$/, "") : title;
             <p class="mt-5 max-w-xl text-[1.05rem] leading-relaxed text-ink-muted-inverse">
               {body}
             </p>
+          )
+        }
+        {
+          quote && (
+            <figure class="mt-8 max-w-xl border-l-2 border-red pl-5">
+              <blockquote class="text-[0.95rem] leading-relaxed text-paper">
+                &ldquo;{quote.quote}&rdquo;
+              </blockquote>
+              <figcaption class="mt-2.5 font-mono text-xs uppercase tracking-wider text-ink-muted-inverse">
+                {quote.name} - {quote.company}
+              </figcaption>
+            </figure>
           )
         }
       </div>
