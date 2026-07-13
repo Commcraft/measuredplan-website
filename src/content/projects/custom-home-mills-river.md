@@ -1,5 +1,5 @@
 ---
-title: Custom home - as-built 3D model
+title: Custom home - as-built documentation
 order: 11
 service: ["measured-building-surveys", "3d-scanning"]
 buildingType: Single-family home

@@ -39,6 +39,13 @@ const crumbs = [
   { label: d.title, href: `/projects/${entry.id}/` },
 ];
 
+// SEO meta kept within display limits: scope line plus the town, capped at
+// ~160 chars so search results don't truncate it. Location stays in the H1,
+// on-page copy and structured data, so it is dropped from the <title> to keep
+// that under ~60 chars.
+const withLocation = `${d.scopeLine} ${d.location}.`;
+const metaDescription = withLocation.length <= 160 ? withLocation : d.scopeLine;
+
 const specs = [
   { label: "Building type", value: d.buildingType },
   { label: "Location", value: d.location },
@@ -64,8 +71,8 @@ const projectJsonLd = {
 ---
 
 <DefaultLayout
-  title={`${d.title} · ${d.location}`}
-  description={`${d.scopeLine} A ${d.buildingType.toLowerCase()} project in ${d.location} by MeasuredPlan, Western North Carolina.`}
+  title={d.title}
+  description={metaDescription}
   image={d.image}
   jsonLd={[breadcrumbJsonLd(crumbs), projectJsonLd]}
 >
