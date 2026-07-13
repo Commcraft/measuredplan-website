@@ -1,206 +1,29 @@
 ---
-// Decorative hero "survey field": a faint registered grid of crosshair ticks
-// with a few red datum stations, plus a cursor reticle - a crosshair and red
-// datum square locked together at the pointer, with a live coordinate readout
-// - a small nod to the survey instruments behind the work. The red
-// datums echo the logo: they sit still as squares and, on a slow measured
-// cadence, register with a grow + brighten pulse (staying square), then return
-// to rest. The static grid is rendered once to an offscreen buffer, so each frame
-// only paints the moving parts. Purely decorative and inert to assistive tech;
-// honours reduced motion and pauses when scrolled out of view.
+// Decorative hero backdrop: a faint, static "survey sheet" grid of crosshair
+// ticks - a quiet nod to the drafting behind the work. No motion, no pointer
+// interaction, nothing red behind the text; purely texture and inert to
+// assistive tech. Rendered as a single inline SVG pattern (no JS, no paint
+// cost after first render).
 ---
 
-<canvas
-  data-hero-field
+<svg
   class="pointer-events-none absolute inset-0 h-full w-full"
-  aria-hidden="true"></canvas>
-
-<script>
-  const canvas =
-    document.querySelector<HTMLCanvasElement>("[data-hero-field]");
-  const host = canvas?.closest("section") as HTMLElement | null;
-  const ctx = canvas?.getContext("2d") ?? null;
-
-  if (canvas && host && ctx) {
-    const g = ctx;
-    const cv = canvas;
-    const hs = host;
-    const reduce = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    const INK = "11,23,38"; // --mp-ink
-    const RED = "194,31,58"; // --mp-red
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const GRID = 60; // survey-grid spacing (CSS px)
-
-    let w = 0;
-    let h = 0;
-    let raf = 0;
-    let t0 = 0;
-    let visible = true;
-
-    // Offscreen buffer for the static grid so it is drawn once, not per frame.
-    const grid = document.createElement("canvas");
-    const gg = grid.getContext("2d")!;
-
-    type Datum = { x: number; y: number; offset: number };
-    let datums: Datum[] = [];
-
-    // Reticle: crosshair + red datum square, locked together at the pointer.
-    const pointer = { x: 0, y: 0, active: false };
-
-    const PERIOD = 5200; // ms between a station's registrations
-    const PULSE = 1000; // ms the register accent lasts
-    function bump(k: number) {
-      // symmetric rise/fall so the datum returns to an identical rest square
-      return Math.sin(Math.PI * Math.max(0, Math.min(1, k)));
-    }
-
-    function seed() {
-      const cols = Math.max(2, Math.floor(w / GRID));
-      const rows = Math.max(2, Math.floor(h / GRID));
-      const picks: Array<[number, number]> = [
-        [0.24, 0.34],
-        [0.7, 0.28],
-        [0.52, 0.66],
-        [0.86, 0.6],
-      ];
-      datums = picks.map(([fx, fy], i) => ({
-        x: Math.max(1, Math.min(cols - 1, Math.round(fx * cols))) * GRID,
-        y: Math.max(1, Math.min(rows - 1, Math.round(fy * rows))) * GRID,
-        offset: (i * PERIOD) / picks.length,
-      }));
-    }
-
-    // paint the faint registered field once into the offscreen buffer
-    function paintGrid() {
-      grid.width = Math.round(w * dpr);
-      grid.height = Math.round(h * dpr);
-      gg.setTransform(dpr, 0, 0, dpr, 0, 0);
-      gg.clearRect(0, 0, w, h);
-      gg.strokeStyle = `rgba(${INK},0.05)`;
-      gg.lineWidth = 1;
-      gg.beginPath();
-      for (let x = GRID; x < w; x += GRID) {
-        for (let y = GRID; y < h; y += GRID) {
-          gg.moveTo(x - 3, y);
-          gg.lineTo(x + 3, y);
-          gg.moveTo(x, y - 3);
-          gg.lineTo(x, y + 3);
-        }
-      }
-      gg.stroke();
-    }
-
-    function resize() {
-      const r = hs.getBoundingClientRect();
-      w = r.width;
-      h = r.height;
-      cv.width = Math.round(w * dpr);
-      cv.height = Math.round(h * dpr);
-      g.setTransform(dpr, 0, 0, dpr, 0, 0);
-      seed();
-      paintGrid();
-    }
-
-    // a red datum square; when registering it grows and brightens in place,
-    // then settles back - always an axis-aligned square, never a diamond
-    function drawDatum(d: Datum, t: number) {
-      const local = (t - d.offset + PERIOD * 10) % PERIOD;
-      const k = local < PULSE ? bump(local / PULSE) : 0;
-      const s = 7 * (1 + 0.6 * k);
-      g.fillStyle = `rgba(${RED},${0.5 + 0.4 * k})`;
-      g.fillRect(d.x - s / 2, d.y - s / 2, s, s);
-    }
-
-    function drawReticle() {
-      if (!pointer.active) return;
-      // crosshair and red datum square move as one, exactly at the pointer
-      const x = Math.round(pointer.x);
-      const y = Math.round(pointer.y);
-      g.strokeStyle = `rgba(${INK},0.24)`;
-      g.lineWidth = 1;
-      g.beginPath();
-      g.moveTo(0, y + 0.5);
-      g.lineTo(w, y + 0.5);
-      g.moveTo(x + 0.5, 0);
-      g.lineTo(x + 0.5, h);
-      g.stroke();
-
-      g.strokeStyle = `rgba(${INK},0.18)`;
-      g.strokeRect(x - 5, y - 5, 10, 10);
-      g.fillStyle = `rgba(${RED},0.95)`;
-      g.fillRect(x - 2.5, y - 2.5, 5, 5);
-
-      const label = `x ${x}  y ${y}`;
-      g.font =
-        "11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
-      const tw = g.measureText(label).width;
-      let lx = x + 14;
-      let ly = y + 22;
-      if (lx + tw + 8 > w) lx = x - tw - 18;
-      if (ly + 8 > h) ly = y - 14;
-      g.fillStyle = `rgba(${INK},0.92)`;
-      g.fillRect(lx - 5, ly - 12, tw + 10, 17);
-      g.fillStyle = "rgba(247,245,240,0.96)";
-      g.fillText(label, lx, ly);
-    }
-
-    function frame(t: number) {
-      g.clearRect(0, 0, w, h);
-      g.drawImage(grid, 0, 0, w, h);
-      for (const d of datums) drawDatum(d, t);
-      drawReticle();
-    }
-
-    function tick(ts: number) {
-      if (!t0) t0 = ts;
-      frame(ts - t0);
-      raf = requestAnimationFrame(tick);
-    }
-    function play() {
-      if (reduce) {
-        frame(0);
-        return;
-      }
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(tick);
-    }
-    function pause() {
-      cancelAnimationFrame(raf);
-    }
-
-    hs.addEventListener(
-      "pointermove",
-      (e) => {
-        if (e.pointerType === "touch") return;
-        const r = hs.getBoundingClientRect();
-        pointer.x = e.clientX - r.left;
-        pointer.y = e.clientY - r.top;
-        pointer.active = true;
-        if (reduce) frame(0);
-      },
-      { passive: true },
-    );
-    hs.addEventListener("pointerleave", () => {
-      pointer.active = false;
-      if (reduce) frame(0);
-    });
-
-    new ResizeObserver(() => {
-      resize();
-      if (reduce || !visible) frame(0);
-    }).observe(hs);
-
-    new IntersectionObserver(
-      ([entry]) => {
-        visible = entry.isIntersecting;
-        if (!reduce) (visible ? play : pause)();
-      },
-      { threshold: 0 },
-    ).observe(hs);
-
-    resize();
-    play();
-  }
-</script>
+  aria-hidden="true"
+  focusable="false"
+>
+  <defs>
+    <pattern
+      id="mp-hero-grid"
+      width="60"
+      height="60"
+      patternUnits="userSpaceOnUse"
+    >
+      <path
+        d="M30 26 V34 M26 30 H34"
+        stroke="rgba(11,23,38,0.06)"
+        stroke-width="1"
+        fill="none"></path>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#mp-hero-grid)"></rect>
+</svg>
