@@ -3,6 +3,7 @@ import CTASection from "@/components/CTASection.astro";
 import Faq from "@/components/Faq.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import PageIntro from "@/components/PageIntro.astro";
+import ProofStats from "@/components/ProofStats.astro";
 import Section from "@/components/Section.astro";
 import SectionHeading from "@/components/SectionHeading.astro";
 import DefaultLayout from "@/layouts/DefaultLayout.astro";
@@ -168,6 +169,8 @@ const priceOffers = {
     intro="Starting prices are published for each service below. Your final quote depends on the property and the drawings you need - scope and price are confirmed before any work begins."
     crumbs={crumbs}
   />
+
+  <ProofStats />
 
   <!-- Price list -->
   <Section surface="stone">

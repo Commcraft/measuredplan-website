@@ -1,7 +1,8 @@
 ---
 // Track-record proof band. Social proof placed high on the page and near the
 // primary CTA, where it does the most conversion work. Real figures from the
-// practice, kept in one place in consts.
+// practice, kept in one place in consts. The numbers count up when the band
+// scrolls into view (skipped under reduced motion / no JS).
 import Container from "./Container.astro";
 import { PROOF_STATS } from "../consts";
 
@@ -11,7 +12,7 @@ interface Props {
 const { class: className = "" } = Astro.props;
 ---
 
-<section class:list={["band-ink", className]}>
+<section class:list={["band-ink", className]} data-reveal>
   <Container class="py-10 sm:py-12">
     <dl
       class="grid grid-cols-1 divide-y divide-line-inverse sm:grid-cols-3 sm:divide-x sm:divide-y-0"
@@ -23,7 +24,10 @@ const { class: className = "" } = Astro.props;
           >
             <dt class="flex items-baseline gap-1">
               <span class="datum-tick self-center" aria-hidden="true" />
-              <span class="font-display text-5xl font-semibold leading-none tracking-tight text-paper sm:text-6xl">
+              <span
+                class="font-display text-5xl font-semibold leading-none tracking-tight text-paper tabular-nums sm:text-6xl"
+                data-count-to={s.value}
+              >
                 {s.value}
               </span>
               <span class="font-display text-2xl font-semibold leading-none text-red-inverse sm:text-3xl">
@@ -39,3 +43,48 @@ const { class: className = "" } = Astro.props;
     </dl>
   </Container>
 </section>
+
+{/* Count-up runs inline so it can reset the numbers to 0 before first paint,
+    avoiding a flash of the final value. No-JS keeps the server-rendered value. */}
+<script is:inline>
+  (function () {
+    var nums = document.querySelectorAll("[data-count-to]");
+    if (!nums.length) return;
+    var reduce =
+      window.matchMedia &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce || !("IntersectionObserver" in window)) return;
+
+    function animate(el) {
+      var target = parseInt(el.getAttribute("data-count-to"), 10);
+      if (isNaN(target)) return;
+      var dur = 1100;
+      var startTs;
+      function tick(ts) {
+        if (startTs === undefined) startTs = ts;
+        var p = Math.min((ts - startTs) / dur, 1);
+        var eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
+        el.textContent = String(Math.round(eased * target));
+        if (p < 1) requestAnimationFrame(tick);
+        else el.textContent = String(target);
+      }
+      requestAnimationFrame(tick);
+    }
+
+    // Reset to 0 immediately (before paint) so the count-up starts clean.
+    for (var i = 0; i < nums.length; i++) nums[i].textContent = "0";
+
+    var io = new IntersectionObserver(
+      function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) {
+            animate(e.target);
+            io.unobserve(e.target);
+          }
+        });
+      },
+      { threshold: 0.4 },
+    );
+    for (var j = 0; j < nums.length; j++) io.observe(nums[j]);
+  })();
+</script>

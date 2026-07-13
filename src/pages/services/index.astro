@@ -6,6 +6,7 @@ import Eyebrow from "@/components/Eyebrow.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import PageIntro from "@/components/PageIntro.astro";
 import ProcessStrip from "@/components/ProcessStrip.astro";
+import ProofStats from "@/components/ProofStats.astro";
 import Section from "@/components/Section.astro";
 import SectionHeading from "@/components/SectionHeading.astro";
 import ServiceCard from "@/components/ServiceCard.astro";
@@ -52,6 +53,8 @@ const crumbs = [
     intro="Whatever the property and whatever the drawings are for, the aim is the same: an accurate record, drawn clearly and delivered in a format you can use."
     crumbs={crumbs}
   />
+
+  <ProofStats />
 
   <Section surface="paper">
     <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

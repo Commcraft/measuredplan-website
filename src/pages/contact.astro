@@ -230,32 +230,6 @@ const crumbs = [
               )
             }
 
-            {/* Progress (JS only). Steps advance with commitment, so the form
-                reads as a short conversation rather than one long wall. */}
-            <div class="form-progress hidden">
-              <div class="flex items-baseline justify-between">
-                <span
-                  class="font-mono text-xs uppercase tracking-wider text-ink-muted"
-                  data-progress-label
-                >
-                  Step 1 of 4
-                </span>
-                <span class="font-mono text-xs text-ink-muted" data-progress-title>
-                  What do you need?
-                </span>
-              </div>
-              <div class="mt-2 h-0.5 w-full bg-line">
-                <div
-                  class="h-full bg-red transition-[width] duration-300"
-                  style="width:25%"
-                  data-progress-bar
-                ></div>
-              </div>
-              <p class="mt-2 font-mono text-xs text-ink-muted">
-                Takes about a minute - no account needed.
-              </p>
-            </div>
-
             <p
               id="quote-status"
               class="hidden border border-line px-4 py-3 text-sm text-ink"
@@ -263,8 +237,7 @@ const crumbs = [
             >
             </p>
 
-            {/* Step 1 - what they need (engaging, low friction, asked first). */}
-            <div data-step="1" data-step-title="What do you need?" data-step-active>
+            <div>
               <fieldset>
                 <legend class={labelCls}>Service needed</legend>
                 <div class="grid gap-2.5 sm:grid-cols-2">
@@ -296,8 +269,7 @@ const crumbs = [
               </div>
             </div>
 
-            {/* Step 2 - the property. */}
-            <div data-step="2" data-step-title="The property">
+            <div>
               <div>
                 <label for="location" class={labelCls}>Property address / ZIP code</label>
                 <input id="location" name="location" type="text" required class={field} autocomplete="street-address" />
@@ -320,8 +292,7 @@ const crumbs = [
               </div>
             </div>
 
-            {/* Step 3 - details. */}
-            <div data-step="3" data-step-title="The drawings">
+            <div>
               <label for="details" class={labelCls}>Project details</label>
               <textarea id="details" name="details" rows="5" required class={field} placeholder="What are the drawings for? Permitting, a lease, a renovation, a record…"></textarea>
               <p class="mt-4 text-base leading-relaxed text-ink-muted">
@@ -330,8 +301,7 @@ const crumbs = [
               </p>
             </div>
 
-            {/* Step 4 - contact details, asked last once they're invested. */}
-            <div data-step="4" data-step-title="Where to reply">
+            <div>
               <div class="grid gap-6 sm:grid-cols-2">
                 <div>
                   <label for="name" class={labelCls}>Name</label>
@@ -358,20 +328,6 @@ const crumbs = [
               </div>
             </div>
 
-            {/* Step navigation (JS only; with JS off every step is visible and
-                the single submit button above handles it). */}
-            <div class="step-nav hidden items-center justify-between gap-4 pt-2">
-              <button
-                type="button"
-                data-step-back
-                class="font-mono text-sm text-ink-muted transition-colors hover:text-ink disabled:invisible"
-              >
-                ← Back
-              </button>
-              <LinkButton type="button" size="lg" data-step-next class="js-only">
-                Continue
-              </LinkButton>
-            </div>
           </form>
         </div>
       </div>
@@ -391,104 +347,13 @@ const crumbs = [
     status.classList.toggle("text-red-deep", isError);
   }
 
-  // --- Multi-step wizard (progressive enhancement) ------------------------
-  // Splits the long form into short, committing steps. Evidence: multi-step
-  // forms of 5+ fields convert markedly better than one long wall because each
-  // easy answer increases the visitor's investment. With JS off the CSS keeps
-  // every step visible and this code never runs, so the form still works.
-  function initWizard(f: HTMLFormElement) {
-    const steps = Array.from(
-      f.querySelectorAll<HTMLElement>("[data-step]"),
-    );
-    if (steps.length < 2) return null;
-
-    // JS present: use our own step-by-step validation, not the native wall.
-    f.noValidate = true;
-
-    const label = f.querySelector<HTMLElement>("[data-progress-label]");
-    const titleEl = f.querySelector<HTMLElement>("[data-progress-title]");
-    const bar = f.querySelector<HTMLElement>("[data-progress-bar]");
-    const backBtn = f.querySelector<HTMLButtonElement>("[data-step-back]");
-    const nextBtn = f.querySelector<HTMLButtonElement>("[data-step-next]");
-    const total = steps.length;
-    let current = steps.findIndex((s) => s.hasAttribute("data-step-active"));
-    if (current < 0) current = 0;
-
-    function render() {
-      steps.forEach((s, i) =>
-        s.toggleAttribute("data-step-active", i === current),
-      );
-      if (label) label.textContent = `Step ${current + 1} of ${total}`;
-      if (titleEl)
-        titleEl.textContent = steps[current].dataset.stepTitle || "";
-      if (bar) bar.style.width = `${((current + 1) / total) * 100}%`;
-      if (backBtn) backBtn.disabled = current === 0;
-      if (nextBtn)
-        nextBtn.style.display = current === total - 1 ? "none" : "";
-    }
-
-    // Validate every field inside a given step; focus the first invalid one.
-    function stepValid(i: number) {
-      const fields = steps[i].querySelectorAll<
-        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-      >("input, select, textarea");
-      for (const field of fields) {
-        if (!field.checkValidity()) {
-          field.reportValidity();
-          field.focus();
-          return false;
-        }
-      }
-      return true;
-    }
-
-    function goTo(i: number, focus = true) {
-      current = Math.max(0, Math.min(total - 1, i));
-      render();
-      if (focus) {
-        const first = steps[current].querySelector<HTMLElement>(
-          "input:not([type=hidden]):not([type=checkbox]), select, textarea",
-        );
-        first?.focus({ preventScroll: true });
-      }
-      const top = f.getBoundingClientRect().top;
-      if (top < 80) window.scrollBy({ top: top - 96, behavior: "smooth" });
-    }
-
-    nextBtn?.addEventListener("click", () => {
-      if (stepValid(current)) goTo(current + 1);
-    });
-    backBtn?.addEventListener("click", () => goTo(current - 1));
-
-    // Enter advances rather than submitting, except on the last step.
-    f.addEventListener("keydown", (e) => {
-      const t = e.target as HTMLElement;
-      if (
-        e.key === "Enter" &&
-        t.tagName !== "TEXTAREA" &&
-        current < total - 1
-      ) {
-        e.preventDefault();
-        if (stepValid(current)) goTo(current + 1);
-      }
-    });
-
-    render();
-    // Jump to the first step that has an invalid field (used before submit).
-    return {
-      validateAll() {
-        for (let i = 0; i < total; i++) {
-          if (!stepValid(i)) {
-            goTo(i);
-            return false;
-          }
-        }
-        return true;
-      },
-    };
+  // Native HTML5 validation drives the required fields (single-page form), so
+  // an incomplete submit shows the browser's own prompt on the first bad field.
+  function formValid(f: HTMLFormElement) {
+    if (f.checkValidity()) return true;
+    f.reportValidity();
+    return false;
   }
-
-  const wizard = form ? initWizard(form) : null;
 
   // --- Draft persistence --------------------------------------------------
   // A partly-filled form is a common abandonment point (accidental reload,
@@ -587,7 +452,7 @@ const crumbs = [
     const submitBtn = f.querySelector<HTMLButtonElement>('[type="submit"]');
     f.addEventListener("submit", async (e) => {
       e.preventDefault();
-      if (wizard && !wizard.validateAll()) return;
+      if (!formValid(f)) return;
       submitBtn?.setAttribute("disabled", "");
       showStatus("Sending your request…");
       try {
@@ -620,7 +485,7 @@ const crumbs = [
     const f = form;
     f.addEventListener("submit", (e) => {
       e.preventDefault();
-      if (wizard && !wizard.validateAll()) return;
+      if (!formValid(f)) return;
       showStatus(
         "Opening your email app… if nothing happens, email " +
           (f.dataset.email || "") +

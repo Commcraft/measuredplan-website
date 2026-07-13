@@ -471,26 +471,6 @@
   }
 }
 
-/* Progressive-enhancement helpers for the multi-step quote form.
-   With JS off, every step is visible and the form submits as one page (the
-   `.js-only` navigation stays hidden). With JS on, the class on <html> is set
-   synchronously in <head> before first paint, so only the active step shows -
-   no flash of the full form. */
-.js-only {
-  display: none;
-}
-html.js .js-only {
-  display: revert;
-}
-html.js .step-nav {
-  display: flex;
-}
-html.js .form-progress {
-  display: block;
-}
-html.js #quote-form [data-step]:not([data-step-active]) {
-  display: none;
-}
 
 /* Reduced motion - honour user preference. */
 @media (prefers-reduced-motion: reduce) {
