@@ -375,12 +375,12 @@
      replacing a round full stop so titles read as brand-consistent. */
   .title-dot {
     display: inline-block;
-    width: 0.16em;
-    height: 0.16em;
-    /* Small optical gap that keeps the datum reading as a period without
-       drifting away from the final glyph. Kept modest so a rounded trailing
-       letter (e.g. the hero's "a") doesn't read looser than a "t". */
-    margin-left: 0.01em;
+    /* Fixed size matching .datum-tick so every red square on the site reads
+       as one brand mark, regardless of heading size. Was em-scaled, which
+       made the largest heading (the hero) carry a noticeably chunkier dot. */
+    width: 0.5rem;
+    height: 0.5rem;
+    margin-left: 0.15rem;
     background-color: var(--mp-red);
     vertical-align: baseline;
   }
