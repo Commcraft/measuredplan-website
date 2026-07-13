@@ -448,6 +448,36 @@ const crumbs = [
     )}&body=${encodeURIComponent(lines.join("\n"))}`;
   }
 
+  // Non-PII properties for the "Quote Submitted" event so the Umami Pro
+  // dashboard can break conversions down by demand mix. Deliberately excludes
+  // name, email, phone and address.
+  function quoteProps(f: HTMLFormElement, method: string) {
+    const data = new FormData(f);
+    const services = data.getAll("service").map(String);
+    return {
+      method,
+      "property-type": (data.get("property-type") as string) || "unspecified",
+      timeline: (data.get("timeline") as string) || "unspecified",
+      services: services.length ? services.join(", ") : "none",
+      "service-count": services.length,
+    };
+  }
+
+  // "Quote Started" - fired once on first interaction, so the Pro funnel can
+  // measure form abandonment (Started -> Submitted).
+  if (form) {
+    let started = false;
+    form.addEventListener(
+      "input",
+      () => {
+        if (started) return;
+        started = true;
+        (window as any).umami?.track("Quote Started");
+      },
+      { once: false },
+    );
+  }
+
   if (form && form.dataset.mode === "backend") {
     const f = form;
     const submitBtn = f.querySelector<HTMLButtonElement>('[type="submit"]');
@@ -465,7 +495,7 @@ const crumbs = [
         const data = await res.json().catch(() => null);
         if (res.ok && data && String(data.success) === "true") {
           clearDraft();
-          (window as any).umami?.track("Quote Submitted", { method: "form" });
+          (window as any).umami?.track("Quote Submitted", quoteProps(f, "form"));
           window.location.href = "/contact/thanks/";
           return;
         }
@@ -480,9 +510,10 @@ const crumbs = [
             ".",
           true,
         );
-        (window as any).umami?.track("Quote Submitted", {
-          method: "email-fallback",
-        });
+        (window as any).umami?.track(
+          "Quote Submitted",
+          quoteProps(f, "email-fallback"),
+        );
         openMailto(f);
       }
     });
@@ -497,7 +528,7 @@ const crumbs = [
           " directly.",
       );
       clearDraft();
-      (window as any).umami?.track("Quote Submitted", { method: "email" });
+      (window as any).umami?.track("Quote Submitted", quoteProps(f, "email"));
       openMailto(f);
     });
   }

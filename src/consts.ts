@@ -57,19 +57,17 @@ export const PROOF_STATS = [
   { value: "72", accent: "hr", label: "Average turnaround" },
 ] as const;
 
-// Privacy-friendly analytics (Umami). Free forever (Umami Cloud Hobby tier),
-// open source, no cookies, and no consent banner required - GDPR-compliant by
-// design. Same clean dashboard as Plausible, with no data sampling.
+// Privacy-friendly analytics (Umami Cloud, Pro account). Open source, no
+// cookies, no consent banner - GDPR-compliant by design, with no data sampling.
 //
-// To activate (~2 min): create a free account at https://cloud.umami.is, add a
-// website for "measuredplan.com", copy the Website ID it gives you (a UUID),
-// and paste it below in place of the placeholder. Custom events
-// ("Quote Submitted", "WhatsApp Click", "Call Click") and pageviews then start
-// flowing automatically - no other code change needed.
+// Custom events emitted for the Pro dashboard (funnels, retention, event-data
+// breakdowns): "Quote Started" (first form interaction), "Quote Submitted"
+// (with method / property type / timeline / services), plus "WhatsApp Click"
+// and "Call Click". Pageviews and UTM attribution are captured automatically.
 export const ANALYTICS = {
   provider: "umami" as const,
   src: "https://cloud.umami.is/script.js",
-  websiteId: "[TODO: paste Umami Website ID]",
+  websiteId: "0fe27ea0-0005-4ee4-bff8-15bd27d7ffd8",
 } as const;
 // Analytics only load once a real UUID Website ID is set, so nothing is
 // requested (and no console noise) until the account is connected.
