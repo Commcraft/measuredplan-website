@@ -194,15 +194,32 @@ const proof = [
       </div>
       <figure class="relative">
         <div class="title-block overflow-hidden shadow-lg">
-          <img
-            src="/projects/luxury-home-3d.webp"
-            alt="A 3D model produced from a MeasuredPlan as-built measure"
-            width="1200"
-            height="758"
-            fetchpriority="high"
-            decoding="async"
-            class="block h-auto w-full bg-white"
-          />
+          <div class="relative">
+            <img
+              src="/projects/luxury-home-3d.webp"
+              alt="A 3D model produced from a MeasuredPlan as-built measure"
+              width="1200"
+              height="758"
+              fetchpriority="high"
+              decoding="async"
+              class="block h-auto w-full bg-white"
+            />
+            {/* CAD registration marks that draw in on load - a restrained,
+                on-brand "measured drawing" flourish (vector, a few bytes,
+                honours reduced motion). */}
+            <svg
+              class="hero-anno pointer-events-none absolute inset-0 h-full w-full"
+              viewBox="0 0 1200 758"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path d="M20 52 L20 20 L52 20" />
+              <path d="M1180 52 L1180 20 L1148 20" />
+              <path d="M20 706 L20 738 L52 738" />
+              <path d="M1180 706 L1180 738 L1148 738" />
+              <rect class="hero-datum" x="595" y="14" width="10" height="10" />
+            </svg>
+          </div>
           <figcaption
             class="flex items-center gap-2.5 border-t border-line bg-white px-4 py-2.5 font-mono text-xs text-ink-muted"
           >
@@ -526,3 +543,53 @@ const proof = [
 
   <CTASection secondaryLabel="View services" secondaryHref="/services" proof={false} />
 </DefaultLayout>
+
+<style>
+  /* Hero registration marks: draw in once on load (CSS-only, no JS needed).
+     Reduced motion -> shown statically. */
+  .hero-anno path {
+    stroke: rgba(11, 23, 38, 0.4);
+    stroke-width: 1.5;
+    vector-effect: non-scaling-stroke;
+    stroke-linecap: square;
+  }
+  .hero-datum {
+    fill: #c21f3a;
+    opacity: 1;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-anno path {
+      stroke-dasharray: 64;
+      stroke-dashoffset: 64;
+      animation: hero-draw 0.7s ease-out forwards;
+    }
+    .hero-anno path:nth-of-type(1) {
+      animation-delay: 0.35s;
+    }
+    .hero-anno path:nth-of-type(2) {
+      animation-delay: 0.47s;
+    }
+    .hero-anno path:nth-of-type(3) {
+      animation-delay: 0.59s;
+    }
+    .hero-anno path:nth-of-type(4) {
+      animation-delay: 0.71s;
+    }
+    .hero-datum {
+      animation: hero-fade 0.5s ease-out 0.95s both;
+    }
+  }
+  @keyframes hero-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  @keyframes hero-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+</style>
