@@ -5,7 +5,12 @@ import Container from "@/components/Container.astro";
 import Eyebrow from "@/components/Eyebrow.astro";
 import LinkButton from "@/components/LinkButton.astro";
 import PageIntro from "@/components/PageIntro.astro";
-import { BUSINESS, CONTACT_FORM_CONFIGURED, SITE_URL } from "@/consts";
+import {
+  BUSINESS,
+  CONTACT_FORM,
+  CONTACT_FORM_CONFIGURED,
+  SITE_URL,
+} from "@/consts";
 import DefaultLayout from "@/layouts/DefaultLayout.astro";
 import { breadcrumbJsonLd } from "@/lib/seo";
 
@@ -13,12 +18,13 @@ const services = (await getCollection("services"))
   .filter((s) => !s.data.landingOnly)
   .sort((a, b) => a.data.order - b.data.order);
 
-// Static-host contact backend (FormSubmit - free, no account). When
-// configured the form POSTs to FormSubmit, which emails BUSINESS.email and
-// redirects to /contact/thanks/. Otherwise it falls back to composing an
-// email in the visitor's mail app, so the contact route never breaks.
+// Static-host contact backend (Web3Forms - free, no per-submission activation).
+// When a valid access key is configured the form POSTs to Web3Forms, which
+// emails BUSINESS.email and redirects to /contact/thanks/. Otherwise it falls
+// back to composing an email in the visitor's mail app, so the contact route
+// always works and no message is lost.
 const formAction = CONTACT_FORM_CONFIGURED
-  ? `https://formsubmit.co/${BUSINESS.email}`
+  ? "https://api.web3forms.com/submit"
   : undefined;
 const thanksUrl = `${SITE_URL}/contact/thanks/`;
 
@@ -138,27 +144,34 @@ const crumbs = [
             {
               CONTACT_FORM_CONFIGURED && (
                 <>
-                  {/* FormSubmit configuration fields */}
-                  <input type="hidden" name="_next" value={thanksUrl} />
+                  {/* Web3Forms configuration fields */}
                   <input
                     type="hidden"
-                    name="_subject"
+                    name="access_key"
+                    value={CONTACT_FORM.web3formsKey}
+                  />
+                  <input
+                    type="hidden"
+                    name="subject"
                     value="New quote request - MeasuredPlan"
                   />
-                  <input type="hidden" name="_template" value="table" />
-                  <input type="hidden" name="_captcha" value="false" />
-                  {/* Honeypot: bots fill this hidden field; humans never see it. */}
-                  <div class="absolute left-[-9999px]" aria-hidden="true">
-                    <label>
-                      Leave this field empty
-                      <input
-                        type="text"
-                        name="_honey"
-                        tabindex="-1"
-                        autocomplete="off"
-                      />
-                    </label>
-                  </div>
+                  <input
+                    type="hidden"
+                    name="from_name"
+                    value="MeasuredPlan website"
+                  />
+                  {/* No-JS fallback redirect (JS handles it on success). */}
+                  <input type="hidden" name="redirect" value={thanksUrl} />
+                  {/* Honeypot: bots tick this hidden box; humans never see it. */}
+                  <input
+                    type="checkbox"
+                    name="botcheck"
+                    class="hidden"
+                    style="display:none"
+                    tabindex="-1"
+                    autocomplete="off"
+                    aria-hidden="true"
+                  />
                 </>
               )
             }
@@ -307,17 +320,13 @@ const crumbs = [
 
   if (form && form.dataset.mode === "backend") {
     const f = form;
-    const ajaxAction = f.action.replace(
-      "formsubmit.co/",
-      "formsubmit.co/ajax/",
-    );
     const submitBtn = f.querySelector<HTMLButtonElement>('[type="submit"]');
     f.addEventListener("submit", async (e) => {
       e.preventDefault();
       submitBtn?.setAttribute("disabled", "");
       showStatus("Sending your request…");
       try {
-        const res = await fetch(ajaxAction, {
+        const res = await fetch(f.action, {
           method: "POST",
           headers: { Accept: "application/json" },
           body: new FormData(f),

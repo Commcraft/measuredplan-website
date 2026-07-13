@@ -27,20 +27,27 @@ export const BUSINESS = {
   formats: ["PDF", "DWG", "IFC"],
 } as const;
 
-// Contact form backend - free, static-host-friendly, no monthly cap.
+// Contact form backend - free, static-host-friendly, no monthly cap, and no
+// per-submission "activation" step.
 //
-// Default: FormSubmit (https://formsubmit.co) - genuinely free, no account and
-// no API key. Submissions are delivered to BUSINESS.email. One-time setup:
-// after the site is live, submit the form once with your own details, then
-// click the activation link FormSubmit emails to that address. Every
-// submission after that lands straight in the inbox.
+// Web3Forms (https://web3forms.com): free and unlimited. One-time setup, ~30s:
+// go to web3forms.com, enter info@measuredplan.com, copy the Access Key it
+// shows, and paste it below. It works instantly - no confirmation email to
+// click. Submissions are emailed straight to that address.
 //
-// Set provider to "none" to fall back to opening the visitor's email app
-// (mailto), which keeps the contact route working with no backend at all.
+// Until a valid key is set, the form still works: it opens the visitor's mail
+// app with the details filled in, so no message is ever lost.
 export const CONTACT_FORM = {
-  provider: "formsubmit" as "formsubmit" | "none",
+  provider: "web3forms" as "web3forms" | "none",
+  web3formsKey: "[TODO: Web3Forms access key]",
 } as const;
-export const CONTACT_FORM_CONFIGURED = CONTACT_FORM.provider !== "none";
+// A real Web3Forms key is a UUID (hex + hyphens). The placeholder fails this,
+// so the form cleanly uses the email fallback until a key is pasted in.
+export const CONTACT_FORM_CONFIGURED =
+  CONTACT_FORM.provider === "web3forms" &&
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+    CONTACT_FORM.web3formsKey,
+  );
 
 // Primary navigation (see site-brief §2).
 export const NAV_LINKS = [
