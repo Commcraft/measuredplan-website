@@ -278,50 +278,79 @@ const crumbs = [
     status.classList.toggle("text-red-deep", isError);
   }
 
+  // Compose the inquiry as an email in the visitor's mail app - the always-
+  // available fallback so a message reaches us even if the backend is down or
+  // not yet activated.
+  function openMailto(f: HTMLFormElement) {
+    const to = f.dataset.email || "";
+    const data = new FormData(f);
+    const val = (n: string) => (data.get(n) as string) || "";
+    const services = data.getAll("service").join(", ");
+    const lines = [
+      `Name: ${val("name")}`,
+      `Email: ${val("email")}`,
+      `Phone: ${val("phone")}`,
+      `Property / location: ${val("location")}`,
+      `Service needed: ${services}`,
+      `Property type: ${val("property-type")}`,
+      `Approx. size: ${val("size")}`,
+      `Timeline: ${val("timeline")}`,
+      "",
+      "Project details:",
+      val("details"),
+    ];
+    const subject = `Quote request - ${val("name") || "MeasuredPlan"}`;
+    window.location.href = `mailto:${to}?subject=${encodeURIComponent(
+      subject,
+    )}&body=${encodeURIComponent(lines.join("\n"))}`;
+  }
+
   if (form && form.dataset.mode === "backend") {
-    // Native POST to FormSubmit - the reliable, documented flow. FormSubmit
-    // emails the submission to the practice and redirects to /contact/thanks/
-    // via the hidden _next field. (On the very first submission FormSubmit
-    // shows a one-time "confirm your email" page instead of redirecting.)
-    // We only surface a lightweight sending state; the browser handles the
-    // rest, so there is no CORS or AJAX activation edge case to trip on.
-    form.addEventListener("submit", () => {
+    const f = form;
+    const ajaxAction = f.action.replace(
+      "formsubmit.co/",
+      "formsubmit.co/ajax/",
+    );
+    const submitBtn = f.querySelector<HTMLButtonElement>('[type="submit"]');
+    f.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      submitBtn?.setAttribute("disabled", "");
       showStatus("Sending your request…");
+      try {
+        const res = await fetch(ajaxAction, {
+          method: "POST",
+          headers: { Accept: "application/json" },
+          body: new FormData(f),
+        });
+        const data = await res.json().catch(() => null);
+        if (res.ok && data && String(data.success) === "true") {
+          window.location.href = "/contact/thanks/";
+          return;
+        }
+        throw new Error((data && data.message) || `HTTP ${res.status}`);
+      } catch {
+        // Backend unavailable or not yet activated: fall back to email so the
+        // visitor's message still reaches us.
+        submitBtn?.removeAttribute("disabled");
+        showStatus(
+          "Opening your email app so you can send this to us directly. If nothing happens, email " +
+            (f.dataset.email || "") +
+            ".",
+          true,
+        );
+        openMailto(f);
+      }
     });
   } else if (form) {
-    // Fallback (no backend configured yet): compose the inquiry as an email.
-    form.addEventListener("submit", (e) => {
+    const f = form;
+    f.addEventListener("submit", (e) => {
       e.preventDefault();
-      const to = form.dataset.email || "";
-      const data = new FormData(form);
-      const val = (n: string) => (data.get(n) as string) || "";
-      const services = data.getAll("service").join(", ");
-
-      const lines = [
-        `Name: ${val("name")}`,
-        `Email: ${val("email")}`,
-        `Phone: ${val("phone")}`,
-        `Property / location: ${val("location")}`,
-        `Service needed: ${services}`,
-        `Property type: ${val("property-type")}`,
-        `Approx. size: ${val("size")}`,
-        `Timeline: ${val("timeline")}`,
-        "",
-        "Project details:",
-        val("details"),
-      ];
-
-      const subject = `Quote request - ${val("name") || "MeasuredPlan"}`;
-      const href = `mailto:${to}?subject=${encodeURIComponent(
-        subject,
-      )}&body=${encodeURIComponent(lines.join("\n"))}`;
-
       showStatus(
         "Opening your email app… if nothing happens, email " +
-          to +
+          (f.dataset.email || "") +
           " directly.",
       );
-      window.location.href = href;
+      openMailto(f);
     });
   }
 </script>
