@@ -1,8 +1,8 @@
 ---
 // Decorative hero "survey field": a faint registered grid of crosshair ticks
-// with a few red datum stations, plus a cursor reticle that glides with the
-// pointer and softly locks onto the nearest grid node with a live coordinate
-// readout - a small nod to the survey instruments behind the work. The red
+// with a few red datum stations, plus a cursor reticle - a crosshair and red
+// datum square locked together at the pointer, with a live coordinate readout
+// - a small nod to the survey instruments behind the work. The red
 // datums echo the logo: they sit still as squares and, on a slow measured
 // cadence, register with a grow + brighten pulse (staying square), then return
 // to rest. The static grid is rendered once to an offscreen buffer, so each frame
@@ -46,19 +46,14 @@
     type Datum = { x: number; y: number; offset: number };
     let datums: Datum[] = [];
 
-    // Reticle: an eased position that trails the raw pointer for a fluid,
-    // 1:1-feeling glide (no hard snapping), plus the nearest node it locks to.
+    // Reticle: crosshair + red datum square, locked together at the pointer.
     const pointer = { x: 0, y: 0, active: false };
-    const reticle = { x: 0, y: 0, ready: false };
 
     const PERIOD = 5200; // ms between a station's registrations
     const PULSE = 1000; // ms the register accent lasts
     function bump(k: number) {
       // symmetric rise/fall so the datum returns to an identical rest square
       return Math.sin(Math.PI * Math.max(0, Math.min(1, k)));
-    }
-    function snap(v: number) {
-      return Math.round(v / GRID) * GRID;
     }
 
     function seed() {
@@ -120,9 +115,9 @@
 
     function drawReticle() {
       if (!pointer.active) return;
-      const x = reticle.x;
-      const y = reticle.y;
-      // thin crosshair follows the pointer smoothly
+      // crosshair and red datum square move as one, exactly at the pointer
+      const x = Math.round(pointer.x);
+      const y = Math.round(pointer.y);
       g.strokeStyle = `rgba(${INK},0.24)`;
       g.lineWidth = 1;
       g.beginPath();
@@ -132,15 +127,12 @@
       g.lineTo(x + 0.5, h);
       g.stroke();
 
-      // soft lock onto the nearest grid node - the datum being acquired
-      const nx = snap(x);
-      const ny = snap(y);
       g.strokeStyle = `rgba(${INK},0.18)`;
-      g.strokeRect(nx - 5, ny - 5, 10, 10);
+      g.strokeRect(x - 5, y - 5, 10, 10);
       g.fillStyle = `rgba(${RED},0.95)`;
-      g.fillRect(nx - 2.5, ny - 2.5, 5, 5);
+      g.fillRect(x - 2.5, y - 2.5, 5, 5);
 
-      const label = `x ${Math.round(nx)}  y ${Math.round(ny)}`;
+      const label = `x ${x}  y ${y}`;
       g.font =
         "11px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
       const tw = g.measureText(label).width;
@@ -155,19 +147,6 @@
     }
 
     function frame(t: number) {
-      // ease the reticle toward the pointer for a fluid glide
-      if (pointer.active) {
-        if (!reticle.ready) {
-          reticle.x = pointer.x;
-          reticle.y = pointer.y;
-          reticle.ready = true;
-        } else {
-          reticle.x += (pointer.x - reticle.x) * 0.22;
-          reticle.y += (pointer.y - reticle.y) * 0.22;
-        }
-      } else {
-        reticle.ready = false;
-      }
       g.clearRect(0, 0, w, h);
       g.drawImage(grid, 0, 0, w, h);
       for (const d of datums) drawDatum(d, t);
@@ -199,12 +178,7 @@
         pointer.x = e.clientX - r.left;
         pointer.y = e.clientY - r.top;
         pointer.active = true;
-        if (reduce) {
-          reticle.x = pointer.x;
-          reticle.y = pointer.y;
-          reticle.ready = true;
-          frame(0);
-        }
+        if (reduce) frame(0);
       },
       { passive: true },
     );
