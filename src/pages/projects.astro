@@ -7,6 +7,7 @@ import PlanThumb from "@/components/PlanThumb.astro";
 import Section from "@/components/Section.astro";
 import DefaultLayout from "@/layouts/DefaultLayout.astro";
 import { breadcrumbJsonLd } from "@/lib/seo";
+import { SITE_URL } from "@/consts";
 
 const projects = (await getCollection("projects")).sort(
   (a, b) => a.data.order - b.data.order,
@@ -28,12 +29,40 @@ const crumbs = [
   { label: "Home", href: "/" },
   { label: "Projects", href: "/projects/" },
 ];
+
+// Structured data for search engines and AI answer engines: each project as a
+// CreativeWork with its building type, location and the services it involved.
+const projectsJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "MeasuredPlan projects",
+  url: `${SITE_URL}/projects/`,
+  about:
+    "As-built drawings, construction drawings and design documentation across Western North Carolina",
+  mainEntity: {
+    "@type": "ItemList",
+    itemListElement: projects.map((p, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      item: {
+        "@type": "CreativeWork",
+        name: p.data.title,
+        about: p.data.buildingType,
+        locationCreated: { "@type": "Place", name: p.data.location },
+        dateCreated: p.data.date,
+        image: `${SITE_URL}${p.data.image}`,
+        creator: { "@id": `${SITE_URL}/#business` },
+        keywords: p.data.service.map(serviceName).join(", "),
+      },
+    })),
+  },
+};
 ---
 
 <DefaultLayout
   title="Sample Plans & Recent Projects"
   description="Sample as-built drawings - floor plans, elevations, sections and lease plans - showing the standard of MeasuredPlan's output across services."
-  jsonLd={[breadcrumbJsonLd(crumbs)]}
+  jsonLd={[breadcrumbJsonLd(crumbs), projectsJsonLd]}
 >
   <PageIntro
     eyebrow="Selected work"
@@ -88,7 +117,7 @@ const crumbs = [
                 <div class="title-block aspect-[4/3] overflow-hidden transition-colors group-hover:border-line-strong">
                   <img
                     src={p.data.image}
-                    alt={`${p.data.title} - measured drawing`}
+                    alt={`${p.data.title} - ${p.data.buildingType} in ${p.data.location} by MeasuredPlan`}
                     loading="lazy"
             decoding="async"
                     class="h-full w-full bg-white object-cover object-top"
