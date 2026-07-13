@@ -357,6 +357,20 @@
     background-color: var(--mp-red-inverse);
   }
 
+  /* Eyebrow marker - a short red rule. Distinct from the square datum so a
+     section's eyebrow (rule) and its title's end-datum (square) don't read as
+     two identical marks. */
+  .eyebrow-rule {
+    display: inline-block;
+    width: 0.9rem;
+    height: 0.14rem;
+    background-color: var(--mp-red);
+    flex: none;
+  }
+  .band-ink .eyebrow-rule {
+    background-color: var(--mp-red-inverse);
+  }
+
   /* Squared "period" that ends a heading - the red datum from the logo,
      replacing a round full stop so titles read as brand-consistent. */
   .title-dot {

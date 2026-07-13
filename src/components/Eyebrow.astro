@@ -8,6 +8,6 @@ const { tick = true, class: className = "" } = Astro.props;
 ---
 
 <p class:list={["eyebrow flex items-center gap-2.5", className]}>
-  {tick && <span class="datum-tick" aria-hidden="true"></span>}
+  {tick && <span class="eyebrow-rule" aria-hidden="true"></span>}
   <slot />
 </p>
