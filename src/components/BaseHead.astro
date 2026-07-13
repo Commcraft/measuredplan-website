@@ -1,7 +1,12 @@
 ---
 // Global <head>. Imported once via DefaultLayout so global.css loads everywhere.
 import "../styles/global.css";
-import { SITE_METADATA, ORGANIZATION_JSONLD, ANALYTICS } from "../consts";
+import {
+  SITE_METADATA,
+  ORGANIZATION_JSONLD,
+  ANALYTICS,
+  ANALYTICS_ENABLED,
+} from "../consts";
 
 interface Props {
   title?: string;
@@ -60,25 +65,16 @@ const structuredData = [ORGANIZATION_JSONLD, ...jsonLd];
 <meta name="author" content={SITE_METADATA.authors[0].name} />
 <meta name="theme-color" content="#0B1726" />
 
-<!-- Privacy-friendly analytics (Plausible) - no cookies, no consent banner.
-     The stub queues events fired before the script finishes loading. -->
+<!-- Privacy-friendly analytics (Umami) - free, open source, no cookies, no
+     consent banner. Loads only once a real Website ID is configured. -->
 {
-  ANALYTICS.enabled && (
-    <>
-      <script
-        defer
-        data-domain={ANALYTICS.domain}
-        src={ANALYTICS.src}
-        is:inline
-      />
-      <script is:inline>
-        window.plausible =
-          window.plausible ||
-          function () {
-            (window.plausible.q = window.plausible.q || []).push(arguments);
-          };
-      </script>
-    </>
+  ANALYTICS_ENABLED && (
+    <script
+      defer
+      src={ANALYTICS.src}
+      data-website-id={ANALYTICS.websiteId}
+      is:inline
+    />
   )
 }
 

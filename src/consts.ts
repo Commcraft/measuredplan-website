@@ -57,18 +57,26 @@ export const PROOF_STATS = [
   { value: "72", accent: "hr", label: "Average turnaround" },
 ] as const;
 
-// Privacy-friendly analytics (Plausible). No cookies, no consent banner
-// required. To activate: create a free account at plausible.io, add the site
-// "measuredplan.com", and that's it - the script below is already wired in and
-// tracks pageviews, outbound clicks (WhatsApp), and the custom events
-// "Quote Submitted" and "Call Click". Set enabled to false to remove it.
+// Privacy-friendly analytics (Umami). Free forever (Umami Cloud Hobby tier),
+// open source, no cookies, and no consent banner required - GDPR-compliant by
+// design. Same clean dashboard as Plausible, with no data sampling.
+//
+// To activate (~2 min): create a free account at https://cloud.umami.is, add a
+// website for "measuredplan.com", copy the Website ID it gives you (a UUID),
+// and paste it below in place of the placeholder. Custom events
+// ("Quote Submitted", "WhatsApp Click", "Call Click") and pageviews then start
+// flowing automatically - no other code change needed.
 export const ANALYTICS = {
-  enabled: true,
-  provider: "plausible" as const,
-  domain: "measuredplan.com",
-  // Combined script: custom (tagged) events + automatic outbound-link tracking.
-  src: "https://plausible.io/js/script.tagged-events.outbound-links.js",
+  provider: "umami" as const,
+  src: "https://cloud.umami.is/script.js",
+  websiteId: "[TODO: paste Umami Website ID]",
 } as const;
+// Analytics only load once a real UUID Website ID is set, so nothing is
+// requested (and no console noise) until the account is connected.
+export const ANALYTICS_ENABLED =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+    ANALYTICS.websiteId,
+  );
 
 // Primary navigation (see site-brief §2).
 export const NAV_LINKS = [

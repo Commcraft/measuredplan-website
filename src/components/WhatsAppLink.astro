@@ -38,7 +38,8 @@ const iconSize = variant === "footer" ? 16 : variant === "icon" ? 24 : 19;
   target="_blank"
   rel="noopener"
   aria-label="Message MeasuredPlan on WhatsApp"
-  class:list={[base, variants[variant], className, "plausible-event-name=WhatsApp+Click"]}
+  data-umami-event="WhatsApp Click"
+  class:list={[base, variants[variant], className]}
 >
   <svg
     width={iconSize}

@@ -75,7 +75,8 @@ const year = 2026; // build-time constant; update at release
           <li>
             <a
               href={`tel:${BUSINESS.phoneHref}`}
-              class="plausible-event-name=Call+Click transition-colors hover:text-paper"
+              data-umami-event="Call Click"
+              class="transition-colors hover:text-paper"
               >{BUSINESS.phone}</a
             >
           </li>
