@@ -34,19 +34,28 @@ export function serviceJsonLd(opts: {
     },
     url: `${SITE_URL}/services/${opts.slug}/`,
   };
-  // Publish the starting price where one exists, as a "from" offer.
+  // Publish the starting price where one exists, as a "from" offer. Google's
+  // Offer validation requires `price` + `priceCurrency` directly on the Offer;
+  // an hourly rate additionally carries a UnitPriceSpecification (unitCode HUR).
   const m = opts.fromFee?.match(/^From \$([\d,]+)(\/hr)?$/);
   if (m) {
+    const price = m[1].replace(/,/g, "");
     data.offers = {
       "@type": "Offer",
+      price,
       priceCurrency: "USD",
       url: `${SITE_URL}/services/${opts.slug}/`,
-      priceSpecification: {
-        "@type": "PriceSpecification",
-        price: m[1].replace(/,/g, ""),
-        priceCurrency: "USD",
-        ...(m[2] ? { unitText: "hour" } : {}),
-      },
+      ...(m[2]
+        ? {
+            priceSpecification: {
+              "@type": "UnitPriceSpecification",
+              price,
+              priceCurrency: "USD",
+              unitCode: "HUR",
+              unitText: "hour",
+            },
+          }
+        : {}),
     };
   }
   return data;
