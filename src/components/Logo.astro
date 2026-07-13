@@ -56,8 +56,8 @@ const Tag = href ? "a" : "span";
      vertical flip (a coin-flip that goes edge-on at the midpoint, hiding any
      glyph-height mismatch) in mirrored directions, so the dP pair reads as a
      mirror of itself. The red datum is cursor-driven (see script): it glides
-     toward the pointer and lifts into the letter band, echoing the hero
-     reticle, then eases back to an identical rest square. */
+     toward the pointer and lifts into the letter band as a square that grows
+     slightly, echoing the hero reticle, then eases back to its rest square. */
   .mp-logo-svg {
     perspective: 900px;
   }
@@ -92,8 +92,9 @@ const Tag = href ? "a" : "span";
 
 <script>
   // Cursor-driven red datum: while the pointer is over the logo, the datum
-  // glides toward it (horizontally) and lifts into the letter band, rotating
-  // toward a diamond and growing - the same reticle feel as the hero field.
+  // glides toward it (horizontally) and lifts into the letter band, growing
+  // slightly - the same reticle feel as the hero field. It stays a crisp
+  // axis-aligned square (a datum mark), never rotating into a diamond.
   // On leave it eases back and the inline transform is cleared, so the logo is
   // pixel-identical at rest. Offsets are in the datum's own SVG units (which
   // are scale-independent), the same units the rest-state markup uses.
@@ -123,8 +124,9 @@ const Tag = href ? "a" : "span";
         }
         const tx = leanX * k;
         const ty = LIFT * k; // rise into the letter band
+        // stays an axis-aligned square (a datum mark, never a diamond)
         datum!.style.transform =
-          `translate(${tx}px, ${ty}px) rotate(${45 * k}deg) scale(${1 + 0.5 * k})`;
+          `translate(${tx}px, ${ty}px) scale(${1 + 0.32 * k})`;
         raf = requestAnimationFrame(step);
       }
       function start() {

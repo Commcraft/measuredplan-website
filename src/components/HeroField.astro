@@ -4,8 +4,8 @@
 // pointer and softly locks onto the nearest grid node with a live coordinate
 // readout - a small nod to the survey instruments behind the work. The red
 // datums echo the logo: they sit still as squares and, on a slow measured
-// cadence, register with a rotate-to-diamond + scale pulse, then return to
-// rest. The static grid is rendered once to an offscreen buffer, so each frame
+// cadence, register with a grow + brighten pulse (staying square), then return
+// to rest. The static grid is rendered once to an offscreen buffer, so each frame
 // only paints the moving parts. Purely decorative and inert to assistive tech;
 // honours reduced motion and pauses when scrolled out of view.
 ---
@@ -108,18 +108,14 @@
       paintGrid();
     }
 
-    // a red datum square; when registering it rotates toward a diamond and
-    // grows, then settles back to an axis-aligned square (its rest state)
+    // a red datum square; when registering it grows and brightens in place,
+    // then settles back - always an axis-aligned square, never a diamond
     function drawDatum(d: Datum, t: number) {
       const local = (t - d.offset + PERIOD * 10) % PERIOD;
       const k = local < PULSE ? bump(local / PULSE) : 0;
       const s = 7 * (1 + 0.6 * k);
-      g.save();
-      g.translate(d.x, d.y);
-      g.rotate((Math.PI / 4) * k);
       g.fillStyle = `rgba(${RED},${0.5 + 0.4 * k})`;
-      g.fillRect(-s / 2, -s / 2, s, s);
-      g.restore();
+      g.fillRect(d.x - s / 2, d.y - s / 2, s, s);
     }
 
     function drawReticle() {
