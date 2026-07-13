@@ -55,7 +55,9 @@ const Tag = href ? "a" : "span";
      Astro's style scoping does not reach. The "d" and "P" do a synchronised
      vertical flip (a coin-flip that goes edge-on at the midpoint, hiding any
      glyph-height mismatch) in mirrored directions, so the dP pair reads as a
-     mirror of itself. The red datum pulses between them. */
+     mirror of itself. The red datum is cursor-driven (see script): it glides
+     toward the pointer and lifts into the letter band, echoing the hero
+     reticle, then eases back to an identical rest square. */
   .mp-logo-svg {
     perspective: 900px;
   }
@@ -75,10 +77,6 @@ const Tag = href ? "a" : "span";
     .mp-logo:focus-visible .mp-p {
       animation: mp-flip-b 1s cubic-bezier(0.55, 0, 0.3, 1);
     }
-    .mp-logo:hover .mp-datum,
-    .mp-logo:focus-visible .mp-datum {
-      animation: mp-datum-turn 1s cubic-bezier(0.55, 0, 0.3, 1);
-    }
   }
   @keyframes mp-flip-a {
     to {
@@ -90,25 +88,74 @@ const Tag = href ? "a" : "span";
       transform: rotateX(-360deg);
     }
   }
-  /* The "d" and "P" go edge-on (invisible) at 25% and 75% of their flip. On
-     each of those beats the datum leaps up into the empty "dP" gap, spins, and
-     grows - standing in for the missing letters - then drops home as they
-     resolve. Two full turns over the second; ends exactly where it started. */
-  @keyframes mp-datum-turn {
-    0% {
-      transform: translateY(0) rotate(0) scale(1);
-    }
-    25% {
-      transform: translateY(500px) rotate(180deg) scale(1.8);
-    }
-    50% {
-      transform: translateY(0) rotate(360deg) scale(1);
-    }
-    75% {
-      transform: translateY(500px) rotate(540deg) scale(1.8);
-    }
-    100% {
-      transform: translateY(0) rotate(720deg) scale(1);
-    }
-  }
 </style>
+
+<script>
+  // Cursor-driven red datum: while the pointer is over the logo, the datum
+  // glides toward it (horizontally) and lifts into the letter band, rotating
+  // toward a diamond and growing - the same reticle feel as the hero field.
+  // On leave it eases back and the inline transform is cleared, so the logo is
+  // pixel-identical at rest. Offsets are in the datum's own SVG units (which
+  // are scale-independent), the same units the rest-state markup uses.
+  (function () {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const LIFT = 500; // SVG units the datum rises into the letter band
+    const LEAN = 760; // max SVG units the datum leans toward the cursor
+
+    document.querySelectorAll<HTMLElement>(".mp-logo").forEach((logo) => {
+      const datum = logo.querySelector<SVGGraphicsElement>(".mp-datum");
+      if (!datum) return;
+
+      let engaged = 0; // eased 0..1
+      let engagedT = 0; // engagement target
+      let leanX = 0; // eased horizontal offset (SVG units)
+      let leanT = 0; // horizontal target (SVG units)
+      let raf = 0;
+
+      function step() {
+        engaged += (engagedT - engaged) * 0.2;
+        leanX += (leanT - leanX) * 0.25;
+        const k = engaged;
+        if (engagedT === 0 && k < 0.01) {
+          datum!.style.transform = ""; // exact rest - pixel-identical
+          raf = 0;
+          return;
+        }
+        const tx = leanX * k;
+        const ty = LIFT * k; // rise into the letter band
+        datum!.style.transform =
+          `translate(${tx}px, ${ty}px) rotate(${45 * k}deg) scale(${1 + 0.5 * k})`;
+        raf = requestAnimationFrame(step);
+      }
+      function start() {
+        if (!raf) raf = requestAnimationFrame(step);
+      }
+
+      logo.addEventListener("pointerenter", (e) => {
+        if (e.pointerType === "touch") return;
+        engagedT = 1;
+        start();
+      });
+      logo.addEventListener(
+        "pointermove",
+        (e) => {
+          if (e.pointerType === "touch") return;
+          const r = logo.getBoundingClientRect();
+          const nx = Math.max(
+            -1,
+            Math.min(1, ((e.clientX - r.left) / r.width) * 2 - 1),
+          );
+          leanT = nx * LEAN; // -1..1 across the logo
+          start();
+        },
+        { passive: true },
+      );
+      logo.addEventListener("pointerleave", (e) => {
+        if (e.pointerType === "touch") return;
+        engagedT = 0;
+        leanT = 0;
+        start();
+      });
+    });
+  })();
+</script>

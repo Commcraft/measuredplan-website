@@ -39,7 +39,7 @@ export const BUSINESS = {
 // app with the details filled in, so no message is ever lost.
 export const CONTACT_FORM = {
   provider: "web3forms" as "web3forms" | "none",
-  web3formsKey: "[TODO: Web3Forms access key]",
+  web3formsKey: "87d4bef3-51fe-46ed-b854-d634bee84edb",
 } as const;
 // A real Web3Forms key is a UUID (hex + hyphens). The placeholder fails this,
 // so the form cleanly uses the email fallback until a key is pasted in.
