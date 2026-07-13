@@ -375,12 +375,12 @@
      replacing a round full stop so titles read as brand-consistent. */
   .title-dot {
     display: inline-block;
-    /* Fixed size matching .datum-tick so every red square on the site reads
-       as one brand mark, regardless of heading size. Was em-scaled, which
-       made the largest heading (the hero) carry a noticeably chunkier dot. */
-    width: 0.5rem;
-    height: 0.5rem;
-    margin-left: 0.15rem;
+    /* Fixed size (not em-scaled, which made the big hero heading carry a
+       chunkier dot). Kept a touch smaller than .datum-tick so the heading
+       "period" reads as a refined full stop, not a list marker. */
+    width: 0.4rem;
+    height: 0.4rem;
+    margin-left: 0.14rem;
     background-color: var(--mp-red);
     vertical-align: baseline;
   }
