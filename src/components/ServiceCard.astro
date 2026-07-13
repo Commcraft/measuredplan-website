@@ -39,7 +39,10 @@ const sheet = index != null ? String(index + 1).padStart(2, "0") : undefined;
           </span>
         )
       }
-      <span class="datum-tick" aria-hidden="true"></span>
+      <span
+        class="h-2 w-2 shrink-0 bg-line-strong transition-colors group-hover:bg-red"
+        aria-hidden="true"
+      ></span>
     </div>
     {
       optional && (
