@@ -23,14 +23,24 @@ const { class: className = "" } = Astro.props;
             class={`flex items-baseline gap-4 py-6 sm:flex-col sm:items-start sm:gap-3 sm:py-0 ${i === 0 ? "sm:pr-8" : "sm:px-8"}`}
           >
             <dt class="flex items-baseline gap-1">
+              {/* True value for assistive tech - stable regardless of the
+                  count-up animation state. Visual spans below are aria-hidden. */}
+              <span class="sr-only">
+                {s.value}
+                {s.accent}
+              </span>
               <span class="datum-tick self-center" aria-hidden="true" />
               <span
                 class="font-display text-5xl font-semibold leading-none tracking-tight text-paper tabular-nums sm:text-6xl"
                 data-count-to={s.value}
+                aria-hidden="true"
               >
                 {s.value}
               </span>
-              <span class="font-display text-2xl font-semibold leading-none text-red-inverse sm:text-3xl">
+              <span
+                class="font-display text-2xl font-semibold leading-none text-red-inverse sm:text-3xl"
+                aria-hidden="true"
+              >
                 {s.accent}
               </span>
             </dt>

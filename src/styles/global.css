@@ -262,14 +262,28 @@
     font-variant-numeric: tabular-nums lining-nums;
   }
 
-  /* Ink focus ring, visible on every interactive element (a11y). */
-  :where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  /* Ink focus ring, visible on every interactive element (a11y). Uses real
+     (non-:where) selectors and an explicit outline-color so it is never lost
+     to currentColor on elements that set their own text color - e.g. the red
+     primary buttons, whose white text would otherwise make the ring invisible
+     on a light background. */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible,
+  [tabindex]:focus-visible {
     outline: 2px solid var(--mp-ink);
+    outline-color: var(--mp-ink);
     outline-offset: 2px;
     border-radius: 0;
   }
-  .band-ink
-    :where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  .band-ink a:focus-visible,
+  .band-ink button:focus-visible,
+  .band-ink input:focus-visible,
+  .band-ink textarea:focus-visible,
+  .band-ink select:focus-visible,
+  .band-ink [tabindex]:focus-visible {
     outline-color: var(--mp-paper);
   }
 
@@ -518,4 +532,19 @@
 .leaflet-control-attribution {
   font-size: 10px;
   background: rgba(247, 245, 240, 0.85);
+}
+
+/* Unlayered (beats the utilities layer): keep outline-color out of any
+   transition so the keyboard focus ring appears instantly instead of fading
+   in from currentColor. Elements using .transition-colors otherwise animate
+   outline-color, leaving the ring invisible for ~150ms - a focus-visibility
+   (WCAG 2.4.7) concern. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  transition-property: color, background-color, border-color,
+    text-decoration-color, fill, stroke, box-shadow, transform, opacity;
 }
