@@ -21,7 +21,7 @@ const {
   align = "left",
   class: className = "",
   max = true,
-} = Astro.props;
+}: Props = Astro.props;
 
 // End headings with the brand's red square datum instead of a round period.
 const hasDot = /\.\s*$/.test(title);

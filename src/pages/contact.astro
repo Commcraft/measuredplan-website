@@ -122,7 +122,16 @@ const crumbs = [
               <dt class="font-mono text-xs uppercase tracking-wider text-ink-muted">
                 Coverage
               </dt>
-              <dd class="mt-1.5 text-ink">{BUSINESS.areaServed}</dd>
+              <dd class="mt-1.5 text-ink">
+                {BUSINESS.areaServed}
+                <a
+                  href="/about/#service-area"
+                  class="mt-1 inline-flex items-center gap-1 text-sm text-ink underline underline-offset-4 transition-colors hover:text-red-deep"
+                >
+                  Check your location on our coverage map
+                  <span aria-hidden="true">→</span>
+                </a>
+              </dd>
             </div>
           </dl>
 

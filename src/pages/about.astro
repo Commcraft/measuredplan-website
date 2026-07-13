@@ -156,7 +156,7 @@ const crumbs = [
       {
         team.map((person) => (
           <div class="title-block flex flex-col bg-white p-5 sm:p-6">
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-4 sm:gap-5">
               <img
                 src={person.photo.src}
                 alt={`${person.name}, ${person.role} of MeasuredPlan`}
@@ -164,7 +164,7 @@ const crumbs = [
                 height={person.photo.height}
                 loading="lazy"
                 decoding="async"
-                class="h-20 w-20 shrink-0 bg-white object-cover"
+                class="h-20 w-20 shrink-0 bg-white object-cover sm:h-32 sm:w-32 lg:h-36 lg:w-36"
               />
               <div class="min-w-0">
                 <h3 class="text-lg leading-snug text-ink">{person.name}</h3>
@@ -216,7 +216,7 @@ const crumbs = [
   </Section>
 
   <!-- Service area -->
-  <Section surface="stone">
+  <Section surface="stone" id="service-area" class="scroll-mt-24">
     <SectionHeading
       eyebrow="Service area"
       title="Our core and extended service area."

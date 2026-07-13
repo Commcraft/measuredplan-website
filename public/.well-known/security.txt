@@ -1,0 +1,4 @@
+# Security contact for measuredplan.com (RFC 9116)
+Contact: mailto:info@measuredplan.com
+Expires: 2027-07-13T00:00:00.000Z
+Preferred-Languages: en

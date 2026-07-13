@@ -33,6 +33,18 @@ const structuredData = [ORGANIZATION_JSONLD, ...jsonLd];
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 
+<!-- Content Security Policy (defense-in-depth). Allows only this origin plus
+     the site's real third parties: Umami analytics, Web3Forms (contact form)
+     and CARTO map tiles. 'unsafe-inline' is required for the site's inline
+     scripts/styles; a static site has no server to issue nonces, and there is
+     no user-generated HTML on the page, so the residual risk is low. Some
+     directives (frame-ancestors, HSTS) can only be set as HTTP headers - do
+     those at the CDN/Cloudflare layer. -->
+<meta
+  http-equiv="Content-Security-Policy"
+  content="default-src 'self'; base-uri 'self'; object-src 'none'; script-src 'self' 'unsafe-inline' https://*.umami.is; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.basemaps.cartocdn.com; font-src 'self'; connect-src 'self' https://*.umami.is https://api.web3forms.com; form-action 'self' https://api.web3forms.com; frame-src 'none'; manifest-src 'self'"
+/>
+
 <!-- Self-hosted fonts preloaded (no external font requests) -->
 <link
   rel="preload"
