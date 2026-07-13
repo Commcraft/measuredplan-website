@@ -548,3 +548,21 @@ select:focus-visible,
   transition-property: color, background-color, border-color,
     text-decoration-color, fill, stroke, box-shadow, transform, opacity;
 }
+
+/* Larger small-text on phones for comfortable reading by older customers.
+   Body copy is already 16-19px; this lifts the small mono labels, captions,
+   eyebrows, breadcrumbs and helper text (previously ~13-15px). Unlayered so it
+   beats Tailwind's text-xs / text-sm utilities. */
+@media (max-width: 767px) {
+  .text-xs {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+  .text-sm {
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+  .eyebrow {
+    font-size: 0.84rem;
+  }
+}

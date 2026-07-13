@@ -94,6 +94,16 @@ const Tag = href ? "a" : "span";
       animation: mp-flip-b 1s cubic-bezier(0.55, 0, 0.3, 1);
     }
   }
+  /* Touch devices have no hover, so the dP flourish would never play. Run it
+     once on load instead, shortly after the header appears. */
+  @media (prefers-reduced-motion: no-preference) and (hover: none) {
+    .mp-d {
+      animation: mp-flip-a 1s cubic-bezier(0.55, 0, 0.3, 1) 0.6s;
+    }
+    .mp-p {
+      animation: mp-flip-b 1s cubic-bezier(0.55, 0, 0.3, 1) 0.6s;
+    }
+  }
   @keyframes mp-flip-a {
     to {
       transform: rotateX(360deg);

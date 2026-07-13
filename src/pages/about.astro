@@ -155,7 +155,7 @@ const crumbs = [
     >
       {
         team.map((person) => (
-          <div class="title-block flex flex-col bg-white">
+          <div class="title-block flex items-start gap-4 bg-white p-4 sm:block sm:gap-0 sm:p-0">
             <img
               src={person.photo.src}
               alt={`${person.name}, ${person.role} of MeasuredPlan`}
@@ -163,15 +163,15 @@ const crumbs = [
               height={person.photo.height}
               loading="lazy"
               decoding="async"
-              class="aspect-square w-full bg-white object-cover"
+              class="aspect-square w-24 shrink-0 bg-white object-cover sm:w-full"
             />
-            <div class="p-6 sm:p-7">
+            <div class="min-w-0 flex-1 sm:p-6 md:p-7">
               <div class="flex items-center gap-2.5">
                 <span class="datum-tick" aria-hidden="true"></span>
                 <h3 class="text-lg leading-snug text-ink">{person.name}</h3>
               </div>
-              <p class="eyebrow mt-2">{person.role}</p>
-              <p class="mt-4 text-base leading-relaxed text-ink-muted">
+              <p class="eyebrow mt-1.5 sm:mt-2">{person.role}</p>
+              <p class="mt-2.5 text-base leading-relaxed text-ink-muted sm:mt-4">
                 {person.bio}
               </p>
             </div>
