@@ -505,6 +505,12 @@
   font-family: var(--font-sans);
   background: var(--mp-cad);
 }
+/* Mute the raster basemap to a monochrome, brand-matched palette. The red
+   coverage rings and datum are SVG overlays in separate panes, so they stay
+   vivid and become the visual focus of the map. */
+.leaflet-tile-pane {
+  filter: grayscale(1) contrast(1.03) brightness(1.03);
+}
 .leaflet-bar,
 .leaflet-bar a,
 .leaflet-bar a:hover {
