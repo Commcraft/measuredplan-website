@@ -69,6 +69,12 @@ const team = [
     photo: "/team/benas-rimsa.webp",
     bio: "Benas brings over 15 years of financial and operational management experience to MeasuredPlan. As COO, he oversees the commercial and operational side of the business, helping ensure clients receive a clear, reliable service with transparent communication, efficient processes and strong value from first inquiry to final delivery.",
   },
+  {
+    name: "Elena Survilaite",
+    role: "CMO",
+    photo: "/team/elena-survilaite.webp",
+    bio: "Elena brings more than 20 years of international marketing experience across Europe, the United States and the Middle East. As CMO, she leads MeasuredPlan's brand, marketing and partnerships - shaping how the practice presents its work and building the relationships that connect it with architects, developers and property owners.",
+  },
 ];
 
 const crumbs = [
@@ -133,12 +139,12 @@ const crumbs = [
     <SectionHeading
       eyebrow="Leadership"
       title="The people behind the practice."
-      intro="MeasuredPlan is led by two principals who between them cover the technical and the commercial side of every project."
+      intro="MeasuredPlan is led by a small team that covers the technical, commercial and brand sides of every project."
     />
-    <div class="mt-12 grid gap-6 md:grid-cols-2">
+    <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {
         team.map((person) => (
-          <div class="title-block flex flex-col gap-6 bg-white p-6 sm:flex-row sm:p-7">
+          <div class="title-block flex flex-col bg-white">
             <img
               src={person.photo}
               alt={`${person.name}, ${person.role} of MeasuredPlan`}
@@ -146,9 +152,9 @@ const crumbs = [
               height="640"
               loading="lazy"
               decoding="async"
-              class="h-28 w-28 shrink-0 border border-line bg-white object-cover sm:h-32 sm:w-32"
+              class="aspect-square w-full border-b border-line bg-white object-cover"
             />
-            <div>
+            <div class="p-6 sm:p-7">
               <h3 class="text-lg leading-snug text-ink">{person.name}</h3>
               <p class="eyebrow mt-1.5">{person.role}</p>
               <p class="mt-4 text-sm leading-relaxed text-ink-muted">
