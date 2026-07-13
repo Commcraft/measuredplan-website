@@ -135,21 +135,22 @@ const trust = [
   "Starting-price quotes",
 ];
 
-// Hero crossfade: a small, cohesive set of real 3D models built from as-built
-// measures (all top-down cutaways, so the frames read as one series). First
-// frame is eager/high-priority; the rest lazy. Reduced motion holds the first.
+// Hero crossfade: a curated set of real renders built from as-built measures.
+// It leads with a photographic exterior visualization (depth, light) then moves
+// to top-down cutaway models - exterior vision to measured model. First frame is
+// eager/high-priority; the rest lazy. Reduced motion holds the first frame.
 const heroSlides = [
   {
-    src: "/projects/luxury-home-3d.webp",
-    alt: "A 3D model produced from a MeasuredPlan as-built measure",
+    src: "/projects/custom-home-visualization.webp",
+    alt: "A photorealistic exterior visualization of a custom home, modeled from a MeasuredPlan as-built measure",
   },
   {
-    src: "/projects/concept-multiunit-fletcher.webp",
-    alt: "A 3D cutaway model of a multi-unit building from an as-built measure",
+    src: "/projects/luxury-home-3d.webp",
+    alt: "A 3D cutaway model of a home produced from a MeasuredPlan as-built measure",
   },
   {
     src: "/projects/hillside-home-mars-hill.webp",
-    alt: "A 3D cutaway model of a hillside home from an as-built measure",
+    alt: "A 3D cutaway model of a hillside home produced from an as-built measure",
   },
 ];
 
@@ -230,7 +231,7 @@ const proof = [
                     decoding="async"
                     data-hero-slide
                     class:list={[
-                      "absolute inset-0 h-full w-full bg-white object-cover transition-opacity duration-1000 ease-out",
+                      "hero-slide absolute inset-0 h-full w-full bg-white object-cover transition-opacity duration-[1100ms] ease-out",
                       i === 0 ? "opacity-100" : "opacity-0",
                     ]}
                     aria-hidden={i === 0 ? undefined : "true"}
@@ -663,6 +664,39 @@ const proof = [
     }
     to {
       opacity: 1;
+    }
+  }
+
+  /* Ken Burns drift: a barely-there, cinematic slow zoom on each hero frame so
+     the render reads as atmosphere rather than a static image. Scale-only (never
+     below 1) so object-cover never reveals an edge; each frame gets its own
+     origin + duration so the three never drift in sync. Compositor-only
+     (transform), and fully disabled under reduced motion. The registration-mark
+     overlay is a sibling, so it stays pinned to the frame while the image moves. */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-slide {
+      will-change: transform;
+      animation: hero-kenburns 22s ease-in-out infinite alternate;
+    }
+    .hero-slide:nth-of-type(1) {
+      transform-origin: 32% 42%;
+      animation-duration: 22s;
+    }
+    .hero-slide:nth-of-type(2) {
+      transform-origin: 68% 40%;
+      animation-duration: 25s;
+    }
+    .hero-slide:nth-of-type(3) {
+      transform-origin: 46% 66%;
+      animation-duration: 19s;
+    }
+  }
+  @keyframes hero-kenburns {
+    from {
+      transform: scale(1.015);
+    }
+    to {
+      transform: scale(1.075);
     }
   }
 </style>
