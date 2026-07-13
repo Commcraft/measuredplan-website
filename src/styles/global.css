@@ -570,3 +570,9 @@ select:focus-visible,
     font-size: 0.84rem;
   }
 }
+
+/* Anchored jumps (e.g. the contact -> #service-area link) clear the sticky
+   header instead of hiding behind it. Consistent across the site. */
+:where(h1, h2, h3, section[id], [id]) {
+  scroll-margin-top: 6rem;
+}

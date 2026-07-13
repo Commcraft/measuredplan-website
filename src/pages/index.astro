@@ -240,7 +240,7 @@ const proof = [
         All services
       </LinkButton>
     </div>
-    <div data-reveal class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
       {
         services.map((s, i) => (
           <ServiceCard
@@ -364,7 +364,7 @@ const proof = [
       title="Clean sheets, at the scale you need."
       intro="Every drawing is issued to a consistent layer structure, with a clear title block, scale bar and north point - so it reads the same on screen, on paper and in CAD."
     />
-    <div data-reveal class="mt-12 grid gap-6 md:grid-cols-3">
+    <div class="mt-12 grid gap-6 md:grid-cols-3">
       <figure>
         <div class="title-block aspect-[4/3] overflow-hidden">
           <img
@@ -432,7 +432,7 @@ const proof = [
       title="Accuracy, documented and easy to use."
       intro="The value is not only in the measurement - it is in drawings that are correct, consistent and ready for the next person to work from."
     />
-    <div data-reveal class="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+    <div class="mt-12 grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
       {proof.map((p) => <ProofPoint stat={p.stat} label={p.label} note={p.note} />)}
     </div>
   </Section>
@@ -450,7 +450,7 @@ const proof = [
         View all
       </LinkButton>
     </div>
-    <div data-reveal class="mt-12 grid gap-6 md:grid-cols-3">
+    <div class="mt-12 grid gap-6 md:grid-cols-3">
       {
         projects.map((p) => (
           <a

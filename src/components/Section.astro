@@ -12,6 +12,7 @@ interface Props {
   containerClass?: string;
   bare?: boolean; // skip the inner Container
   labelledby?: string;
+  reveal?: boolean; // subtle fade-up on scroll (site-wide default)
 }
 
 const {
@@ -21,6 +22,7 @@ const {
   containerClass = "",
   bare = false,
   labelledby,
+  reveal = true,
 } = Astro.props;
 
 const surfaces: Record<Surface, string> = {
@@ -43,10 +45,22 @@ const surfaces: Record<Surface, string> = {
 >
   {
     bare ? (
-      <slot />
+      reveal ? (
+        <div data-reveal>
+          <slot />
+        </div>
+      ) : (
+        <slot />
+      )
     ) : (
       <Container class={containerClass}>
-        <slot />
+        {reveal ? (
+          <div data-reveal>
+            <slot />
+          </div>
+        ) : (
+          <slot />
+        )}
       </Container>
     )
   }
