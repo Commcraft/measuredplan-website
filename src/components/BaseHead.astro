@@ -65,12 +65,22 @@ const structuredData = [ORGANIZATION_JSONLD, ...jsonLd];
 <script is:inline>
   document.documentElement.classList.add("js");
   (function () {
+    // Reveal any not-yet-revealed block whose top has entered the viewport.
+    // Uses layout geometry, so it works even inside content-visibility:auto
+    // sections where IntersectionObserver can fail to fire on some engines.
+    function revealInView() {
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      var els = document.querySelectorAll("[data-reveal]:not(.is-visible)");
+      for (var i = 0; i < els.length; i++) {
+        // Reveal as soon as the top edge has entered the viewport (or is above
+        // it). No lower bound, so nothing is ever left faded after a fast scroll.
+        if (els[i].getBoundingClientRect().top < vh) els[i].classList.add("is-visible");
+      }
+    }
     function run() {
       var els = document.querySelectorAll("[data-reveal]");
       if (!("IntersectionObserver" in window)) {
-        els.forEach(function (e) {
-          e.classList.add("is-visible");
-        });
+        for (var i = 0; i < els.length; i++) els[i].classList.add("is-visible");
         return;
       }
       var io = new IntersectionObserver(
@@ -86,6 +96,23 @@ const structuredData = [ORGANIZATION_JSONLD, ...jsonLd];
       );
       els.forEach(function (e) {
         io.observe(e);
+      });
+      // Geometry fallback: guarantees content is never left invisible if IO
+      // misses an element (notably inside content-visibility:auto sections).
+      var ticking = false;
+      function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function () {
+          revealInView();
+          ticking = false;
+        });
+      }
+      window.addEventListener("scroll", onScroll, { passive: true });
+      window.addEventListener("resize", onScroll, { passive: true });
+      revealInView();
+      window.addEventListener("load", function () {
+        setTimeout(revealInView, 200);
       });
     }
     if (document.readyState !== "loading") run();
