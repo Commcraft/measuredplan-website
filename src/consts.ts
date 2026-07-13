@@ -55,11 +55,20 @@ export const NAV_LINKS = [
   { label: "Projects", href: "/projects/" },
   { label: "Pricing", href: "/pricing/" },
   { label: "About", href: "/about/" },
+  { label: "Contact", href: "/contact/" },
 ] as const;
 
 export const PRIMARY_CTA = {
   label: "Request a quote",
   href: "/contact/",
+} as const;
+
+// WhatsApp click-to-chat on the business phone number, with a short prefilled
+// message. Used on the contact page, header and footer.
+export const WHATSAPP = {
+  href: `https://wa.me/${BUSINESS.phoneHref.replace(/\D/g, "")}?text=${encodeURIComponent(
+    "Hi MeasuredPlan, I'd like to ask about a quote.",
+  )}`,
 } as const;
 
 // Footer service links (kept in sync with the services collection order).

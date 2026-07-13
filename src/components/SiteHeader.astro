@@ -2,6 +2,7 @@
 import Container from "./Container.astro";
 import LinkButton from "./LinkButton.astro";
 import Logo from "./Logo.astro";
+import WhatsAppLink from "./WhatsAppLink.astro";
 import { NAV_LINKS, PRIMARY_CTA } from "../consts";
 
 const path = Astro.url.pathname;
@@ -43,7 +44,8 @@ const isActive = (href: string) =>
         </ul>
       </nav>
 
-      <div class="hidden items-center lg:flex">
+      <div class="hidden items-center gap-3 lg:flex">
+        <WhatsAppLink variant="icon" />
         <LinkButton href={PRIMARY_CTA.href} size="sm">{PRIMARY_CTA.label}</LinkButton>
       </div>
 
@@ -115,10 +117,11 @@ const isActive = (href: string) =>
             ))
           }
         </ul>
-        <div class="pt-5">
+        <div class="flex flex-col gap-3 pt-5">
           <LinkButton href={PRIMARY_CTA.href} size="lg" class="w-full">
             {PRIMARY_CTA.label}
           </LinkButton>
+          <WhatsAppLink variant="solid" class="w-full justify-center" />
         </div>
       </nav>
     </Container>

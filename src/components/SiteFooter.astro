@@ -1,6 +1,7 @@
 ---
 import Container from "./Container.astro";
 import Logo from "./Logo.astro";
+import WhatsAppLink from "./WhatsAppLink.astro";
 import {
   BUSINESS,
   FOOTER_SERVICES,
@@ -76,6 +77,9 @@ const year = 2026; // build-time constant; update at release
               href={`tel:${BUSINESS.phoneHref}`}
               class="transition-colors hover:text-paper">{BUSINESS.phone}</a
             >
+          </li>
+          <li>
+            <WhatsAppLink variant="footer" />
           </li>
           <li class="pt-1">{BUSINESS.hours}</li>
           <li class="text-ink-muted-inverse">{BUSINESS.areaServed}</li>
