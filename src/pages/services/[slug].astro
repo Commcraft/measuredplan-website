@@ -216,12 +216,14 @@ const crumbs = [
   <!-- Use cases -->
   <Section surface="paper">
     <SectionHeading eyebrow="Use cases" title="Where this service fits." />
-    <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="mt-12 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
       {
         d.useCases.map((u) => (
-          <div class="title-block p-6">
+          <div class="border-t border-line pt-5">
             <h3 class="text-lg leading-snug">{u.title}</h3>
-            <p class="mt-2 text-sm leading-relaxed text-ink-muted">{u.body}</p>
+            <p class="mt-2.5 text-[0.95rem] leading-relaxed text-ink-muted">
+              {u.body}
+            </p>
           </div>
         ))
       }
