@@ -126,13 +126,17 @@ the logo — reuse it as section dividers and list markers, sparingly.
   `BaseHead.astro` (IntersectionObserver + geometry fallback + load safety),
   gated by `html.js` and `prefers-reduced-motion`, so no-JS / reduced-motion
   shows everything. Do NOT hand-add `data-reveal` to Section children.
-- **Home hero = crossfade** (`index.astro`): a cohesive set of real 3D-model
-  renders (all top-down cutaways, `heroSlides`) stacked in a fixed-aspect
-  (`aspect-[1200/758]`) `object-cover` frame, crossfading via opacity classes.
-  First frame is eager/`fetchpriority="high"`, the rest lazy; the inline script
-  only advances while the tab is visible and holds the first frame under
-  `prefers-reduced-motion`. The CAD registration-mark SVG sits on top and draws
-  in on load. To reskin the hero, swap `heroSlides` (keep the frames one series).
+- **Home hero = crossfade** (`index.astro`): `heroSlides` shows the deliverables
+  for the **most-requested services, in priority order** - an as-built floor
+  plan (service #1) leads, then a 3D model, then a design visualization. Lead
+  with what visitors search for (accurate drawings), not a niche render; if the
+  service ranking changes, re-order the frames to match. Frames stack in a
+  fixed-aspect (`aspect-[1200/758]`) `object-cover` frame and crossfade via
+  opacity classes with a subtle Ken Burns drift. First frame is
+  eager/`fetchpriority="high"`, the rest lazy; the inline script only advances
+  while the tab is visible and holds the first frame under
+  `prefers-reduced-motion`. The image carries a plain drawing-sheet caption (no
+  overlay marks on the image itself - a center datum read as a blemish).
 - **Header = smart hybrid** (`SiteHeader.astro`): persistent/sticky on desktop
   (`>= lg`); hides on scroll-down / shows on scroll-up on mobile, paired with
   the sticky bottom **`MobileCtaBar`** (Get my quote + WhatsApp, hidden on

@@ -135,18 +135,23 @@ const trust = [
   "Starting-price quotes",
 ];
 
-// Hero crossfade: a curated set of real renders built from as-built measures.
-// It leads with a photographic exterior visualization (depth, light) then moves
-// to top-down cutaway models - exterior vision to measured model. First frame is
+// Hero crossfade: shows the deliverables for the most-requested services, in
+// priority order - an as-built floor plan (the #1 service), then a 3D model,
+// then a design visualization. Leads with what visitors actually search for
+// (accurate floor plans/drawings), not a niche render. First frame is
 // eager/high-priority; the rest lazy. Reduced motion holds the first frame.
 const heroSlides = [
   {
-    src: "/projects/hoa-mountain-home-landrum.webp",
-    alt: "A photorealistic exterior visualization of a mountain home, modeled from a MeasuredPlan as-built measure",
+    src: "/projects/custom-home-mills-river.webp",
+    alt: "An as-built floor plan drawn from an on-site MeasuredPlan measure",
   },
   {
     src: "/projects/luxury-home-3d.webp",
-    alt: "A photorealistic 3D cutaway model of a home produced from an as-built measure",
+    alt: "A 3D model produced from an as-built measure",
+  },
+  {
+    src: "/projects/hoa-mountain-home-landrum.webp",
+    alt: "A design visualization developed from measured drawings",
   },
 ];
 
@@ -240,7 +245,7 @@ const proof = [
             class="flex items-center gap-2.5 border-t border-line bg-white px-4 py-2.5 font-mono text-xs text-ink-muted"
           >
             <span class="datum-tick" aria-hidden="true"></span>
-            3D models · from as-built measures
+            Floor plans · 3D models · from as-built measures
           </figcaption>
         </div>
       </figure>
