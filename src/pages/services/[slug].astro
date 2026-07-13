@@ -24,10 +24,20 @@ const { entry } = Astro.props;
 const d = entry.data;
 const { Content } = await render(entry);
 
-const projects = (await getCollection("projects"))
-  .filter((p) => p.data.service.includes(entry.id))
-  .sort((a, b) => a.data.order - b.data.order)
-  .slice(0, 3);
+// Portfolio for this service: projects tagged with it first, then topped up
+// with the newest work so every service page still shows (and links to) real
+// projects even when nothing is tagged to it yet.
+const allProjects = (await getCollection("projects")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const tagged = allProjects.filter((p) => p.data.service.includes(entry.id));
+const projects = [
+  ...tagged,
+  ...allProjects.filter((p) => !tagged.includes(p)),
+].slice(0, 3);
+const projectsHeading = tagged.length
+  ? "Drawings of this type."
+  : "Recent work from the practice.";
 
 // "Choose this if" line, with the leading phrase stripped so it reads cleanly
 // under the callout label.
@@ -292,22 +302,22 @@ const crumbs = [
     projects.length > 0 && (
       <Section surface="paper">
         <div class="flex items-end justify-between gap-6">
-          <SectionHeading eyebrow="Related work" title="Drawings of this type." />
+          <SectionHeading eyebrow="Related work" title={projectsHeading} />
           <LinkButton href="/projects/" variant="outline" size="sm" class="shrink-0">
             All work
           </LinkButton>
         </div>
         <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((p) => (
-            <article>
+            <a href={`/projects/${p.id}/`} class="group flex flex-col">
               {p.data.image ? (
-                <div class="title-block aspect-[4/3] overflow-hidden">
+                <div class="title-block aspect-[4/3] overflow-hidden transition-colors group-hover:border-line-strong">
                   <img
                     src={p.data.image}
-                    alt={`${p.data.title} - measured drawing`}
+                    alt={`${p.data.title} - ${p.data.buildingType} in ${p.data.location}`}
                     loading="lazy"
-            decoding="async"
-                    class="h-full w-full bg-white object-cover object-top"
+                    decoding="async"
+                    class="h-full w-full bg-white object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]"
                   />
                 </div>
               ) : (
@@ -315,10 +325,13 @@ const crumbs = [
               )}
               <div class="mt-4">
                 <span class="eyebrow">{p.data.buildingType}</span>
-                <h3 class="mt-2 text-lg leading-snug">{p.data.title}</h3>
+                <h3 class="mt-2 text-lg leading-snug transition-colors group-hover:text-red-deep">
+                  {p.data.title}
+                </h3>
+                <p class="mt-1 font-mono text-xs text-ink-muted">{p.data.location}</p>
                 <p class="mt-2 text-sm text-ink-muted">{p.data.scopeLine}</p>
               </div>
-            </article>
+            </a>
           ))}
         </div>
       </Section>

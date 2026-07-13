@@ -18,6 +18,16 @@ const allServices = (await getCollection("services")).sort(
 const services = allServices.filter((s) => !s.data.landingOnly);
 const landingServices = allServices.filter((s) => s.data.landingOnly);
 
+// Portfolio teaser: featured projects first, topped up with the newest work,
+// so the services page routes visitors on to real drawings before the CTA.
+const allProjects = (await getCollection("projects")).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+const featuredProjects = [
+  ...allProjects.filter((p) => p.data.featured),
+  ...allProjects.filter((p) => !p.data.featured),
+].slice(0, 3);
+
 const process = [
   { title: "Inquiry", body: "Tell us the property and what the drawings are for." },
   { title: "Site visit", body: "We measure on site to a stated datum." },
@@ -133,6 +143,54 @@ const crumbs = [
     />
     <ProcessStrip steps={process} class="mt-10" />
   </Section>
+
+  <!-- Selected work -->
+  {
+    featuredProjects.length > 0 && (
+      <Section surface="stone">
+        <div class="flex items-end justify-between gap-6">
+          <SectionHeading
+            eyebrow="Selected work"
+            title="See these services drawn."
+            intro="A sample of recent as-built and design drawings from across Western North Carolina. Client names and addresses removed."
+          />
+          <LinkButton href="/projects/" variant="outline" size="sm" class="hidden shrink-0 sm:inline-flex">
+            View all projects
+          </LinkButton>
+        </div>
+        <div class="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {featuredProjects.map((p) => (
+            <a href={`/projects/${p.id}/`} class="group flex flex-col">
+              <div class="title-block aspect-[4/3] overflow-hidden bg-white transition-colors group-hover:border-line-strong">
+                <img
+                  src={p.data.image}
+                  alt={`${p.data.title} - ${p.data.buildingType} in ${p.data.location}`}
+                  loading="lazy"
+                  decoding="async"
+                  class="h-full w-full object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]"
+                />
+              </div>
+              <div class="mt-4">
+                <span class="eyebrow">{p.data.buildingType}</span>
+                <h3 class="mt-2 text-lg leading-snug transition-colors group-hover:text-red-deep">
+                  {p.data.title}
+                </h3>
+                <p class="mt-1 font-mono text-xs text-ink-muted">
+                  {p.data.location}
+                </p>
+                <p class="mt-2 text-sm text-ink-muted">{p.data.scopeLine}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+        <div class="mt-8 sm:hidden">
+          <LinkButton href="/projects/" variant="outline" size="md" class="w-full justify-center">
+            View all projects
+          </LinkButton>
+        </div>
+      </Section>
+    )
+  }
 
   <CTASection />
 </DefaultLayout>
