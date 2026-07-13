@@ -1,5 +1,7 @@
 ---
 // Compact fact / proof point. Fact-first, no superlatives.
+// Drawing-sheet framing: a datum origin sitting on a top dimension rule,
+// so the stat reads as a measured value rather than floating text.
 interface Props {
   stat: string;
   label: string;
@@ -8,10 +10,20 @@ interface Props {
 const { stat, label, note } = Astro.props;
 ---
 
-<div class="flex flex-col">
-  <span class="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl"
+<div class="relative border-t border-line pt-6">
+  <span
+    class="datum-tick absolute left-0 top-[-0.25rem]"
+    aria-hidden="true"></span>
+  <span
+    class="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl"
     >{stat}</span
   >
-  <span class="mt-2 text-sm font-medium text-ink">{label}</span>
-  {note && <span class="mt-1 text-base leading-relaxed text-ink-muted">{note}</span>}
+  <span class="mt-2 block text-sm font-medium text-ink">{label}</span>
+  {
+    note && (
+      <span class="mt-1 block text-base leading-relaxed text-ink-muted">
+        {note}
+      </span>
+    )
+  }
 </div>
