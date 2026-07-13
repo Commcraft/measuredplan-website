@@ -34,7 +34,7 @@ const extended = [
     <div class="title-block overflow-hidden">
       <div
         id="sa-map"
-        class="h-[340px] w-full bg-cad sm:h-[420px]"
+        class="h-[340px] w-full bg-ink sm:h-[420px]"
         role="img"
         aria-label="Map of MeasuredPlan's service area, centred on Asheville and covering Western North Carolina."
       >
@@ -44,7 +44,7 @@ const extended = [
           class="flex h-full w-full flex-col items-center justify-center gap-2 p-6 text-center"
         >
           <span class="datum-tick" aria-hidden="true"></span>
-          <p class="font-mono text-xs text-ink-muted">
+          <p class="font-mono text-xs text-ink-muted-inverse">
             Asheville · Western North Carolina
           </p>
         </div>
@@ -129,8 +129,10 @@ const extended = [
           attributionControl: true,
           zoomControl: true,
         }).setView(asheville, 8);
+        // Dark basemap: the ink-toned map makes the red coverage rings and the
+        // Asheville datum read as the focus (matching the site's dark bands).
         L.tileLayer(
-          "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+          "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
           {
             attribution:
               '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -138,24 +140,24 @@ const extended = [
             maxZoom: 19,
           },
         ).addTo(map);
-        // Extended coverage (Western North Carolina)
+        // Extended coverage (Western North Carolina) - light hairline on dark.
         L.circle(asheville, {
           radius: 120000,
-          color: "#0B1726",
+          color: "#B2BAC2",
           weight: 1,
-          opacity: 0.4,
+          opacity: 0.6,
           dashArray: "3 6",
-          fillColor: "#0B1726",
-          fillOpacity: 0.03,
+          fillColor: "#B2BAC2",
+          fillOpacity: 0.04,
         }).addTo(map);
-        // Core coverage (Greater Asheville)
+        // Core coverage (Greater Asheville) - bold brand red.
         L.circle(asheville, {
           radius: 45000,
           color: "#C21F3A",
-          weight: 1.5,
-          opacity: 0.85,
+          weight: 2.5,
+          opacity: 1,
           fillColor: "#C21F3A",
-          fillOpacity: 0.06,
+          fillOpacity: 0.2,
         }).addTo(map);
         // Asheville datum marker
         var icon = L.divIcon({

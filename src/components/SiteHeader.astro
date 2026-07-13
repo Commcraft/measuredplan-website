@@ -200,7 +200,11 @@ const isActive = (href: string) =>
       ticking = false;
       const y = window.scrollY;
       const menuOpen = toggle?.getAttribute("aria-expanded") === "true";
-      if (menuOpen || y < 80) {
+      // Desktop (>= lg) has no sticky bottom CTA bar, so the header stays
+      // persistently visible - nav and the quote CTA are always in reach. On
+      // mobile the header hides on scroll-down (the sticky bottom bar keeps the
+      // CTA available), the current best-practice hybrid for long pages.
+      if (window.innerWidth >= 1024 || menuOpen || y < 80) {
         header!.style.transform = "";
         lastY = y;
         return;

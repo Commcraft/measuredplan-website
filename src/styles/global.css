@@ -503,13 +503,11 @@
 /* Leaflet service-area map - squared, on-brand controls. */
 .leaflet-container {
   font-family: var(--font-sans);
-  background: var(--mp-cad);
 }
-/* Mute the raster basemap to a monochrome, brand-matched palette. The red
-   coverage rings and datum are SVG overlays in separate panes, so they stay
-   vivid and become the visual focus of the map. */
-.leaflet-tile-pane {
-  filter: grayscale(1) contrast(1.03) brightness(1.03);
+/* Dark map background. Higher specificity (#id) than Leaflet's own
+   `.leaflet-container{background:#ddd}`, which is injected after global.css. */
+#sa-map.leaflet-container {
+  background: var(--mp-ink);
 }
 .leaflet-bar,
 .leaflet-bar a,
@@ -522,8 +520,8 @@
   border-radius: 0;
 }
 .sa-tip.leaflet-tooltip {
-  background: var(--mp-ink);
-  color: var(--mp-paper);
+  background: var(--mp-paper);
+  color: var(--mp-ink);
   border: 0;
   border-radius: 0;
   font-family: var(--font-mono);
@@ -533,7 +531,7 @@
   white-space: nowrap;
 }
 .sa-tip.leaflet-tooltip-right::before {
-  border-right-color: var(--mp-ink);
+  border-right-color: var(--mp-paper);
 }
 .leaflet-control-attribution {
   font-size: 10px;

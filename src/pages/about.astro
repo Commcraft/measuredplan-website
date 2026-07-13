@@ -81,6 +81,9 @@ const team = [
   },
 ];
 
+// Leadership section is currently hidden (set true to show it again).
+const SHOW_LEADERSHIP = false;
+
 const crumbs = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about/" },
@@ -142,7 +145,9 @@ const crumbs = [
     </div>
   </Section>
 
-  <!-- Leadership -->
+  <!-- Leadership (hidden - toggle SHOW_LEADERSHIP to restore) -->
+  {
+    SHOW_LEADERSHIP && (
   <Section surface="cad">
     <SectionHeading
       eyebrow="Leadership"
@@ -179,6 +184,8 @@ const crumbs = [
       }
     </div>
   </Section>
+    )
+  }
 
   <!-- Standards -->
   <Section surface="stone">
