@@ -1,5 +1,5 @@
 ---
-title: Custom home - as-built floor plan
+title: Custom home - existing-conditions plan
 order: 8
 service: ["measured-building-surveys", "cad-drafting"]
 buildingType: Single-family home

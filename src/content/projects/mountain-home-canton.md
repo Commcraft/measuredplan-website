@@ -1,5 +1,5 @@
 ---
-title: Mountain home - as-built 3D model
+title: Split-level mountain home - as-built
 order: 16
 service: ["measured-building-surveys", "3d-scanning"]
 buildingType: Single-family home
