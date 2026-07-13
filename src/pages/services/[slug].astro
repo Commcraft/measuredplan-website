@@ -71,7 +71,12 @@ const crumbs = [
   description={d.seoDescription}
   jsonLd={[
     breadcrumbJsonLd(crumbs),
-    serviceJsonLd({ name: d.title, description: d.summary, slug: entry.id }),
+    serviceJsonLd({
+      name: d.title,
+      description: d.summary,
+      slug: entry.id,
+      fromFee: d.fromFee,
+    }),
     faqPageJsonLd(d.faqs),
   ]}
 >
