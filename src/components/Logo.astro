@@ -1,8 +1,11 @@
 ---
-// Official MeasuredPlan primary lockup (Satoshi wordmark + ruler + red datum),
-// from the logo pack. Fully outlined SVG - no font dependency - used unmodified.
-//   ink   → primary lockup (dark, for light surfaces)
-//   paper → reversed primary lockup (for dark .band-ink surfaces)
+// Official MeasuredPlan primary lockup (wordmark + ruler + red datum), from the
+// logo pack, inlined so the "d" glyph can animate. On hover the "d" makes one
+// full turn - and because "d" rotated 180 degrees IS "p", the spin reveals the
+// dP symmetry in the name (a small brand-memory flourish). The wordmark always
+// resolves back to "d", so the logo is never shown distorted at rest.
+import { readFileSync } from "node:fs";
+
 interface Props {
   tone?: "ink" | "paper";
   href?: string | null;
@@ -10,23 +13,70 @@ interface Props {
 }
 const { tone = "ink", href = "/", class: className = "" } = Astro.props;
 
-const src =
+const file =
   tone === "paper"
-    ? "/brand/measuredplan-logo-primary-reversed.svg"
-    : "/brand/measuredplan-logo-primary.svg";
+    ? "public/brand/measuredplan-logo-primary-reversed.svg"
+    : "public/brand/measuredplan-logo-primary.svg";
+
+let svg = readFileSync(file, "utf8");
+// The "dP" ligature draws the "d" last, as the 12th (clipped) glyph path.
+// Wrap it so it can spin on hover. Its clip-path is a full-bounds export
+// artifact - remove it so the glyph isn't cut while it rotates.
+svg = svg.replace(/ clip-path="url\(#cp-primary[^)]*\)"/g, "");
+let n = 0;
+svg = svg.replace(/<path\b/g, (m) => (++n === 12 ? '<path class="mp-d"' : m));
+// The red datum square (unique x) - it spins and pulses with the "d".
+svg = svg.replace('<rect x="4377.1"', '<rect class="mp-datum" x="4377.1"');
+// size + a11y hooks on the root svg
+svg = svg.replace(
+  "<svg ",
+  '<svg class="mp-logo-svg h-8 w-auto sm:h-9" aria-hidden="true" focusable="false" ',
+);
+
 const Tag = href ? "a" : "span";
 ---
 
 <Tag
   href={href ?? undefined}
-  class:list={["inline-flex items-center rounded-sm", className]}
+  class:list={["mp-logo inline-flex items-center", className]}
   aria-label="MeasuredPlan - home"
 >
-  <img
-    src={src}
-    alt="MeasuredPlan"
-    width="520"
-    height="85.6"
-    class="h-8 w-auto sm:h-9"
-  />
+  <Fragment set:html={svg} />
 </Tag>
+
+<style is:global>
+  /* Global (not scoped): these target glyphs injected via set:html, which
+     Astro's style scoping does not reach. Spin each about its own centre. */
+  .mp-d,
+  .mp-datum {
+    transform-box: fill-box;
+    transform-origin: center;
+    will-change: transform;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .mp-logo:hover .mp-d,
+    .mp-logo:focus-visible .mp-d {
+      animation: mp-dp-turn 0.9s cubic-bezier(0.6, 0, 0.3, 1);
+    }
+    .mp-logo:hover .mp-datum,
+    .mp-logo:focus-visible .mp-datum {
+      animation: mp-datum-turn 0.9s cubic-bezier(0.6, 0, 0.3, 1);
+    }
+  }
+  @keyframes mp-dp-turn {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes mp-datum-turn {
+    0% {
+      transform: rotate(0) scale(1);
+    }
+    50% {
+      transform: rotate(180deg) scale(1.35);
+    }
+    100% {
+      transform: rotate(360deg) scale(1);
+    }
+  }
+</style>
