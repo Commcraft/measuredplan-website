@@ -54,8 +54,8 @@
   --mp-line-subtle: #d6d3cb;
   --mp-line-strong: #838d97;
   --mp-line-inverse: #2a3542;
-  --mp-muted: #5f6973;
-  --mp-muted-inverse: #a8b0b8;
+  --mp-muted: #4d5762;
+  --mp-muted-inverse: #b2bac2;
   --mp-red: #c21f3a;
   --mp-red-deep: #a5192f;
   --mp-red-inverse: #df4b57;
@@ -211,6 +211,9 @@
     border-color: var(--border);
   }
   html {
+    /* Larger base type for comfortable reading (older readers included).
+       Everything is rem-based, so the whole scale grows proportionally. */
+    font-size: 106.25%;
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
@@ -220,9 +223,15 @@
     color: var(--foreground);
     font-family: var(--text-family);
     font-weight: var(--text-weight);
-    line-height: 1.6;
+    line-height: 1.65;
+    letter-spacing: -0.006em;
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    font-feature-settings:
+      "kern" 1,
+      "liga" 1,
+      "calt" 1;
   }
 
   h1,
@@ -231,10 +240,26 @@
   h4 {
     font-family: var(--display-family);
     font-weight: var(--display-weight);
-    letter-spacing: -0.02em;
-    line-height: 1.1;
+    letter-spacing: -0.025em;
+    line-height: 1.08;
     text-wrap: balance;
     color: var(--mp-ink);
+    font-feature-settings:
+      "kern" 1,
+      "liga" 1;
+  }
+  /* Optically tighter tracking as display type gets larger (premium scale). */
+  h1 {
+    letter-spacing: -0.032em;
+    line-height: 1.04;
+  }
+  h2 {
+    letter-spacing: -0.028em;
+  }
+  /* Precise, aligned figures for prices, stats and technical numbers. */
+  .font-display,
+  .tabular {
+    font-variant-numeric: tabular-nums lining-nums;
   }
 
   /* Ink focus ring, visible on every interactive element (a11y). */
@@ -251,6 +276,16 @@
   ::selection {
     background: color-mix(in srgb, var(--mp-red) 18%, transparent);
     color: var(--mp-ink);
+  }
+
+  /* Refined, consistent underlines for every text link (premium detail). */
+  a {
+    text-underline-offset: 0.18em;
+    text-decoration-thickness: 1px;
+    text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  }
+  a:hover {
+    text-decoration-color: currentColor;
   }
 }
 
