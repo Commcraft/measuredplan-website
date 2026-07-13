@@ -102,15 +102,10 @@ const projectsJsonLd = {
       >
         {
           projects.map((p) => (
-            <button
-              type="button"
-              class="group flex flex-col text-left"
+            <a
+              href={`/projects/${p.id}/`}
+              class="group flex flex-col"
               data-services={p.data.service.join(" ")}
-              data-title={p.data.title}
-              data-building={p.data.buildingType}
-              data-scope={p.data.scopeLine}
-              data-deliverables={p.data.deliverables.join(" · ")}
-              data-image={p.data.image}
               data-project
             >
               {p.data.image ? (
@@ -119,8 +114,8 @@ const projectsJsonLd = {
                     src={p.data.image}
                     alt={`${p.data.title} - ${p.data.buildingType} in ${p.data.location} by MeasuredPlan`}
                     loading="lazy"
-            decoding="async"
-                    class="h-full w-full bg-white object-cover object-top"
+                    decoding="async"
+                    class="h-full w-full bg-white object-cover object-top transition-transform duration-300 group-hover:scale-[1.03]"
                   />
                 </div>
               ) : (
@@ -133,6 +128,9 @@ const projectsJsonLd = {
                 <h2 class="mt-2 text-lg leading-snug transition-colors group-hover:text-red-deep">
                   {p.data.title}
                 </h2>
+                <p class="mt-1 font-mono text-xs text-ink-muted">
+                  {p.data.location}
+                </p>
                 <p class="mt-2 text-base leading-relaxed text-ink-muted">
                   {p.data.scopeLine}
                 </p>
@@ -144,7 +142,7 @@ const projectsJsonLd = {
                   ))}
                 </ul>
               </div>
-            </button>
+            </a>
           ))
         }
       </div>
@@ -153,33 +151,6 @@ const projectsJsonLd = {
       </p>
     </div>
   </Section>
-
-  <!-- Lightbox -->
-  <dialog
-    id="project-lightbox"
-    class="m-auto w-[min(92vw,720px)] rounded-md border border-line bg-paper p-0 backdrop:bg-ink/60"
-    aria-label="Project drawing detail"
-  >
-    <div class="flex items-center justify-between border-b border-line px-5 py-3">
-      <span class="eyebrow" data-lb-building></span>
-      <button
-        type="button"
-        class="grid size-8 place-items-center border border-line text-ink hover:bg-stone"
-        aria-label="Close"
-        data-lb-close
-      >
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-          <path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"></path>
-        </svg>
-      </button>
-    </div>
-    <div class="p-5 sm:p-6">
-      <div data-lb-figure class="mb-5"></div>
-      <h2 class="text-xl leading-snug" data-lb-title></h2>
-      <p class="mt-2 text-base leading-relaxed text-ink-muted" data-lb-scope></p>
-      <p class="mt-4 font-mono text-xs text-ink-muted" data-lb-deliverables></p>
-    </div>
-  </dialog>
 
   <CTASection />
 </DefaultLayout>
@@ -206,54 +177,4 @@ const projectsJsonLd = {
       empty?.classList.toggle("hidden", visible > 0);
     }),
   );
-
-  // Lightbox
-  const dialog = document.getElementById(
-    "project-lightbox",
-  ) as HTMLDialogElement | null;
-  const lbFigure = dialog?.querySelector<HTMLElement>("[data-lb-figure]");
-  const lbTitle = dialog?.querySelector<HTMLElement>("[data-lb-title]");
-  const lbBuilding = dialog?.querySelector<HTMLElement>("[data-lb-building]");
-  const lbScope = dialog?.querySelector<HTMLElement>("[data-lb-scope]");
-  const lbDeliverables = dialog?.querySelector<HTMLElement>(
-    "[data-lb-deliverables]",
-  );
-
-  cards.forEach((card) =>
-    card.addEventListener("click", () => {
-      if (!dialog || !lbFigure) return;
-      lbFigure.innerHTML = "";
-      const wrap = document.createElement("div");
-      wrap.className = "title-block overflow-hidden bg-white";
-      const image = card.dataset.image;
-      if (image) {
-        const img = document.createElement("img");
-        img.src = image;
-        img.alt = (card.dataset.title ?? "") + " - measured drawing";
-        img.className = "block h-auto w-full";
-        wrap.appendChild(img);
-      } else {
-        const svg = card.querySelector("svg");
-        if (svg) {
-          const clone = svg.cloneNode(true) as SVGElement;
-          clone.removeAttribute("style");
-          wrap.appendChild(clone);
-        }
-      }
-      lbFigure.appendChild(wrap);
-      if (lbTitle) lbTitle.textContent = card.dataset.title ?? "";
-      if (lbBuilding) lbBuilding.textContent = card.dataset.building ?? "";
-      if (lbScope) lbScope.textContent = card.dataset.scope ?? "";
-      if (lbDeliverables)
-        lbDeliverables.textContent = card.dataset.deliverables ?? "";
-      dialog.showModal();
-    }),
-  );
-
-  dialog
-    ?.querySelector("[data-lb-close]")
-    ?.addEventListener("click", () => dialog.close());
-  dialog?.addEventListener("click", (e) => {
-    if (e.target === dialog) dialog.close();
-  });
 </script>
