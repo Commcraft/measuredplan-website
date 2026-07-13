@@ -1,7 +1,7 @@
 ---
 // Global <head>. Imported once via DefaultLayout so global.css loads everywhere.
 import "../styles/global.css";
-import { SITE_METADATA, ORGANIZATION_JSONLD } from "../consts";
+import { SITE_METADATA, ORGANIZATION_JSONLD, ANALYTICS } from "../consts";
 
 interface Props {
   title?: string;
@@ -59,6 +59,28 @@ const structuredData = [ORGANIZATION_JSONLD, ...jsonLd];
 />
 <meta name="author" content={SITE_METADATA.authors[0].name} />
 <meta name="theme-color" content="#0B1726" />
+
+<!-- Privacy-friendly analytics (Plausible) - no cookies, no consent banner.
+     The stub queues events fired before the script finishes loading. -->
+{
+  ANALYTICS.enabled && (
+    <>
+      <script
+        defer
+        data-domain={ANALYTICS.domain}
+        src={ANALYTICS.src}
+        is:inline
+      />
+      <script is:inline>
+        window.plausible =
+          window.plausible ||
+          function () {
+            (window.plausible.q = window.plausible.q || []).push(arguments);
+          };
+      </script>
+    </>
+  )
+}
 
 <!-- Mark JS available (before paint, so scroll-reveal has no flash) and set up
      a subtle reveal-on-scroll for [data-reveal] blocks. -->

@@ -79,7 +79,12 @@ const next = [
         </p>
         <div class="flex flex-wrap items-center justify-center gap-3">
           <WhatsAppLink variant="solid" />
-          <LinkButton href={`tel:${BUSINESS.phoneHref}`} variant="outline" size="md">
+          <LinkButton
+            href={`tel:${BUSINESS.phoneHref}`}
+            variant="outline"
+            size="md"
+            class="plausible-event-name=Call+Click"
+          >
             Call {BUSINESS.phone}
           </LinkButton>
         </div>

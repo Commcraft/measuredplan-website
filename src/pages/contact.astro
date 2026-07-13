@@ -97,7 +97,7 @@ const crumbs = [
               <dd class="mt-1.5">
                 <a
                   href={`tel:${BUSINESS.phoneHref}`}
-                  class="text-ink underline-offset-4 hover:underline"
+                  class="plausible-event-name=Call+Click text-ink underline-offset-4 hover:underline"
                   >{BUSINESS.phone}</a
                 >
               </dd>
@@ -464,6 +464,9 @@ const crumbs = [
         const data = await res.json().catch(() => null);
         if (res.ok && data && String(data.success) === "true") {
           clearDraft();
+          (window as any).plausible?.("Quote Submitted", {
+            props: { method: "form" },
+          });
           window.location.href = "/contact/thanks/";
           return;
         }
@@ -478,6 +481,9 @@ const crumbs = [
             ".",
           true,
         );
+        (window as any).plausible?.("Quote Submitted", {
+          props: { method: "email-fallback" },
+        });
         openMailto(f);
       }
     });
@@ -492,6 +498,9 @@ const crumbs = [
           " directly.",
       );
       clearDraft();
+      (window as any).plausible?.("Quote Submitted", {
+        props: { method: "email" },
+      });
       openMailto(f);
     });
   }

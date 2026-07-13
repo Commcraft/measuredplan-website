@@ -57,6 +57,19 @@ export const PROOF_STATS = [
   { value: "72", accent: "hr", label: "Average turnaround" },
 ] as const;
 
+// Privacy-friendly analytics (Plausible). No cookies, no consent banner
+// required. To activate: create a free account at plausible.io, add the site
+// "measuredplan.com", and that's it - the script below is already wired in and
+// tracks pageviews, outbound clicks (WhatsApp), and the custom events
+// "Quote Submitted" and "Call Click". Set enabled to false to remove it.
+export const ANALYTICS = {
+  enabled: true,
+  provider: "plausible" as const,
+  domain: "measuredplan.com",
+  // Combined script: custom (tagged) events + automatic outbound-link tracking.
+  src: "https://plausible.io/js/script.tagged-events.outbound-links.js",
+} as const;
+
 // Primary navigation (see site-brief §2).
 export const NAV_LINKS = [
   { label: "Services", href: "/services/" },
