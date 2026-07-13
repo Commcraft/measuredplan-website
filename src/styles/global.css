@@ -377,7 +377,11 @@
     display: inline-block;
     width: 0.16em;
     height: 0.16em;
-    margin-left: 0.03em;
+    /* Slight negative offset so the datum sits snug against the final glyph
+       like a real period. This cancels the trailing letter's side bearing,
+       which otherwise makes the gap vary by heading (e.g. a rounded "a" in
+       the hero read looser than a "t"), keeping the spacing consistent. */
+    margin-left: -0.01em;
     background-color: var(--mp-red);
     vertical-align: baseline;
   }

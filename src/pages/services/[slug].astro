@@ -363,12 +363,32 @@ const crumbs = [
     )
   }
 
-  <div class="border-t border-line bg-paper">
-    <div class="container flex flex-wrap items-center gap-x-6 gap-y-2 py-6 font-mono text-xs text-ink-muted">
-      <a href="/services/" class="hover:text-ink">← All services</a>
-      <a href="/contact/" class="hover:text-ink">Request a quote →</a>
+  <nav class="border-t border-line bg-paper" aria-label="Service page">
+    <div class="container flex flex-col sm:flex-row sm:items-stretch">
+      <a
+        href="/services/"
+        class="group flex items-center gap-2 py-5 font-mono text-sm text-ink-muted transition-colors hover:text-ink"
+      >
+        <span
+          aria-hidden="true"
+          class="transition-transform duration-150 group-hover:-translate-x-0.5"
+          >←</span
+        >
+        All services
+      </a>
+      <a
+        href="/contact/"
+        class="group flex items-center gap-2 border-t border-line py-5 font-mono text-sm text-ink-muted transition-colors hover:text-ink sm:ml-auto sm:border-t-0"
+      >
+        Request a quote
+        <span
+          aria-hidden="true"
+          class="transition-transform duration-150 group-hover:translate-x-0.5"
+          >→</span
+        >
+      </a>
     </div>
-  </div>
+  </nav>
 
   <CTASection />
 </DefaultLayout>

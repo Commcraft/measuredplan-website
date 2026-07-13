@@ -18,7 +18,7 @@ const { items, class: className = "" } = Astro.props;
           {item.href && i < items.length - 1 ? (
             <a
               href={item.href}
-              class="transition-colors hover:text-ink"
+              class="-my-2 inline-block py-2 transition-colors hover:text-ink"
             >
               {item.label}
             </a>
