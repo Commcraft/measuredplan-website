@@ -6,16 +6,41 @@ interface Props {
   summary: string;
   deliverables?: string[];
   optional?: boolean;
+  index?: number; // sheet number for the drawing-sheet header
 }
-const { href, title, eyebrow, summary, deliverables = [], optional } =
-  Astro.props;
+const {
+  href,
+  title,
+  eyebrow,
+  summary,
+  deliverables = [],
+  optional,
+  index,
+} = Astro.props;
+const sheet = index != null ? String(index + 1).padStart(2, "0") : undefined;
 ---
 
 <article
-  class="title-block group relative flex flex-col p-6 transition-colors duration-150 hover:border-line-strong sm:p-7"
+  class="title-block group relative flex flex-col overflow-hidden p-6 transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-1 hover:border-line-strong hover:shadow-lg sm:p-7"
 >
+  <!-- Red datum edge that wipes in on hover, echoing the logo mark -->
+  <span
+    aria-hidden="true"
+    class="pointer-events-none absolute inset-x-0 top-0 h-[3px] origin-left scale-x-0 bg-red transition-transform duration-300 ease-out group-hover:scale-x-100"
+  ></span>
+
+  <!-- Drawing-sheet header: sheet no. + datum, then a single-line spec label -->
   <div class="flex items-center justify-between gap-3">
-    {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+    <div class="flex items-center gap-2.5">
+      {
+        sheet && (
+          <span class="font-mono text-xs tabular-nums text-ink-muted">
+            {sheet}
+          </span>
+        )
+      }
+      <span class="datum-tick" aria-hidden="true"></span>
+    </div>
     {
       optional && (
         <span class="font-mono text-xs uppercase tracking-wide text-ink-muted">
@@ -24,9 +49,22 @@ const { href, title, eyebrow, summary, deliverables = [], optional } =
       )
     }
   </div>
+  {
+    eyebrow && (
+      <span class="eyebrow mt-3 block overflow-hidden whitespace-nowrap">
+        {eyebrow}
+      </span>
+    )
+  }
 
-  <h3 class="mt-4 text-xl leading-snug">
-    <a href={href} class="after:absolute after:inset-0" aria-label={title}>
+  <div class="dim-rule mt-3" aria-hidden="true"></div>
+
+  <h3 class="mt-5 text-xl leading-snug text-ink">
+    <a
+      href={href}
+      class="transition-colors after:absolute after:inset-0 group-hover:text-red-deep"
+      aria-label={title}
+    >
       {title}
     </a>
   </h3>
@@ -34,11 +72,11 @@ const { href, title, eyebrow, summary, deliverables = [], optional } =
 
   {
     deliverables.length > 0 && (
-      <ul class="mt-5 flex flex-wrap gap-x-4 gap-y-1.5">
+      <ul class="mt-5 flex flex-col gap-1.5">
         {deliverables.map((d) => (
-          <li class="flex items-center gap-2 font-mono text-xs text-ink-muted">
+          <li class="flex items-center gap-2.5 font-mono text-xs text-ink-muted">
             <span
-              class="h-1 w-1 shrink-0 bg-line-strong"
+              class="h-1 w-1 shrink-0 bg-line-strong transition-colors group-hover:bg-red"
               aria-hidden="true"
             />
             {d}
@@ -49,10 +87,9 @@ const { href, title, eyebrow, summary, deliverables = [], optional } =
   }
 
   <div
-    class="mt-6 flex items-center gap-2 pt-5 text-sm font-medium text-ink border-t border-line"
+    class="mt-6 flex items-center gap-2 border-t border-line pt-5 text-sm font-medium text-ink transition-colors group-hover:text-red-deep sm:mt-auto sm:pt-6"
   >
-    <span
-      class="transition-transform duration-150 group-hover:translate-x-0.5"
+    <span class="transition-transform duration-150 group-hover:translate-x-0.5"
       >View service</span
     >
     <svg
