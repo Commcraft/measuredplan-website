@@ -135,6 +135,24 @@ const trust = [
   "Starting-price quotes",
 ];
 
+// Hero crossfade: a small, cohesive set of real 3D models built from as-built
+// measures (all top-down cutaways, so the frames read as one series). First
+// frame is eager/high-priority; the rest lazy. Reduced motion holds the first.
+const heroSlides = [
+  {
+    src: "/projects/luxury-home-3d.webp",
+    alt: "A 3D model produced from a MeasuredPlan as-built measure",
+  },
+  {
+    src: "/projects/concept-multiunit-fletcher.webp",
+    alt: "A 3D cutaway model of a multi-unit building from an as-built measure",
+  },
+  {
+    src: "/projects/hillside-home-mars-hill.webp",
+    alt: "A 3D cutaway model of a hillside home from an as-built measure",
+  },
+];
+
 const proof = [
   {
     stat: "PDF · DWG · IFC",
@@ -194,16 +212,32 @@ const proof = [
       </div>
       <figure class="relative">
         <div class="title-block overflow-hidden shadow-lg">
-          <div class="relative">
-            <img
-              src="/projects/luxury-home-3d.webp"
-              alt="A 3D model produced from a MeasuredPlan as-built measure"
-              width="1200"
-              height="758"
-              fetchpriority="high"
-              decoding="async"
-              class="block h-auto w-full bg-white"
-            />
+          <div class="relative aspect-[1200/758] bg-white">
+            {/* Premium crossfade of real 3D models produced from as-built
+                measures. All frames crop to one aspect via object-cover; the
+                first is eager + high priority, the rest lazy. A tiny inline
+                script cycles them; reduced motion holds the first frame. */}
+            <div class="hero-slides absolute inset-0" data-hero-slides>
+              {
+                heroSlides.map((slide, i) => (
+                  <img
+                    src={slide.src}
+                    alt={slide.alt}
+                    width="1200"
+                    height="758"
+                    fetchpriority={i === 0 ? "high" : undefined}
+                    loading={i === 0 ? "eager" : "lazy"}
+                    decoding="async"
+                    data-hero-slide
+                    class:list={[
+                      "absolute inset-0 h-full w-full bg-white object-cover transition-opacity duration-1000 ease-out",
+                      i === 0 ? "opacity-100" : "opacity-0",
+                    ]}
+                    aria-hidden={i === 0 ? undefined : "true"}
+                  />
+                ))
+              }
+            </div>
             {/* CAD registration marks that draw in on load - a restrained,
                 on-brand "measured drawing" flourish (vector, a few bytes,
                 honours reduced motion). */}
@@ -224,7 +258,7 @@ const proof = [
             class="flex items-center gap-2.5 border-t border-line bg-white px-4 py-2.5 font-mono text-xs text-ink-muted"
           >
             <span class="datum-tick" aria-hidden="true"></span>
-            3D model · from an as-built measure
+            3D models · from as-built measures
           </figcaption>
         </div>
       </figure>
@@ -543,6 +577,45 @@ const proof = [
 
   <CTASection secondaryLabel="View services" secondaryHref="/services" proof={false} />
 </DefaultLayout>
+
+<script>
+  // Hero crossfade. Advances only when the tab is visible and motion is
+  // allowed; reduced-motion visitors simply keep the first frame. Uses
+  // opacity classes already on each <img>, so no-JS shows the first frame too.
+  (() => {
+    const stack = document.querySelector<HTMLElement>("[data-hero-slides]");
+    if (!stack) return;
+    const slides = Array.from(
+      stack.querySelectorAll<HTMLImageElement>("[data-hero-slide]"),
+    );
+    if (slides.length < 2) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (reduce.matches) return;
+
+    let current = 0;
+    const HOLD = 5200;
+    const show = (next: number) => {
+      slides[current].classList.replace("opacity-100", "opacity-0");
+      slides[current].setAttribute("aria-hidden", "true");
+      slides[next].classList.replace("opacity-0", "opacity-100");
+      slides[next].removeAttribute("aria-hidden");
+      current = next;
+    };
+
+    let timer = 0;
+    const tick = () => {
+      if (document.visibilityState === "visible") {
+        show((current + 1) % slides.length);
+      }
+      timer = window.setTimeout(tick, HOLD);
+    };
+    timer = window.setTimeout(tick, HOLD);
+
+    reduce.addEventListener?.("change", (e) => {
+      if (e.matches) window.clearTimeout(timer);
+    });
+  })();
+</script>
 
 <style>
   /* Hero registration marks: draw in once on load (CSS-only, no JS needed).

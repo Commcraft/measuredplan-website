@@ -105,11 +105,14 @@ the logo — reuse it as section dividers and list markers, sparingly.
 
 - Red budget: ~one red element per viewport. Red = action or datum, nothing else.
 - Hairline ink borders (1px, 12%) instead of shadows; shadows near-zero.
-- No gradients, glassmorphism, emoji, decorative blobs, or stock photography
-  of people/buildings. Imagery = real drawing sheets on paper.
+- No gradients, glassmorphism, emoji, decorative blobs, or **stock** photography.
+  Rich media is fine when it is **our own work** - real drawing sheets, floor
+  plans, and 3D models/renders produced from as-built measures. Never generic
+  stock imagery of people/buildings we didn't produce.
 - Icons: lucide, 1.5px stroke, small, only where they carry meaning.
-- Motion: at most one restrained hero reveal; hovers ≤150ms opacity/border
-  shifts; respect `prefers-reduced-motion`.
+- Motion: restrained and on-brand - the hero reveal, the CAD registration-mark
+  draw-in, and the hero **crossfade** (see below); hovers ≤150ms opacity/border
+  shifts; respect `prefers-reduced-motion` everywhere.
 - Generous but **balanced** whitespace — not empty space to fill. Section
   rhythm is `py-14 sm:py-18 lg:py-24` (in `Section.astro`); don't hand-set
   larger per-section padding. Two-column blocks with a short prose column use
@@ -123,6 +126,13 @@ the logo — reuse it as section dividers and list markers, sparingly.
   `BaseHead.astro` (IntersectionObserver + geometry fallback + load safety),
   gated by `html.js` and `prefers-reduced-motion`, so no-JS / reduced-motion
   shows everything. Do NOT hand-add `data-reveal` to Section children.
+- **Home hero = crossfade** (`index.astro`): a cohesive set of real 3D-model
+  renders (all top-down cutaways, `heroSlides`) stacked in a fixed-aspect
+  (`aspect-[1200/758]`) `object-cover` frame, crossfading via opacity classes.
+  First frame is eager/`fetchpriority="high"`, the rest lazy; the inline script
+  only advances while the tab is visible and holds the first frame under
+  `prefers-reduced-motion`. The CAD registration-mark SVG sits on top and draws
+  in on load. To reskin the hero, swap `heroSlides` (keep the frames one series).
 - **Header = smart hybrid** (`SiteHeader.astro`): persistent/sticky on desktop
   (`>= lg`); hides on scroll-down / shows on scroll-up on mobile, paired with
   the sticky bottom **`MobileCtaBar`** (Get my quote + WhatsApp, hidden on
