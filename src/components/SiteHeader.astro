@@ -49,14 +49,16 @@ const isActive = (href: string) =>
         <LinkButton href={PRIMARY_CTA.href} size="sm">{PRIMARY_CTA.label}</LinkButton>
       </div>
 
-      <button
-        type="button"
-        class="grid size-10 place-items-center border border-line text-ink lg:hidden"
-        aria-label="Open menu"
-        aria-expanded="false"
-        aria-controls="mobile-nav"
-        data-menu-toggle
-      >
+      <div class="flex items-center gap-1.5 lg:hidden">
+        <WhatsAppLink variant="icon" />
+        <button
+          type="button"
+          class="grid size-10 place-items-center border border-line text-ink"
+          aria-label="Open menu"
+          aria-expanded="false"
+          aria-controls="mobile-nav"
+          data-menu-toggle
+        >
         <svg
           width="20"
           height="20"
@@ -82,7 +84,8 @@ const isActive = (href: string) =>
         >
           <path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"></path>
         </svg>
-      </button>
+        </button>
+      </div>
     </div>
   </Container>
 
@@ -117,11 +120,10 @@ const isActive = (href: string) =>
             ))
           }
         </ul>
-        <div class="flex flex-col gap-3 pt-5">
+        <div class="pt-5">
           <LinkButton href={PRIMARY_CTA.href} size="lg" class="w-full">
             {PRIMARY_CTA.label}
           </LinkButton>
-          <WhatsAppLink variant="solid" class="w-full justify-center" />
         </div>
       </nav>
     </Container>
