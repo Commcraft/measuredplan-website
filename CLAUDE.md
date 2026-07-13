@@ -11,9 +11,19 @@ Do not add pages, sections, or features that are not in the brief — ask first.
 
 ## Commands
 
-- `pnpm dev` — local dev server
-- `pnpm build` — production build (must pass before every commit)
-- `pnpm astro check` — type/content checks (must pass before every commit)
+Package manager is **npm** (`package-lock.json`).
+
+- `npm run dev` — local dev server
+- `npm run build` — production build (must pass before every commit)
+- `npx astro check` — type/content checks (must pass before every commit)
+- `npm run format` — prettier (only formats non-`.astro` files; no astro plugin)
+
+## Deploy
+
+`master` auto-deploys via `.github/workflows/deploy.yml` → GitHub Pages,
+custom domain **measuredplan.com** (`public/CNAME`). Push with
+`git push -u origin master` (retry with backoff on network errors).
+Verify a deploy with the GitHub Actions API (`deploy.yml` runs).
 
 ## Working rules
 
@@ -50,12 +60,16 @@ never introduce new hues or grey hexes.
 Dark sections are a scoped `.band-ink` class (ink bg, paper text,
 red → `--mp-red-dark-bg`), not a theme toggle. Remove the toggle.
 
-### Type
+### Type (as built)
 
-- Display + body: `[FONT_PRIMARY]` (winner of the font board — set before
-  Session 1; if Satoshi/Avenir, licensed files go in `src/assets/fonts/`).
-- Utility mono for measurements, eyebrows, spec values: IBM Plex Mono.
-- H1 uses weight 600 to echo the wordmark. Tracking tight and consistent.
+- Display + body: **DM Sans**, self-hosted WOFF2, 4 weights (Regular,
+  Medium, SemiBold + one more) in `src/styles/global.css` `@font-face`.
+  Base font-size 106.25% (~17px), body line-height 1.65 (readable for
+  older customers — a stated requirement).
+- Utility mono for measurements, eyebrows, spec values: **system monospace**
+  (`--font-mono`, no external font dependency).
+- H1 weight 600 echoes the wordmark. `--radius: 0` — squared corners
+  everywhere (cards, images, buttons, inputs). Shadows near-zero.
 
 ### Logo usage (hard rules from the logo pack README)
 
@@ -84,14 +98,63 @@ the logo — reuse it as section dividers and list markers, sparingly.
 
 ## Copy rules
 
-British English `[CONFIRM]`. Plain, specific, measured — state accuracy,
-scales, formats, turnaround; no superlatives, no marketing filler.
-Buttons say what happens: "Request a quote", not "Get started".
-Errors say what went wrong and how to fix it; no apologising.
-Sentence case everywhere except the wordmark.
+**American English** (the site had a deliberate Americanize pass). Plain,
+specific, measured — state accuracy, scales, formats, turnaround; no
+superlatives, no marketing filler. Buttons say what happens: "Request a
+quote", not "Get started". Sentence case everywhere except the wordmark.
+
+Hard content constraints (do not break):
+
+- **Only normal hyphens** `-`. Never em/en dashes.
+- Lead with **"Western North Carolina"** (based Asheville).
+- **Avoid the word "survey"** — it is a licensed activity in NC. Use
+  as-built / documentation / measurement / existing-conditions instead.
+- Do **not** claim a blanket "fixed-fee"; prices are published *starting*
+  prices, confirmed per scope.
+- Never invent business facts — unknowns are the literal string `[TODO]`.
+- Never recolour, redraw, distort, or stretch the logo or its datum.
+
+## Red-square datum system (locked)
+
+The red square from the logo is the one brand mark. **Every red square on
+the site is the same size: `0.5rem`.**
+
+- `.datum-tick` — 0.5rem red square, leading marker in lists/captions.
+- `.title-dot` — the squared "period" ending a heading. Fixed `0.5rem`
+  (NOT em-scaled — em-scaling made the big hero dot chunkier than the rest)
+  with `margin-left: 0.15rem` for a steady period-like gap at every size.
+  `SectionHeading`/`PageIntro`/`CTASection` strip a trailing "." from the
+  title and render this span; the hero H1 adds it manually.
+- `.eyebrow-rule` — a short red *bar* (not a square) marks an eyebrow, so a
+  section's eyebrow and its title-end datum don't read as two identical dots.
+- Red budget stays ~one red element per viewport; red = action or datum.
+
+## Service cards (`ServiceCard.astro`)
+
+Drawing-sheet blocks, not plain boxes: header = sheet number (`01`) + red
+datum, then a **single-line** spec eyebrow (never wraps), then a `.dim-rule`
+divider, title, summary, mono deliverables, and a bottom "View service"
+that is pinned so CTAs align across a row. Hover: a red datum edge wipes in
+across the top, the card lifts with `shadow-lg`, and title/bullets/CTA turn
+red. Callers pass `index={i}` for the sheet number. Whole card is one
+stretched link (`after:absolute after:inset-0` on the title `<a>`).
+
+## Tap targets & images
+
+- Keep interactive links ≥ ~34px tall. Breadcrumb links use negative-margin
+  padding to grow the hit area without changing layout; service-detail
+  bottom nav is full-width rows, not 17px inline text.
+- Team photos live in `src/assets/team/*.webp` and are imported (Astro
+  content-hashing) so cache-busting works — do not move them to `public/`.
+
+## Verifying visually
+
+Chromium at `/opt/pw-browsers/chromium-1194/chrome-linux/chrome`; import
+Playwright from `/opt/node22/lib/node_modules/playwright/index.js` (default
+import, then destructure `chromium`). Serve `dist/` with `http-server`.
 
 ## Definition of done (every session)
 
-`pnpm build` + `pnpm astro check` pass · matches the brief section list
-exactly · no `[TODO]` silently resolved with invented facts · screenshots
-at 390px and 1280px reviewed · committed with a conventional message.
+`npm run build` + `npx astro check` pass · no `[TODO]` silently resolved
+with invented facts · screenshots at 390px and 1280px reviewed · committed
+with a conventional message and pushed to `master`.
