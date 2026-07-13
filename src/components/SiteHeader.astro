@@ -11,7 +11,7 @@ const isActive = (href: string) =>
 ---
 
 <header
-  class="sticky top-0 z-50 border-b border-line bg-paper/90 backdrop-blur-sm"
+  class="sticky top-0 z-50 border-b border-line bg-paper/90 backdrop-blur-sm transition-transform duration-300 will-change-transform"
   data-site-header
 >
   <Container>
@@ -187,4 +187,41 @@ const isActive = (href: string) =>
   panel?.querySelectorAll("a").forEach((a) =>
     a.addEventListener("click", () => setOpen(false)),
   );
+
+  // Smart sticky header: hide on scroll down, reveal on scroll up - reclaims
+  // vertical space on long pages. Always shown near the top and while the menu
+  // is open; a small threshold avoids flicker on tiny scrolls.
+  const header = document.querySelector<HTMLElement>("[data-site-header]");
+  if (header) {
+    let lastY = window.scrollY;
+    let ticking = false;
+    const THRESHOLD = 8;
+    function update() {
+      ticking = false;
+      const y = window.scrollY;
+      const menuOpen = toggle?.getAttribute("aria-expanded") === "true";
+      if (menuOpen || y < 80) {
+        header!.style.transform = "";
+        lastY = y;
+        return;
+      }
+      if (y > lastY + THRESHOLD) {
+        header!.style.transform = "translateY(-100%)"; // scrolling down
+        lastY = y;
+      } else if (y < lastY - THRESHOLD) {
+        header!.style.transform = ""; // scrolling up
+        lastY = y;
+      }
+    }
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      },
+      { passive: true },
+    );
+  }
 </script>
