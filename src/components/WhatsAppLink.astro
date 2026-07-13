@@ -21,8 +21,9 @@ const base = "group inline-flex items-center transition-all duration-150 ease-ou
 const variants = {
   solid:
     "gap-2.5 border border-ink bg-ink py-2.5 pr-5 pl-3.5 text-sm font-medium text-paper hover:-translate-y-0.5 hover:shadow-md",
-  // Bare icon, no box - just the mark.
-  icon: "-m-1.5 justify-center p-1.5 hover:scale-110",
+  // Bare icon, no box - just the mark. Generous padding gives a ~44px touch
+  // target; the negative margin keeps the visual footprint tight.
+  icon: "-m-2.5 justify-center p-2.5 hover:scale-110",
   footer: "gap-2 text-[0.95rem] text-ink-muted-inverse hover:text-paper",
 };
 

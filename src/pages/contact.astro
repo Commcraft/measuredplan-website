@@ -74,8 +74,9 @@ const crumbs = [
   <section class="bg-paper py-14 sm:py-16">
     <Container>
       <div class="grid gap-12 lg:grid-cols-[1fr_1.5fr] lg:gap-16">
-        <!-- Direct contact -->
-        <aside class="lg:sticky lg:top-28 lg:h-fit">
+        <!-- Direct contact. On mobile it drops below the form (order-2) so the
+             quote form - the primary action - is the first thing in reach. -->
+        <aside class="order-2 lg:order-1 lg:sticky lg:top-28 lg:h-fit">
           <Eyebrow class="mb-5">Direct contact</Eyebrow>
           <dl class="space-y-6">
             <div>
@@ -147,8 +148,8 @@ const crumbs = [
           }
         </aside>
 
-        <!-- Quote form -->
-        <div>
+        <!-- Quote form (order-1 on mobile so it leads; right column on desktop) -->
+        <div class="order-1 lg:order-2">
           {
             !CONTACT_FORM_CONFIGURED && (
               <div
