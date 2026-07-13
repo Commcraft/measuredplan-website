@@ -10,15 +10,24 @@ interface Props {
   tone?: "ink" | "paper";
   href?: string | null;
   class?: string;
+  /** Render as a plain <img> (cacheable, no hover animation). Use in the
+      footer so the heavy lockup SVG isn't inlined twice per page. */
+  img?: boolean;
 }
-const { tone = "ink", href = "/", class: className = "" } = Astro.props;
+const {
+  tone = "ink",
+  href = "/",
+  class: className = "",
+  img = false,
+} = Astro.props;
 
-const file =
+const publicSrc =
   tone === "paper"
-    ? "public/brand/measuredplan-logo-primary-reversed.svg"
-    : "public/brand/measuredplan-logo-primary.svg";
+    ? "/brand/measuredplan-logo-primary-reversed.svg"
+    : "/brand/measuredplan-logo-primary.svg";
+const file = `public${publicSrc}`;
 
-let svg = readFileSync(file, "utf8");
+let svg = img ? "" : readFileSync(file, "utf8");
 // The "dP" ligature draws the "d" last, as the 12th (clipped) glyph path.
 // Wrap it so it can spin on hover. Its clip-path is a full-bounds export
 // artifact - remove it so the glyph isn't cut while it rotates.
@@ -45,7 +54,19 @@ const Tag = href ? "a" : "span";
   class:list={["mp-logo inline-flex items-center", className]}
   aria-label="MeasuredPlan - home"
 >
-  <Fragment set:html={svg} />
+  {
+    img ? (
+      <img
+        src={publicSrc}
+        width="6232"
+        height="1026"
+        alt=""
+        class="h-8 w-auto sm:h-9"
+      />
+    ) : (
+      <Fragment set:html={svg} />
+    )
+  }
 </Tag>
 
 <style is:global>

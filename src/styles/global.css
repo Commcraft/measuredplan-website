@@ -361,9 +361,9 @@
      replacing a round full stop so titles read as brand-consistent. */
   .title-dot {
     display: inline-block;
-    width: 0.34em;
-    height: 0.34em;
-    margin-left: 0.06em;
+    width: 0.16em;
+    height: 0.16em;
+    margin-left: 0.03em;
     background-color: var(--mp-red);
     vertical-align: baseline;
   }

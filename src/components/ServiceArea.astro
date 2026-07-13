@@ -28,8 +28,6 @@ const extended = [
 ];
 ---
 
-<link rel="stylesheet" href="/vendor/leaflet/leaflet.css" />
-
 <div class="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
   <!-- Real coverage map -->
   <div>
@@ -106,6 +104,12 @@ const extended = [
 
     function loadLeaflet(cb) {
       if (window.L) return cb();
+      // Load the stylesheet only when the map is about to render (lazy),
+      // so it is not render-blocking on the rest of the About page.
+      var css = document.createElement("link");
+      css.rel = "stylesheet";
+      css.href = "/vendor/leaflet/leaflet.css";
+      document.head.appendChild(css);
       var s = document.createElement("script");
       s.src = "/vendor/leaflet/leaflet.js";
       s.onload = cb;
