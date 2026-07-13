@@ -1,10 +1,10 @@
 ---
 // Decorative hero backdrop: a faint, static "survey sheet" grid of crosshair
 // ticks - a quiet nod to the drafting behind the work. The ticks nearest the
-// cursor brighten softly (a gentle spotlight), and nothing else moves: no
-// lines, no red, no readout. It repaints only while the pointer is moving over
-// the hero, so it is idle-cheap. Inert to assistive tech; honours reduced
-// motion (then it is purely static).
+// cursor brighten softly, and a small survey reticle (gapped crosshair + red
+// datum) locks to the pointer, tracking it 1:1. It repaints only while the
+// pointer is moving over the hero, so it is idle-cheap. Inert to assistive
+// tech; honours reduced motion (then it is purely static, no reticle).
 ---
 
 <canvas
@@ -26,6 +26,7 @@
       "(prefers-reduced-motion: reduce)",
     ).matches;
     const INK = "11,23,38"; // --mp-ink
+    const RED = "194,31,58"; // --mp-red
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const GRID = 60; // tick spacing (CSS px)
     const R = 150; // spotlight radius (CSS px)
@@ -73,6 +74,31 @@
           g.stroke();
         }
       }
+      if (spot) drawReticle();
+    }
+
+    // A small survey reticle locked exactly to the pointer: a gapped crosshair
+    // (short arms, so it never lines out across the text) and a red datum at
+    // its centre. Drawn from the live pointer, so it tracks 1:1 with no lag.
+    function drawReticle() {
+      const x = Math.round(pointer.x) + 0.5;
+      const y = Math.round(pointer.y) + 0.5;
+      g.strokeStyle = `rgba(${INK},0.5)`;
+      g.lineWidth = 1;
+      g.beginPath();
+      g.moveTo(x - 11, y);
+      g.lineTo(x - 4, y);
+      g.moveTo(x + 4, y);
+      g.lineTo(x + 11, y);
+      g.moveTo(x, y - 11);
+      g.lineTo(x, y - 4);
+      g.moveTo(x, y + 4);
+      g.lineTo(x, y + 11);
+      g.stroke();
+      g.strokeStyle = `rgba(${INK},0.28)`;
+      g.strokeRect(x - 4.5, y - 4.5, 9, 9);
+      g.fillStyle = `rgba(${RED},0.95)`;
+      g.fillRect(x - 1.5, y - 1.5, 3, 3);
     }
 
     function schedule() {
