@@ -90,15 +90,25 @@ const Tag = href ? "a" : "span";
       transform: rotateX(-360deg);
     }
   }
+  /* The "d" and "P" go edge-on (invisible) at 25% and 75% of their flip. On
+     each of those beats the datum leaps up into the empty "dP" gap, spins, and
+     grows - standing in for the missing letters - then drops home as they
+     resolve. Two full turns over the second; ends exactly where it started. */
   @keyframes mp-datum-turn {
     0% {
-      transform: rotate(0) scale(1);
+      transform: translateY(0) rotate(0) scale(1);
+    }
+    25% {
+      transform: translateY(500px) rotate(180deg) scale(1.8);
     }
     50% {
-      transform: rotate(180deg) scale(1.4);
+      transform: translateY(0) rotate(360deg) scale(1);
+    }
+    75% {
+      transform: translateY(500px) rotate(540deg) scale(1.8);
     }
     100% {
-      transform: rotate(360deg) scale(1);
+      transform: translateY(0) rotate(720deg) scale(1);
     }
   }
 </style>
