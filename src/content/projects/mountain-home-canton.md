@@ -1,6 +1,6 @@
 ---
 title: Split-level mountain home - as-built
-order: 16
+order: 13
 service: ["measured-building-surveys", "3d-scanning"]
 buildingType: Single-family home
 location: Canton, NC

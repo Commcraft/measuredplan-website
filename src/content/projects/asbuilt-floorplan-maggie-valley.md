@@ -1,6 +1,6 @@
 ---
 title: Mountain residence - as-built floor plan
-order: 10
+order: 16
 service: ["measured-building-surveys", "area-reports"]
 buildingType: Single-family home
 location: Maggie Valley, NC

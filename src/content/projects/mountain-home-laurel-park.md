@@ -1,6 +1,6 @@
 ---
 title: Mountain home - as-built documentation
-order: 9
+order: 10
 service: ["measured-building-surveys"]
 buildingType: Single-family home
 location: Laurel Park, NC

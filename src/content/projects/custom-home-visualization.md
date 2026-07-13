@@ -1,6 +1,6 @@
 ---
 title: Custom mountain home - design visualization
-order: 5
+order: 2
 service: ["concept-design", "3d-scanning"]
 buildingType: Single-family home
 location: Western North Carolina

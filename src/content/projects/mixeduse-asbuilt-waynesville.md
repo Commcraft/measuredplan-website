@@ -1,6 +1,6 @@
 ---
 title: Mixed-use building - as-built documentation
-order: 3
+order: 4
 service: ["measured-building-surveys"]
 buildingType: Commercial / mixed-use
 location: Waynesville, NC

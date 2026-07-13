@@ -1,6 +1,6 @@
 ---
 title: Craftsman home - design visualization
-order: 17
+order: 19
 service: ["concept-design", "cad-drafting"]
 buildingType: Single-family home
 location: Asheville, NC

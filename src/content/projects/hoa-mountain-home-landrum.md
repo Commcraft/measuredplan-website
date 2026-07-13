@@ -1,6 +1,6 @@
 ---
 title: Mountain home - HOA review presentation
-order: 14
+order: 1
 service: ["hoa-design-approval", "concept-design"]
 buildingType: Single-family home
 location: Landrum, SC

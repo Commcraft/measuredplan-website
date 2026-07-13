@@ -1,6 +1,6 @@
 ---
 title: Business park - area & square-footage study
-order: 4
+order: 17
 service: ["area-reports", "cad-drafting"]
 buildingType: Commercial
 location: Arden, NC

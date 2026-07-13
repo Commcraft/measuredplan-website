@@ -1,6 +1,6 @@
 ---
 title: Downtown commercial building - as-built
-order: 20
+order: 5
 service: ["measured-building-surveys", "area-reports"]
 buildingType: Commercial / mixed-use
 location: Asheville, NC

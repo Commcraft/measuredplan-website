@@ -1,6 +1,6 @@
 ---
 title: Downtown restaurant - permit floor plan
-order: 2
+order: 18
 service: ["construction-drawings", "cad-drafting"]
 buildingType: Commercial / hospitality
 location: Asheville, NC

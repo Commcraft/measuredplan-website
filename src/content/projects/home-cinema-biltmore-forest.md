@@ -1,6 +1,6 @@
 ---
 title: Home cinema - design visualization
-order: 6
+order: 9
 service: ["concept-design", "3d-scanning"]
 buildingType: Single-family home
 location: Biltmore Forest, NC

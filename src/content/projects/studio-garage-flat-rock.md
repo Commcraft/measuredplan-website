@@ -1,6 +1,6 @@
 ---
 title: Studio & garage - design and drawings
-order: 19
+order: 3
 service: ["construction-drawings", "concept-design"]
 buildingType: Accessory structure
 location: Flat Rock, NC

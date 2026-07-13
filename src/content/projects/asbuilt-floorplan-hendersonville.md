@@ -1,6 +1,6 @@
 ---
 title: Custom home - existing-conditions plan
-order: 8
+order: 15
 service: ["measured-building-surveys", "cad-drafting"]
 buildingType: Single-family home
 location: Hendersonville, NC

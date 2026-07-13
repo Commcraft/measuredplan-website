@@ -1,6 +1,6 @@
 ---
 title: Custom home - as-built floor plan
-order: 15
+order: 14
 service: ["measured-building-surveys", "area-reports"]
 buildingType: Single-family home
 location: Fairview, NC
