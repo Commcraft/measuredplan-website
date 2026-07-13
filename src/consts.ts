@@ -86,7 +86,7 @@ export const NAV_LINKS = [
 ] as const;
 
 export const PRIMARY_CTA = {
-  label: "Request a quote",
+  label: "Get my quote",
   href: "/contact/",
 } as const;
 
