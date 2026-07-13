@@ -357,6 +357,20 @@
     background-color: var(--mp-red-inverse);
   }
 
+  /* Squared "period" that ends a heading - the red datum from the logo,
+     replacing a round full stop so titles read as brand-consistent. */
+  .title-dot {
+    display: inline-block;
+    width: 0.34em;
+    height: 0.34em;
+    margin-left: 0.06em;
+    background-color: var(--mp-red);
+    vertical-align: baseline;
+  }
+  .band-ink .title-dot {
+    background-color: var(--mp-red-inverse);
+  }
+
   /* Hairline dimension rule with end stops (section divider) */
   .dim-rule {
     position: relative;

@@ -22,6 +22,10 @@ const {
   class: className = "",
   max = true,
 } = Astro.props;
+
+// End headings with the brand's red square datum instead of a round period.
+const hasDot = /\.\s*$/.test(title);
+const titleMain = hasDot ? title.replace(/\.\s*$/, "") : title;
 ---
 
 <div
@@ -36,7 +40,7 @@ const {
     id={id}
     class="text-[1.75rem] leading-tight sm:text-4xl lg:text-[2.6rem]"
   >
-    {title}
+    {titleMain}{hasDot && <span class="title-dot" aria-hidden="true" />}
   </Tag>
   {
     intro && (

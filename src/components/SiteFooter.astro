@@ -17,11 +17,11 @@ const year = 2026; // build-time constant; update at release
     <div class="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1.1fr]">
       <div class="max-w-xs">
         <Logo tone="paper" />
-        <p class="mt-5 text-sm leading-relaxed text-ink-muted-inverse">
+        <p class="mt-5 text-[0.95rem] leading-relaxed text-ink-muted-inverse">
           {SITE_TAGLINE}. Precise as-built drawings and design documentation for architects,
           property owners and attorneys.
         </p>
-        <p class="mt-4 font-mono text-xs text-ink-muted-inverse">
+        <p class="mt-4 font-mono text-sm text-ink-muted-inverse">
           Formats: {BUSINESS.formats.join(" · ")}
         </p>
       </div>
@@ -34,7 +34,7 @@ const year = 2026; // build-time constant; update at release
               <li>
                 <a
                   href={link.href}
-                  class="text-sm text-ink-muted-inverse transition-colors hover:text-paper"
+                  class="text-[0.95rem] text-ink-muted-inverse transition-colors hover:text-paper"
                 >
                   {link.label}
                 </a>
@@ -52,7 +52,7 @@ const year = 2026; // build-time constant; update at release
               <li>
                 <a
                   href={link.href}
-                  class="text-sm text-ink-muted-inverse transition-colors hover:text-paper"
+                  class="text-[0.95rem] text-ink-muted-inverse transition-colors hover:text-paper"
                 >
                   {link.label}
                 </a>
@@ -64,7 +64,7 @@ const year = 2026; // build-time constant; update at release
 
       <div>
         <h2 class="eyebrow mb-4">Contact</h2>
-        <ul class="space-y-2.5 text-sm text-ink-muted-inverse">
+        <ul class="space-y-2.5 text-[0.95rem] text-ink-muted-inverse">
           <li>
             <a
               href={`mailto:${BUSINESS.email}`}
@@ -78,13 +78,13 @@ const year = 2026; // build-time constant; update at release
             >
           </li>
           <li class="pt-1">{BUSINESS.hours}</li>
-          <li class="text-ink-muted-inverse/80">{BUSINESS.areaServed}</li>
+          <li class="text-ink-muted-inverse">{BUSINESS.areaServed}</li>
         </ul>
       </div>
     </div>
 
     <div
-      class="mt-14 flex flex-col gap-4 border-t border-line-inverse pt-8 text-xs text-ink-muted-inverse sm:flex-row sm:items-center sm:justify-between"
+      class="mt-14 flex flex-col gap-4 border-t border-line-inverse pt-8 text-sm text-ink-muted-inverse sm:flex-row sm:items-center sm:justify-between"
     >
       <p class="font-mono">
         © {year} {BUSINESS.name} · {BUSINESS.location}
