@@ -23,9 +23,15 @@ let svg = readFileSync(file, "utf8");
 // Wrap it so it can spin on hover. Its clip-path is a full-bounds export
 // artifact - remove it so the glyph isn't cut while it rotates.
 svg = svg.replace(/ clip-path="url\(#cp-primary[^)]*\)"/g, "");
+// Glyph paths in order: the 8th is the "P", the 12th (drawn last) is the "d".
 let n = 0;
-svg = svg.replace(/<path\b/g, (m) => (++n === 12 ? '<path class="mp-d"' : m));
-// The red datum square (unique x) - it spins and pulses with the "d".
+svg = svg.replace(/<path\b/g, (m) => {
+  n += 1;
+  if (n === 8) return '<path class="mp-p"';
+  if (n === 12) return '<path class="mp-d"';
+  return m;
+});
+// The red datum square (unique x) - it pulses between the flipping d and P.
 svg = svg.replace('<rect x="4377.1"', '<rect class="mp-datum" x="4377.1"');
 // size + a11y hooks on the root svg
 svg = svg.replace(
@@ -46,8 +52,15 @@ const Tag = href ? "a" : "span";
 
 <style is:global>
   /* Global (not scoped): these target glyphs injected via set:html, which
-     Astro's style scoping does not reach. Spin each about its own centre. */
+     Astro's style scoping does not reach. The "d" and "P" do a synchronised
+     vertical flip (a coin-flip that goes edge-on at the midpoint, hiding any
+     glyph-height mismatch) in mirrored directions, so the dP pair reads as a
+     mirror of itself. The red datum pulses between them. */
+  .mp-logo-svg {
+    perspective: 900px;
+  }
   .mp-d,
+  .mp-p,
   .mp-datum {
     transform-box: fill-box;
     transform-origin: center;
@@ -56,16 +69,25 @@ const Tag = href ? "a" : "span";
   @media (prefers-reduced-motion: no-preference) {
     .mp-logo:hover .mp-d,
     .mp-logo:focus-visible .mp-d {
-      animation: mp-dp-turn 0.9s cubic-bezier(0.6, 0, 0.3, 1);
+      animation: mp-flip-a 1s cubic-bezier(0.55, 0, 0.3, 1);
+    }
+    .mp-logo:hover .mp-p,
+    .mp-logo:focus-visible .mp-p {
+      animation: mp-flip-b 1s cubic-bezier(0.55, 0, 0.3, 1);
     }
     .mp-logo:hover .mp-datum,
     .mp-logo:focus-visible .mp-datum {
-      animation: mp-datum-turn 0.9s cubic-bezier(0.6, 0, 0.3, 1);
+      animation: mp-datum-turn 1s cubic-bezier(0.55, 0, 0.3, 1);
     }
   }
-  @keyframes mp-dp-turn {
+  @keyframes mp-flip-a {
     to {
-      transform: rotate(360deg);
+      transform: rotateX(360deg);
+    }
+  }
+  @keyframes mp-flip-b {
+    to {
+      transform: rotateX(-360deg);
     }
   }
   @keyframes mp-datum-turn {
@@ -73,7 +95,7 @@ const Tag = href ? "a" : "span";
       transform: rotate(0) scale(1);
     }
     50% {
-      transform: rotate(180deg) scale(1.35);
+      transform: rotate(180deg) scale(1.4);
     }
     100% {
       transform: rotate(360deg) scale(1);

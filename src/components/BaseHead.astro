@@ -53,6 +53,39 @@ const structuredData = [ORGANIZATION_JSONLD, ...jsonLd];
 <meta name="author" content={SITE_METADATA.authors[0].name} />
 <meta name="theme-color" content="#0B1726" />
 
+<!-- Mark JS available (before paint, so scroll-reveal has no flash) and set up
+     a subtle reveal-on-scroll for [data-reveal] blocks. -->
+<script is:inline>
+  document.documentElement.classList.add("js");
+  (function () {
+    function run() {
+      var els = document.querySelectorAll("[data-reveal]");
+      if (!("IntersectionObserver" in window)) {
+        els.forEach(function (e) {
+          e.classList.add("is-visible");
+        });
+        return;
+      }
+      var io = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) {
+              e.target.classList.add("is-visible");
+              io.unobserve(e.target);
+            }
+          });
+        },
+        { rootMargin: "0px 0px -8% 0px", threshold: 0.08 },
+      );
+      els.forEach(function (e) {
+        io.observe(e);
+      });
+    }
+    if (document.readyState !== "loading") run();
+    else document.addEventListener("DOMContentLoaded", run);
+  })();
+</script>
+
 <!-- Favicons (MeasuredPlan datum mark) -->
 {
   SITE_METADATA.icons.icon.map((icon) => (
