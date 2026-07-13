@@ -1,6 +1,6 @@
 ---
 import type { GetStaticPaths } from "astro";
-import { getCollection } from "astro:content";
+import { getCollection, render } from "astro:content";
 
 import CTASection from "@/components/CTASection.astro";
 import LinkButton from "@/components/LinkButton.astro";
@@ -22,6 +22,7 @@ export const getStaticPaths = (async () => {
 
 const { entry, services } = Astro.props;
 const d = entry.data;
+const { Content } = await render(entry);
 const serviceName = (slug: string) =>
   services.find((s) => s.id === slug)?.data.title ?? slug;
 
@@ -94,6 +95,9 @@ const projectJsonLd = {
           {d.buildingType} · {d.location} · {d.date} · client name and address
           removed
         </figcaption>
+        <div class="prose-tech mt-8 max-w-none text-[1.05rem] leading-relaxed text-ink-muted [&>p:first-child]:mt-0 [&>p]:mt-4">
+          <Content />
+        </div>
       </figure>
 
       <aside class="lg:sticky lg:top-28 lg:h-fit">

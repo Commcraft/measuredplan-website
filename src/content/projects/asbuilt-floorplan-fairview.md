@@ -10,3 +10,5 @@ image: /projects/asbuilt-floorplan-fairview.webp
 date: "2025"
 featured: false
 ---
+
+An existing-conditions floor plan of a custom home in Fairview, drawn from a full on-site measure and issued with a heated-area schedule. The plan records the home as it stands and pairs it with defensible square-footage figures for design, appraisal or renovation. It is dimensioned and layered so the next person can work from it directly.
