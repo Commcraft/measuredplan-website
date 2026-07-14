@@ -142,7 +142,7 @@ const extended = [
           },
         ).addTo(map);
         // Extended coverage (Western North Carolina) - dashed hairline.
-        L.circle(asheville, {
+        var extended = L.circle(asheville, {
           radius: 120000,
           color: "#5b6672",
           weight: 1.25,
@@ -160,6 +160,9 @@ const extended = [
           fillColor: "#C21F3A",
           fillOpacity: 0.14,
         }).addTo(map);
+        // Open framed to the whole extended service area, not a fixed zoom on
+        // Asheville, so the full coverage reads at a glance.
+        map.fitBounds(extended.getBounds(), { padding: [16, 16] });
         // Asheville datum marker
         var icon = L.divIcon({
           className: "sa-datum",
