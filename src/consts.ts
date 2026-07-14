@@ -128,7 +128,7 @@ export const FOOTER_LEGAL = [
 
 export const SITE_METADATA = {
   title: {
-    default: `${SITE_TITLE} - As-Built & Construction Drawings · Western North Carolina`,
+    default: `${SITE_TITLE} - As-Built & Construction Drawings · Western NC`,
     template: `%s - ${SITE_TITLE}`,
   },
   description: SITE_DESCRIPTION,
