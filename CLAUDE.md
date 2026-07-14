@@ -144,6 +144,10 @@ the logo — reuse it as section dividers and list markers, sparingly.
   item is a dropdown (desktop: CSS hover + focus-within panel listing every
   service; mobile: the services listed indented under Services) so services are
   reachable from any page, not only via the homepage route-finder.
+- **`RouteFinder`** ("Choose your route"): the need-based service router is a
+  shared component used on **both** the home page and the `/services` index (the
+  natural "which do I need?" decision point, reachable from the Services tab).
+  Edit routes/icons in `RouteFinder.astro` once - it feeds both pages.
 - **`BackToTop`** (mobile only, `lg:hidden`): a subtle squared FAB, bottom-right,
   that fades in only after ~1.2 screens of scroll (so short pages never show it)
   and jumps to top (instant under reduced motion). It sits **above** the

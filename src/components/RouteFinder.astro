@@ -1,0 +1,183 @@
+---
+// Need-based service router ("Choose your route"): match a plain-language
+// situation to the right service. Reused on the home page and the services
+// index (the natural "which do I need?" decision point). Surface defaults to
+// the CAD band; pass surface to fit the host page's rhythm.
+import LinkButton from "./LinkButton.astro";
+import Section from "./Section.astro";
+import SectionHeading from "./SectionHeading.astro";
+
+interface Props {
+  surface?: "paper" | "stone" | "cad";
+}
+const { surface = "cad" } = Astro.props;
+
+// Line icons for each route (drawn as SVG paths on a technical square tile).
+const routeIcons: Record<string, string[]> = {
+  house: ["M3 10.5 12 4l9 6.5", "M5 9.5V20h14V9.5"],
+  plan: ["M4 4h16v16H4z", "M4 11h9", "M13 4v16"],
+  building: [
+    "M6 21V4h12v17",
+    "M9.5 8h.01",
+    "M14.5 8h.01",
+    "M9.5 12h.01",
+    "M14.5 12h.01",
+    "M9.5 16h.01",
+    "M14.5 16h.01",
+  ],
+  doc: ["M8 3h6l4 4v14H8z", "M14 3v5h4"],
+  scan: ["M12 3v3M12 18v3M3 12h3M18 12h3", "M12 8.5a3.5 3.5 0 100 7 3.5 3.5 0 000-7z"],
+  permit: ["M7 3h8l3 3v15H7z", "M15 3v3h3", "M10 13l2 2 4-4"],
+  concept: ["M4 20l2-0.5 11-11-1.5-1.5L4.5 18z", "M14 6l1.5 1.5", "M4 20l0.6-2"],
+  hoa: ["M3 11l9-7 9 7", "M6 10v10h12V10", "M9.5 14.5l1.8 1.8 3.2-3.2"],
+};
+
+const routes = [
+  {
+    icon: "house",
+    need: "I'm renovating or designing from an existing building.",
+    label: "As-built documentation",
+    href: "/services/measured-building-surveys/",
+  },
+  {
+    icon: "plan",
+    need: "I need square footage or a floor plan for a listing.",
+    label: "Floor plan & square-footage report",
+    href: "/services/floor-plans-square-footage/",
+  },
+  {
+    icon: "permit",
+    need: "I need permit-ready drawings to price and build from.",
+    label: "Construction drawings",
+    href: "/services/construction-drawings/",
+  },
+  {
+    icon: "concept",
+    need: "I'm building new or reworking a layout.",
+    label: "Concept design",
+    href: "/services/concept-design/",
+  },
+  {
+    icon: "building",
+    need: "I need drawings for a lease, suite or commercial space.",
+    label: "Lease & BOMA area plans",
+    href: "/services/lease-plans/",
+  },
+  {
+    icon: "doc",
+    need: "I have an old PDF, sketch or plan that needs to become CAD.",
+    label: "CAD redraw / drafting",
+    href: "/services/cad-drafting/",
+  },
+  {
+    icon: "hoa",
+    need: "I need drawings for HOA architectural approval.",
+    label: "HOA design & approval",
+    href: "/services/hoa-design-approval/",
+  },
+  {
+    icon: "scan",
+    need: "The building is complex and needs detailed capture.",
+    label: "3D laser scanning / scan-to-CAD",
+    href: "/services/3d-scanning/",
+  },
+];
+---
+
+<Section surface={surface} labelledby="route-heading">
+  <SectionHeading
+    id="route-heading"
+    eyebrow="Choose your route"
+    title="Which drawing do you actually need?"
+    intro="Match what you're trying to do to the right service - each route links straight to the details."
+  />
+  <div class="mt-10 border-t border-line">
+    {
+      routes.map((r) => (
+        <a
+          href={r.href}
+          class="group relative flex items-center gap-4 overflow-hidden border-b border-line py-4 pr-3 pl-4 transition-colors hover:bg-white sm:gap-5"
+        >
+          <span
+            class="absolute top-0 left-0 h-full w-[3px] origin-top scale-y-0 bg-red transition-transform duration-200 ease-out group-hover:scale-y-100"
+            aria-hidden="true"
+          />
+          <span class="grid size-11 shrink-0 place-items-center border border-line bg-white text-ink transition-colors duration-150 group-hover:border-ink group-hover:bg-ink group-hover:text-paper">
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              {routeIcons[r.icon].map((d) => (
+                <path d={d} />
+              ))}
+            </svg>
+          </span>
+          <span class="min-w-0 flex-1">
+            <span class="block text-[1.02rem] leading-snug text-ink">
+              <span class="text-line-strong">“</span>
+              {r.need}
+              <span class="text-line-strong">”</span>
+            </span>
+            <span class="mt-1 flex items-center gap-1.5 font-mono text-xs text-red-deep sm:hidden">
+              {r.label}
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.6"
+                aria-hidden="true"
+              >
+                <path
+                  d="M5 12h14M13 6l6 6-6 6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </span>
+          </span>
+          <span class="hidden shrink-0 items-center gap-2 font-mono text-sm text-ink-muted transition-colors group-hover:text-red-deep sm:flex">
+            {r.label}
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              aria-hidden="true"
+              class="shrink-0 transition-transform duration-150 group-hover:translate-x-1"
+            >
+              <path
+                d="M5 12h14M13 6l6 6-6 6"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+        </a>
+      ))
+    }
+  </div>
+
+  <!-- Reassurance + CTA -->
+  <div class="title-block mt-10 flex flex-col items-start gap-6 bg-white p-6 sm:flex-row sm:items-center sm:justify-between sm:p-8">
+    <p class="max-w-3xl text-base leading-relaxed text-ink">
+      Not sure which drawing you need? Tell us the property address, what the
+      drawing is for, and your deadline. We'll recommend the correct route -
+      floor plan, as-built drawings, square-footage report, lease exhibit, CAD
+      redraw or scan-to-CAD - before you commit.
+    </p>
+    <LinkButton href="/contact/" size="lg" class="shrink-0">
+      Tell us about your property
+    </LinkButton>
+  </div>
+</Section>
