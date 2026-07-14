@@ -141,6 +141,11 @@ the logo — reuse it as section dividers and list markers, sparingly.
   (`>= lg`); hides on scroll-down / shows on scroll-up on mobile, paired with
   the sticky bottom **`MobileCtaBar`** (Get my quote + WhatsApp, hidden on
   `/contact`). Never stack two persistent bars on mobile.
+- **`BackToTop`** (mobile only, `lg:hidden`): a subtle squared FAB, bottom-right,
+  that fades in only after ~1.2 screens of scroll (so short pages never show it)
+  and jumps to top (instant under reduced motion). It sits **above** the
+  `MobileCtaBar` (`bottom-[84px]`), dropping to `bottom-5` on `/contact` where
+  the bar is hidden - so the two never overlap.
 - **Contact form is single-page** (NOT multi-step — a multi-step version was
   tried and reverted as slower). Web3Forms backend (`CONTACT_FORM` in consts)
   with a mailto fallback, honeypot, and localStorage draft recovery. On mobile

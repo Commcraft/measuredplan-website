@@ -1,0 +1,70 @@
+---
+// Mobile-only "back to top" for long pages. Best practice: bottom-right, only
+// after the user has scrolled well down, a real <button> with a label, and an
+// instant (not smooth) jump under reduced motion. It sits ABOVE the sticky
+// MobileCtaBar so the two never overlap; on /contact (no CTA bar) it drops to
+// the normal bottom-right inset. Desktop keeps the persistent header instead,
+// so this is hidden at lg+. It self-gates by scroll distance, so short pages
+// never show it.
+const path = Astro.url.pathname;
+const aboveCtaBar = !path.startsWith("/contact");
+---
+
+<button
+  type="button"
+  data-back-to-top
+  aria-label="Back to top"
+  class:list={[
+    "fixed right-4 z-30 flex h-11 w-11 items-center justify-center border border-line bg-white/95 text-ink shadow-md backdrop-blur-sm transition-[opacity,transform] duration-200 ease-out hover:border-line-strong focus-visible:border-ink lg:hidden",
+    aboveCtaBar ? "bottom-[84px]" : "bottom-5",
+  ]}
+  style="opacity:0;transform:translateY(8px);pointer-events:none"
+>
+  <svg
+    width="20"
+    height="20"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+    stroke-linecap="square"
+    aria-hidden="true"
+  >
+    <path d="M12 19V6"></path>
+    <path d="M6 11l6-6 6 6"></path>
+  </svg>
+</button>
+
+<script>
+  (() => {
+    const btn = document.querySelector<HTMLButtonElement>("[data-back-to-top]");
+    if (!btn) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    const update = () => {
+      const past = window.scrollY > window.innerHeight * 1.2;
+      btn.style.opacity = past ? "1" : "0";
+      btn.style.transform = past ? "translateY(0)" : "translateY(8px)";
+      btn.style.pointerEvents = past ? "auto" : "none";
+    };
+
+    let ticking = false;
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          update();
+          ticking = false;
+        });
+      },
+      { passive: true },
+    );
+    update();
+
+    btn.addEventListener("click", () => {
+      window.scrollTo({ top: 0, behavior: reduce.matches ? "auto" : "smooth" });
+    });
+  })();
+</script>
