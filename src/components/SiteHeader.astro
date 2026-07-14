@@ -81,8 +81,15 @@ const services = (await getCollection("services"))
                       ))}
                       <li class="mt-1 border-t border-line pt-1">
                         <a
-                          href="/services/"
+                          href="/services/#find-your-service"
                           class="flex items-center gap-1.5 px-4 py-2 font-mono text-xs uppercase tracking-wide text-red-deep transition-colors hover:bg-white"
+                        >
+                          Not sure? Find your service
+                          <span aria-hidden="true">&rarr;</span>
+                        </a>
+                        <a
+                          href="/services/"
+                          class="flex items-center gap-1.5 px-4 py-2 font-mono text-xs uppercase tracking-wide text-ink-muted transition-colors hover:bg-white hover:text-ink"
                         >
                           All services
                           <span aria-hidden="true">&rarr;</span>
@@ -203,6 +210,15 @@ const services = (await getCollection("services"))
                         </a>
                       </li>
                     ))}
+                    <li>
+                      <a
+                        href="/services/#find-your-service"
+                        class="flex items-center gap-1.5 py-2 font-mono text-xs uppercase tracking-wide text-red-deep"
+                      >
+                        Not sure? Find your service
+                        <span aria-hidden="true">&rarr;</span>
+                      </a>
+                    </li>
                   </ul>
                 )}
               </li>
