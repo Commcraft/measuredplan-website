@@ -504,10 +504,11 @@
 .leaflet-container {
   font-family: var(--font-sans);
 }
-/* Dark map background. Higher specificity (#id) than Leaflet's own
-   `.leaflet-container{background:#ddd}`, which is injected after global.css. */
+/* Light map background (matches the CARTO Positron basemap) so tile gaps and
+   the pre-load state read as a light map, not a dark panel. Higher specificity
+   (#id) than Leaflet's own `.leaflet-container{background:#ddd}`. */
 #sa-map.leaflet-container {
-  background: var(--mp-ink);
+  background: #eceef0;
 }
 .leaflet-bar,
 .leaflet-bar a,

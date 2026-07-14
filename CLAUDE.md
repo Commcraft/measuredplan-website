@@ -140,7 +140,10 @@ the logo — reuse it as section dividers and list markers, sparingly.
 - **Header = smart hybrid** (`SiteHeader.astro`): persistent/sticky on desktop
   (`>= lg`); hides on scroll-down / shows on scroll-up on mobile, paired with
   the sticky bottom **`MobileCtaBar`** (Get my quote + WhatsApp, hidden on
-  `/contact`). Never stack two persistent bars on mobile.
+  `/contact`). Never stack two persistent bars on mobile. The **Services** nav
+  item is a dropdown (desktop: CSS hover + focus-within panel listing every
+  service; mobile: the services listed indented under Services) so services are
+  reachable from any page, not only via the homepage route-finder.
 - **`BackToTop`** (mobile only, `lg:hidden`): a subtle squared FAB, bottom-right,
   that fades in only after ~1.2 screens of scroll (so short pages never show it)
   and jumps to top (instant under reduced motion). It sits **above** the
@@ -155,9 +158,11 @@ the logo — reuse it as section dividers and list markers, sparingly.
   `'Quote Submitted'` (non-PII props only — method / property-type / timeline /
   services); `data-umami-event="WhatsApp Click"|"Call Click"` attrs on those
   links. **Never send PII (name/email/phone/address) to analytics.**
-- **Service-area map** (`ServiceArea.astro`): dark CARTO `dark_all` basemap with
-  a bold red core ring + light extended ring (SVG overlays). Leaflet is
-  self-hosted in `public/vendor/`.
+- **Service-area map** (`ServiceArea.astro`): **light** CARTO Positron
+  (`light_all`) basemap - labeled towns/roads so it reads clearly as a map -
+  with a bold red core coverage circle + dashed extended circle and an Asheville
+  datum marker. Leaflet is self-hosted in `public/vendor/`. (A dark basemap was
+  tried and reverted: it didn't read as a map.)
 - **Security:** a CSP `<meta>` in `BaseHead.astro` allows only self + Umami +
   Web3Forms + CARTO tiles (`'unsafe-inline'` needed for inline scripts/styles);
   frame-ancestors/HSTS must be set at the CDN (Cloudflare). `/.well-known/

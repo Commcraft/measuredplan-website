@@ -1,4 +1,6 @@
 ---
+import { getCollection } from "astro:content";
+
 import Container from "./Container.astro";
 import LinkButton from "./LinkButton.astro";
 import Logo from "./Logo.astro";
@@ -8,6 +10,13 @@ import { NAV_LINKS, PRIMARY_CTA, BUSINESS } from "../consts";
 const path = Astro.url.pathname;
 const isActive = (href: string) =>
   href === "/" ? path === "/" : path === href || path.startsWith(href + "/");
+
+// Services for the "Services" nav dropdown - the full list, one tap/hover from
+// any page (the homepage route-finder is no longer the only way in).
+const services = (await getCollection("services"))
+  .filter((s) => !s.data.landingOnly)
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((s) => ({ label: s.data.title, href: `/services/${s.id}/` }));
 ---
 
 <header
@@ -21,25 +30,87 @@ const isActive = (href: string) =>
       <nav aria-label="Primary" class="hidden lg:block">
         <ul class="flex items-center gap-8">
           {
-            NAV_LINKS.map((link) => (
-              <li>
-                <a
-                  href={link.href}
-                  aria-current={isActive(link.href) ? "page" : undefined}
-                  class:list={[
-                    "relative flex items-center gap-2 py-2 text-sm font-medium transition-colors",
-                    isActive(link.href)
-                      ? "text-ink"
-                      : "text-ink-muted hover:text-ink",
-                  ]}
-                >
-                  {isActive(link.href) && (
-                    <span class="datum-tick" aria-hidden="true" />
-                  )}
-                  {link.label}
-                </a>
-              </li>
-            ))
+            NAV_LINKS.map((link) =>
+              link.label === "Services" ? (
+                <li class="mp-nav-dd relative">
+                  <a
+                    href={link.href}
+                    aria-current={isActive(link.href) ? "page" : undefined}
+                    aria-haspopup="true"
+                    class:list={[
+                      "relative flex items-center gap-1.5 py-2 text-sm font-medium transition-colors",
+                      isActive(link.href)
+                        ? "text-ink"
+                        : "text-ink-muted hover:text-ink",
+                    ]}
+                  >
+                    {isActive(link.href) && (
+                      <span class="datum-tick" aria-hidden="true" />
+                    )}
+                    {link.label}
+                    <svg
+                      class="mp-nav-caret"
+                      width="12"
+                      height="12"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.6"
+                      aria-hidden="true"
+                    >
+                      <path d="M6 9l6 6 6-6" stroke-linecap="round" />
+                    </svg>
+                  </a>
+                  <div class="mp-nav-panel absolute left-1/2 top-full z-50 pt-3">
+                    <ul class="w-64 -translate-x-1/2 border border-line bg-paper py-1.5 shadow-lg">
+                      {services.map((s) => (
+                        <li>
+                          <a
+                            href={s.href}
+                            aria-current={
+                              isActive(s.href) ? "page" : undefined
+                            }
+                            class:list={[
+                              "flex items-center gap-2 px-4 py-2 text-sm transition-colors hover:bg-white hover:text-ink",
+                              isActive(s.href) ? "text-ink" : "text-ink-muted",
+                            ]}
+                          >
+                            {s.label}
+                          </a>
+                        </li>
+                      ))}
+                      <li class="mt-1 border-t border-line pt-1">
+                        <a
+                          href="/services/"
+                          class="flex items-center gap-1.5 px-4 py-2 font-mono text-xs uppercase tracking-wide text-red-deep transition-colors hover:bg-white"
+                        >
+                          All services
+                          <span aria-hidden="true">&rarr;</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              ) : (
+                <li>
+                  <a
+                    href={link.href}
+                    aria-current={isActive(link.href) ? "page" : undefined}
+                    class:list={[
+                      "relative flex items-center gap-2 py-2 text-sm font-medium transition-colors",
+                      isActive(link.href)
+                        ? "text-ink"
+                        : "text-ink-muted hover:text-ink",
+                    ]}
+                  >
+                    {isActive(link.href) && (
+                      <span class="datum-tick" aria-hidden="true" />
+                    )}
+                    {link.label}
+                  </a>
+                </li>
+              ),
+            )
           }
         </ul>
       </nav>
@@ -116,6 +187,24 @@ const isActive = (href: string) =>
                   )}
                   {link.label}
                 </a>
+                {link.label === "Services" && (
+                  <ul class="mb-2 flex flex-col gap-0.5 border-l border-line pb-1 pl-4">
+                    {services.map((s) => (
+                      <li>
+                        <a
+                          href={s.href}
+                          aria-current={isActive(s.href) ? "page" : undefined}
+                          class:list={[
+                            "block py-2 text-sm",
+                            isActive(s.href) ? "text-ink" : "text-ink-muted",
+                          ]}
+                        >
+                          {s.label}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
             ))
           }
@@ -151,6 +240,42 @@ const isActive = (href: string) =>
     </Container>
   </div>
 </header>
+
+<style>
+  /* Desktop "Services" dropdown. Pure CSS: opens on hover (mouse) and on
+     focus-within (keyboard - focusing the Services link reveals the panel so
+     the next Tab lands inside it). visibility:hidden keeps the panel links out
+     of the tab order until it opens. Touch has neither hover nor focus, so a
+     tap simply follows the Services link to the full services index. */
+  .mp-nav-panel {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(4px);
+    transition:
+      opacity 0.15s ease,
+      transform 0.15s ease,
+      visibility 0.15s;
+  }
+  .mp-nav-dd:hover .mp-nav-panel,
+  .mp-nav-dd:focus-within .mp-nav-panel {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+  .mp-nav-caret {
+    transition: transform 0.15s ease;
+  }
+  .mp-nav-dd:hover .mp-nav-caret,
+  .mp-nav-dd:focus-within .mp-nav-caret {
+    transform: rotate(180deg);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .mp-nav-panel,
+    .mp-nav-caret {
+      transition: none;
+    }
+  }
+</style>
 
 <script>
   const toggle = document.querySelector<HTMLButtonElement>("[data-menu-toggle]");
